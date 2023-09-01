@@ -1,6 +1,8 @@
 package com.neuralnet.maisfinancas.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -14,13 +16,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.neuralnet.maisfinancas.R
+import com.neuralnet.maisfinancas.ui.components.ObjetivosOverview
+import com.neuralnet.maisfinancas.ui.components.OrcamentoOverview
+import com.neuralnet.maisfinancas.ui.components.TransferenciasSemana
 import com.neuralnet.maisfinancas.ui.navigation.AppBottomBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeNavGraph
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
+import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
@@ -46,28 +53,20 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 }
 
 @Composable
-fun HomeScreen(onClick: () -> Unit) {
-    Column {
+fun HomeContent() {
+    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         OrcamentoOverview()
 
         ObjetivosOverview()
 
-
+        TransferenciasSemana()
     }
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(onClick = {})
-}
-
-@Composable
-fun ObjetivosOverview() {
-    Text(text = "Objetivos \u423d")
-}
-
-@Composable
-fun OrcamentoOverview() {
-    Text(text = "Orçamento")
+    MaisFinancasTheme {
+        HomeContent()
+    }
 }
