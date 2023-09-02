@@ -18,11 +18,18 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
     ) {
 
         composable(route = HomeDestinations.Home.route) {
-            HomeContent()
+            HomeContent(
+                onAddClick = { navController.navigate(HomeDestinations.AddDespesa.route) }
+            )
         }
 
         composable(route = HomeDestinations.AddDespesa.route) {
-            AddDespesaScreen()
+            AddDespesaScreen(onSaveClick = {
+                navController.popBackStack(
+                    route = HomeDestinations.Home.route,
+                    inclusive = true
+                )
+            })
         }
 
         despesasNavGraph(navController)

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -32,21 +33,7 @@ import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route
-
     Scaffold(
-        floatingActionButton = {
-            if (HomeDestinations.Home.route == currentDestination) {
-                FloatingActionButton(onClick = { navController.navigate(HomeDestinations.AddDespesa.route) }) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.add)
-                    )
-                }
-            }
-        },
-        floatingActionButtonPosition = FabPosition.Center,
         bottomBar = { AppBottomBar(navController = navController) }
     ) { paddingValues ->
         HomeNavGraph(navController, modifier = Modifier.padding(paddingValues))
@@ -54,13 +41,31 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 }
 
 @Composable
-fun HomeContent() {
-    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        OrcamentoOverview()
+fun HomeContent(onAddClick: () -> Unit) {
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onAddClick) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.add)
+                )
+            }
 
-        ObjetivosOverview()
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .padding(paddingValues), verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            OrcamentoOverview()
 
-        TransferenciasSemana()
+            ObjetivosOverview()
+
+            TransferenciasSemana()
+        }
     }
 }
 
@@ -68,6 +73,8 @@ fun HomeContent() {
 @Composable
 fun HomeScreenPreview() {
     MaisFinancasTheme {
-        HomeContent()
+        HomeContent(
+            onAddClick = {},
+        )
     }
 }

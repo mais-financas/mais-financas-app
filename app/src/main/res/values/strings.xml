@@ -13,4 +13,5 @@
     <string name="ganhos">Ganhos</string>
     <string name="categoria">Categoria</string>
     <string name="nome">Nome</string>
+    <string name="recorrencia_despesa">Recorrência da despesa</string>
 </resources>
