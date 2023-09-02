@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
@@ -11,6 +12,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -30,14 +32,14 @@ fun AppBottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-        NavigationBar {
-            screens.forEach { screen ->
-                BottomScreen(
-                    screen = screen,
-                    currentDestination = currentDestination,
-                    navController = navController
-                )
-            }
+    NavigationBar {
+        screens.forEach { screen ->
+            BottomScreen(
+                screen = screen,
+                currentDestination = currentDestination,
+                navController = navController
+            )
+        }
 
     }
 }
@@ -52,7 +54,7 @@ fun RowScope.BottomScreen(
         Icons.Default.Home,
         Icons.Default.Menu,
         Icons.Default.AccountBox,
-        Icons.Default.DateRange
+        Icons.Default.Email
     )
 
     NavigationBarItem(

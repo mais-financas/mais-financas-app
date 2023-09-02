@@ -14,4 +14,6 @@
     <string name="categoria">Categoria</string>
     <string name="nome">Nome</string>
     <string name="recorrencia_despesa">Recorrência da despesa</string>
+    <string name="valor">Valor</string>
+    <string name="recorrencia">Recorrência</string>
 </resources>

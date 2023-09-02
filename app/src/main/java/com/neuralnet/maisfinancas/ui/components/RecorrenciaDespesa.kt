@@ -15,9 +15,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 
+val items = listOf("Nenhuma", "Diária", "Semanal", "Mensal", "Anual")
+
 @Composable
-fun RecorrenciaDespesa(modifier: Modifier = Modifier) {
-    val items = listOf("Nenhuma", "Diária", "Semanal", "Mensal", "Anual")
+fun RecorrenciaDespesa(recorrencia: String, onRecorrenciaChanged: (String) -> Unit, modifier: Modifier = Modifier) {
 
     Column(modifier = modifier) {
         Text(
@@ -28,12 +29,12 @@ fun RecorrenciaDespesa(modifier: Modifier = Modifier) {
         )
 
         var expanded by remember { mutableStateOf(false) }
-        var selectedOption by remember { mutableStateOf(items[0]) }
 
         AppDropdown(
+            label = R.string.recorrencia,
             options = items,
-            selectedOptionText = selectedOption,
-            onSelectedOptionText = { selectedOption = it },
+            selectedOptionText = recorrencia,
+            onSelectedOptionText = onRecorrenciaChanged,
             expanded = expanded,
             onExpandedChanged = { expanded = it }
         )

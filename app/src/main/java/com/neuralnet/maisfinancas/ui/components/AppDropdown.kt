@@ -24,15 +24,16 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import com.neuralnet.maisfinancas.R
 
 @Composable
 fun AppDropdown(
+    label: Int,
     options: List<String>,
     selectedOptionText: String,
     onSelectedOptionText: (String) -> Unit,
     expanded: Boolean,
     onExpandedChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -41,7 +42,7 @@ fun AppDropdown(
     else
         Icons.Filled.KeyboardArrowDown
 
-    Column(Modifier.padding(20.dp)) {
+    Column(modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)) {
 
         OutlinedTextField(
             value = selectedOptionText,
@@ -50,12 +51,9 @@ fun AppDropdown(
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
-                    // This value is used to assign to
-                    // the DropDown the same width
                     textFieldSize = coordinates.size.toSize()
-                }
-                .clickable { onExpandedChanged(!expanded) },
-            label = { Text(stringResource(R.string.categoria)) },
+                },
+            label = { Text(stringResource(label)) },
             trailingIcon = {
                 Icon(
                     imageVector = icon,

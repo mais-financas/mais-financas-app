@@ -1,26 +1,28 @@
 package com.neuralnet.maisfinancas.ui.screens
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,10 +32,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
 import com.neuralnet.maisfinancas.ui.components.RecorrenciaDespesa
+import com.neuralnet.maisfinancas.ui.components.items
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -50,7 +54,20 @@ val list = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddDespesaScreen(onSaveClick: () -> Unit, modifier: Modifier = Modifier) {
+fun AddDespesaScreen(
+    nome: String,
+    onNomeChanged: (String) -> Unit,
+    valor: String,
+    onValorChanged: (String) -> Unit,
+    categoria: String,
+    onCategoriaChanged: (String) -> Unit,
+    recorrencia: String,
+    onRecorrenciaChanged: (String) -> Unit,
+    calendarState: DatePickerState,
+    onNavigateUp: () -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -58,7 +75,7 @@ fun AddDespesaScreen(onSaveClick: () -> Unit, modifier: Modifier = Modifier) {
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Voltar"
+                        contentDescription = "Voltar", Modifier.clickable(onClick = onNavigateUp)
                     )
                 })
         },
@@ -80,45 +97,63 @@ fun AddDespesaScreen(onSaveClick: () -> Unit, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            var nome by remember {
-                mutableStateOf("")
-            }
 
             OutlinedTextField(
                 placeholder = { Text(stringResource(R.string.nome)) },
                 value = nome,
-                onValueChange = { nome = it },
+                onValueChange = onNomeChanged,
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
             )
 
-            var selectedOptionText by remember { mutableStateOf(list[0]) }
+            OutlinedTextField(
+                placeholder = { Text(stringResource(R.string.valor)) },
+                value = valor,
+                onValueChange = onValorChanged,
+                singleLine = true,
+                prefix = { Text("R$") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                )
+            )
+
             var expanded by remember { mutableStateOf(false) }
             AppDropdown(
+                label = R.string.categoria,
                 options = list,
-                selectedOptionText = selectedOptionText,
-                onSelectedOptionText = { selectedOption -> selectedOptionText = selectedOption },
+                selectedOptionText = categoria,
+                onSelectedOptionText = onCategoriaChanged,
                 expanded = expanded,
                 onExpandedChanged = { expanded = it },
             )
 
-            RecorrenciaDespesa()
+            RecorrenciaDespesa(
+                recorrencia = recorrencia,
+                onRecorrenciaChanged = onRecorrenciaChanged,
+                modifier = Modifier.padding(top = 8.dp)
+            )
 
-            val calendarState = rememberDatePickerState()
-            DatePicker(title = { }, state = calendarState, showModeToggle = false)
+            var definirLembrete by remember {
+                mutableStateOf(false)
+            }
+            AnimatedVisibility(visible = recorrencia != items[0]) {
+                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                    Text(text = "Definir Lembrete?", modifier = Modifier.weight(1f))
+                    Switch(
+                        checked = definirLembrete,
+                        onCheckedChange = {
+                            definirLembrete = !definirLembrete
+                        }
+                    )
+                }
+            }
 
-            Text(text = "${calendarState.selectedDateMillis?.plus(86_400_000L)?.getDate()}")
+            DatePicker(state = calendarState, showModeToggle = false)
         }
-    }
-}
-
-private fun Long.getDate(): String {
-    return try {
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-        sdf.format(Date(this))
-    } catch (e: Exception) {
-        e.toString()
     }
 }
