@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.neuralnet.maisfinancas.ui.screens.AddDespesaScreen
+import com.neuralnet.maisfinancas.ui.screens.HomeContent
 
 @Composable
 fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -16,9 +18,11 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
     ) {
 
         composable(route = HomeDestinations.Home.route) {
-            Screen(
-                route = HomeDestinations.Home.route,
-                onClick = { navController.navigate(HomeDestinations.Home.route) })
+            HomeContent()
+        }
+
+        composable(route = HomeDestinations.AddDespesa.route) {
+            AddDespesaScreen()
         }
 
         despesasNavGraph(navController)
@@ -46,6 +50,7 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 sealed class HomeDestinations(val route: String) {
     object Home : HomeDestinations("home")
     object DespesasGraph : HomeDestinations("despesas_graph")
+    object AddDespesa : HomeDestinations("add_despesa")
     object Statistics : HomeDestinations("statistics")
     object FinancialGoals : HomeDestinations("financial_goals")
     object Profile : HomeDestinations("profile")

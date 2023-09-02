@@ -11,4 +11,6 @@
     <string name="transferencias_semanais">Transferências da Semana</string>
     <string name="despesas">Despesas</string>
     <string name="ganhos">Ganhos</string>
+    <string name="categoria">Categoria</string>
+    <string name="nome">Nome</string>
 </resources>

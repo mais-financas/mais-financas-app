@@ -2,15 +2,16 @@ package com.neuralnet.maisfinancas.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -37,7 +38,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
         floatingActionButton = {
             if (HomeDestinations.Home.route == currentDestination) {
-                FloatingActionButton(onClick = { navController.navigate(HomeDestinations.Home.route) }) {
+                FloatingActionButton(onClick = { navController.navigate(HomeDestinations.AddDespesa.route) }) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = stringResource(R.string.add)
