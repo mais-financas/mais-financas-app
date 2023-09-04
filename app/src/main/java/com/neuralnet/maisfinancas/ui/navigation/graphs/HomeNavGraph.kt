@@ -14,11 +14,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.data.model.Despesa
-import com.neuralnet.maisfinancas.ui.components.items
-import com.neuralnet.maisfinancas.ui.screens.AddDespesaScreen
-import com.neuralnet.maisfinancas.ui.screens.HomeContent
-import com.neuralnet.maisfinancas.ui.screens.despesas
-import com.neuralnet.maisfinancas.ui.screens.list
+import com.neuralnet.maisfinancas.ui.screens.depesas.AddDespesaScreen
+import com.neuralnet.maisfinancas.ui.screens.depesas.AddDespesaUiState
+import com.neuralnet.maisfinancas.ui.screens.depesas.despesas
+import com.neuralnet.maisfinancas.ui.screens.home.HomeContent
+import com.neuralnet.maisfinancas.ui.screens.home.HomeUiState
 import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,48 +33,35 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
         composable(route = HomeDestinations.Home.route) {
             HomeContent(
+                uiState = HomeUiState(),
                 onAddClick = { navController.navigate(HomeDestinations.AddDespesa.route) }
             )
         }
 
         composable(route = HomeDestinations.AddDespesa.route) {
-            var nome by remember {
-                mutableStateOf("")
-            }
-            var valor by remember {
-                mutableStateOf("")
-            }
-            var categoria by remember {
-                mutableStateOf(list[0])
-            }
-            var recorrencia by remember {
-                mutableStateOf(items[0])
+            var uiState by remember {
+                mutableStateOf(AddDespesaUiState())
             }
             val calendarState = rememberDatePickerState()
 
             AddDespesaScreen(
-                nome = nome,
-                onNomeChanged = { nome = it },
-                valor = valor,
-                onValorChanged = { valor = it },
-                categoria = categoria,
-                onCategoriaChanged = { categoria = it },
-                recorrencia = recorrencia,
+                uiState = uiState,
+                onUiStateChanged = { uiState = it },
                 calendarState = calendarState,
-                onRecorrenciaChanged = { recorrencia = it },
                 onNavigateUp = { navController.navigateUp() }, onSaveClick = {
                     despesas.add(
                         Despesa(
-                            nome = nome,
-                            categoria = categoria,
-                            valor = valor.toDouble(),
-                            recorrencia = recorrencia,
+                            nome = uiState.nome,
+                            categoria = uiState.categoria,
+                            valor = uiState.valor.toDouble(),
+                            recorrencia = uiState.recorrencia,
                             dataEmMillis = calendarState.selectedDateMillis ?: Instant.now()
                                 .toEpochMilli()
                         )
                     )
                     navController.navigateUp()
-                })
+                }
+            )
         }
 
         despesasNavGraph(navController)

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,18 +26,25 @@ import java.time.format.TextStyle
 import java.util.Currency
 import java.util.Locale
 
-
 @Composable
-fun OrcamentoOverview(modifier: Modifier = Modifier) {
+fun OrcamentoOverview(
+    gasto: Double,
+    saldo: Double,
+    modifier: Modifier = Modifier,
+    data: LocalDate = LocalDate.now()
+) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        GastoMensal(1232.0)
+        GastoMensal(gasto)
 
-        SaldoDisponivel(234.0)
+        SaldoDisponivel(saldo, data)
     }
 }
 
 @Composable
-fun GastoMensal(gasto: Double, modifier: Modifier = Modifier) {
+fun GastoMensal(
+    gasto: Double,
+    modifier: Modifier = Modifier,
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -68,7 +76,11 @@ fun GastoMensal(gasto: Double, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SaldoDisponivel(saldo: Double, modifier: Modifier = Modifier) {
+fun SaldoDisponivel(
+    saldo: Double,
+    data: LocalDate,
+    modifier: Modifier = Modifier,
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -79,7 +91,7 @@ fun SaldoDisponivel(saldo: Double, modifier: Modifier = Modifier) {
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = stringResource(R.string.carteira_disponivel, mesAtual()),
+                    text = stringResource(R.string.carteira_disponivel, data.mesAtual()),
                     fontWeight = FontWeight.Medium,
                 )
 
@@ -92,7 +104,8 @@ fun SaldoDisponivel(saldo: Double, modifier: Modifier = Modifier) {
 
             Text(
                 text = saldo.toReal(),
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(top = 16.dp)
             )
         }
     }
@@ -103,12 +116,26 @@ fun SaldoDisponivel(saldo: Double, modifier: Modifier = Modifier) {
 @Composable
 fun OrcamentoOverviewPreview() {
     MaisFinancasTheme {
-        OrcamentoOverview()
+        OrcamentoOverview(
+            gasto = 235.4,
+            saldo = 4389.0,
+        )
     }
 }
 
-fun mesAtual(): String {
-    return LocalDate.now().month
+@Preview(widthDp = 350)
+@Composable
+fun SaldoDisponivelPreview() {
+    MaisFinancasTheme {
+        SaldoDisponivel(
+            saldo = 123.12,
+            data = LocalDate.now().plusMonths(2)
+        )
+    }
+}
+
+fun LocalDate.mesAtual(): String {
+    return this.month
         .getDisplayName(TextStyle.FULL, Locale("pt", "BR"))
         .replaceFirstChar { it.uppercase() }
 }

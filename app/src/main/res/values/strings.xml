@@ -21,4 +21,6 @@
     <string name="adicionar_despesa">Adicionar Despesa</string>
     <string name="estatisticas">Estatísticas\n</string>
     <string name="perfil">Perfil</string>
+    <string name="definir_lembrete">Definir Lembrete?</string>
+    <string name="moeda">R$</string>
 </resources>

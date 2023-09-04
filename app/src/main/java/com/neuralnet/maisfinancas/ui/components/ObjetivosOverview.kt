@@ -39,7 +39,7 @@ fun ObjetivosOverview(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.primaryContainer, shape = CircleShape)
-                    .padding(4.dp)
+                    .padding(8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Home,

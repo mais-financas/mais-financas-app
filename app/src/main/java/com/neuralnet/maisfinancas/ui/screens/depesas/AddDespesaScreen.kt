@@ -1,7 +1,6 @@
-package com.neuralnet.maisfinancas.ui.screens
+package com.neuralnet.maisfinancas.ui.screens.depesas
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,9 +39,6 @@ import com.neuralnet.maisfinancas.ui.components.items
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 val list = listOf(
     "Essenciais",
@@ -59,14 +53,8 @@ val list = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDespesaScreen(
-    nome: String,
-    onNomeChanged: (String) -> Unit,
-    valor: String,
-    onValorChanged: (String) -> Unit,
-    categoria: String,
-    onCategoriaChanged: (String) -> Unit,
-    recorrencia: String,
-    onRecorrenciaChanged: (String) -> Unit,
+    uiState: AddDespesaUiState,
+    onUiStateChanged: (AddDespesaUiState) -> Unit,
     calendarState: DatePickerState,
     onNavigateUp: () -> Unit,
     onSaveClick: () -> Unit,
@@ -101,8 +89,8 @@ fun AddDespesaScreen(
 
             OutlinedTextField(
                 placeholder = { Text(stringResource(R.string.nome)) },
-                value = nome,
-                onValueChange = onNomeChanged,
+                value = uiState.nome,
+                onValueChange = { onUiStateChanged(uiState.copy(nome = it)) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,10 +99,10 @@ fun AddDespesaScreen(
 
             OutlinedTextField(
                 placeholder = { Text(stringResource(R.string.valor)) },
-                value = valor,
-                onValueChange = onValorChanged,
+                value = uiState.valor,
+                onValueChange = { onUiStateChanged(uiState.copy(valor = it)) },
                 singleLine = true,
-                prefix = { Text("R$") },
+                prefix = { Text(stringResource(R.string.moeda)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp, start = 16.dp, end = 16.dp),
@@ -127,33 +115,31 @@ fun AddDespesaScreen(
             AppDropdown(
                 label = R.string.categoria,
                 options = list,
-                selectedOptionText = categoria,
-                onSelectedOptionText = onCategoriaChanged,
+                selectedOptionText = uiState.categoria,
+                onSelectedOptionText = { onUiStateChanged(uiState.copy(categoria = it)) },
                 expanded = expanded,
                 onExpandedChanged = { expanded = it },
             )
 
             RecorrenciaDespesa(
-                recorrencia = recorrencia,
-                onRecorrenciaChanged = onRecorrenciaChanged,
+                recorrencia = uiState.recorrencia,
+                onRecorrenciaChanged = { onUiStateChanged(uiState.copy(nome = it)) },
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            var definirLembrete by remember {
-                mutableStateOf(false)
-            }
-            AnimatedVisibility(visible = recorrencia != items[0]) {
+            AnimatedVisibility(visible = uiState.recorrencia != items[0]) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 ) {
-                    Text(text = "Definir Lembrete?", modifier = Modifier.weight(1f))
+                    Text(
+                        text = stringResource(R.string.definir_lembrete),
+                        modifier = Modifier.weight(1f)
+                    )
                     Switch(
-                        checked = definirLembrete,
-                        onCheckedChange = {
-                            definirLembrete = !definirLembrete
-                        }
+                        checked = uiState.definirLembrete,
+                        onCheckedChange = { onUiStateChanged(uiState.copy(definirLembrete = it)) }
                     )
                 }
             }
@@ -169,16 +155,10 @@ fun AddDespesaScreen(
 fun AddDespesaScreenPreview() {
     MaisFinancasTheme {
         AddDespesaScreen(
-            nome = "",
-            onNomeChanged = { },
-            valor = "",
-            onValorChanged = { },
-            categoria = "",
-            onCategoriaChanged = { },
-            recorrencia = "",
-            onRecorrenciaChanged = { },
+            uiState = AddDespesaUiState(),
+            onUiStateChanged = {},
             calendarState = rememberDatePickerState(),
-            onNavigateUp = { },
+            onNavigateUp = {},
             onSaveClick = {}
         )
     }

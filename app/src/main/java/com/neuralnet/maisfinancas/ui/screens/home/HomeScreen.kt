@@ -1,17 +1,14 @@
-package com.neuralnet.maisfinancas.ui.screens
+package com.neuralnet.maisfinancas.ui.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,7 +36,10 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 }
 
 @Composable
-fun HomeContent(onAddClick: () -> Unit) {
+fun HomeContent(
+    uiState: HomeUiState,
+    onAddClick: () -> Unit,
+) {
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
@@ -65,11 +65,17 @@ fun HomeContent(onAddClick: () -> Unit) {
                 .padding(16.dp)
                 .padding(paddingValues), verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            OrcamentoOverview()
+            OrcamentoOverview(
+                gasto = uiState.gastoMensal,
+                saldo = uiState.saldoMensal,
+            )
 
             ObjetivosOverview()
 
-            TransferenciasSemana()
+            TransferenciasSemana(
+                rendaSemanal = uiState.rendaSemanal,
+                despesasSemanais = uiState.despesasSemanais,
+            )
         }
     }
 }
@@ -79,6 +85,7 @@ fun HomeContent(onAddClick: () -> Unit) {
 fun HomeScreenPreview() {
     MaisFinancasTheme {
         HomeContent(
+            uiState = HomeUiState(),
             onAddClick = {},
         )
     }

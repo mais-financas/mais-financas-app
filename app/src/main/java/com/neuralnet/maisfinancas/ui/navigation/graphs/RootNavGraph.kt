@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.neuralnet.maisfinancas.ui.screens.HomeScreen
+import com.neuralnet.maisfinancas.ui.screens.home.HomeScreen
 
 @Composable
 fun RootNavGraph(
