@@ -17,12 +17,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.data.model.Despesa
 import com.neuralnet.maisfinancas.ui.components.ItemDespesa
 import com.neuralnet.maisfinancas.ui.components.toReal
+import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
+import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
+import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 val despesas = mutableListOf(
     Despesa("Água", "Essenciais", 100.0, "Mensal", 1693577802000),
@@ -38,17 +42,15 @@ fun DespesasScreen() {
         mutableStateListOf(*(despesas.toTypedArray()))
     }
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+            MaisFinancasTopAppBar(
+                title = HomeDestinations.DespesasGraph.title,
+                canNavigateBack = false,
+            )
+        }
+    ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
-            item {
-                Divider(modifier = Modifier.fillMaxWidth())
-                Text(
-                    stringResource(R.string.despesas),
-                    style = MaterialTheme.typography.displaySmall.copy(fontSize = 28.sp),
-                    modifier = Modifier.padding(start = 12.dp, top = 16.dp, bottom = 8.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
 
             for (grupos in despesasState.groupBy { it.categoria }) {
                 item(grupos.key) {
@@ -56,7 +58,9 @@ fun DespesasScreen() {
                         Text(
                             text = grupos.key,
                             style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(start = 16.dp).weight(1f)
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .weight(1f)
                         )
                         Text(
                             text = "(${valorPorCategoria(grupos)})",
@@ -80,9 +84,17 @@ fun DespesasScreen() {
     }
 }
 
+@Preview(showSystemUi = true)
+@Composable
+fun DespesasScreenPreview() {
+    MaisFinancasTheme {
+        DespesasScreen()
+    }
+}
+
 private fun valorPorCategoria(despesas: Map.Entry<String, List<Despesa>>): String {
     return despesas.value
-        .filter { despesa ->  despesa.categoria == despesas.key }
+        .filter { despesa -> despesa.categoria == despesas.key }
         .sumOf { it.valor }
         .toReal()
 }

@@ -5,36 +5,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.ObjetivosOverview
 import com.neuralnet.maisfinancas.ui.components.OrcamentoOverview
 import com.neuralnet.maisfinancas.ui.components.TransferenciasSemana
-import com.neuralnet.maisfinancas.ui.navigation.AppBottomBar
-import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeNavGraph
+import com.neuralnet.maisfinancas.ui.navigation.FinancasNavigationBar
+import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
+import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeNavGraph
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
-        bottomBar = { AppBottomBar(navController = navController) }
+        bottomBar = { FinancasNavigationBar(navController = navController) }
     ) { paddingValues ->
         HomeNavGraph(navController, modifier = Modifier.padding(paddingValues))
     }
@@ -43,9 +41,16 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 @Composable
 fun HomeContent(onAddClick: () -> Unit) {
     Scaffold(
+        topBar = {
+            MaisFinancasTopAppBar(
+                title = HomeDestinations.Home.title,
+                canNavigateBack = false,
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onAddClick) {
+                onClick = onAddClick
+            ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = stringResource(R.string.add)

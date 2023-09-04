@@ -33,11 +33,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
 import com.neuralnet.maisfinancas.ui.components.RecorrenciaDespesa
 import com.neuralnet.maisfinancas.ui.components.items
+import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
+import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
+import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -70,14 +74,11 @@ fun AddDespesaScreen(
 ) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(text = "Adicionar Despesa") },
-                navigationIcon = {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Voltar", Modifier.clickable(onClick = onNavigateUp)
-                    )
-                })
+            MaisFinancasTopAppBar(
+                title = HomeDestinations.AddDespesa.title,
+                canNavigateBack = true,
+                navigateUp = onNavigateUp
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { onSaveClick() }) {
@@ -142,7 +143,11 @@ fun AddDespesaScreen(
                 mutableStateOf(false)
             }
             AnimatedVisibility(visible = recorrencia != items[0]) {
-                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
                     Text(text = "Definir Lembrete?", modifier = Modifier.weight(1f))
                     Switch(
                         checked = definirLembrete,
@@ -155,5 +160,26 @@ fun AddDespesaScreen(
 
             DatePicker(state = calendarState, showModeToggle = false)
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showSystemUi = true)
+@Composable
+fun AddDespesaScreenPreview() {
+    MaisFinancasTheme {
+        AddDespesaScreen(
+            nome = "",
+            onNomeChanged = { },
+            valor = "",
+            onValorChanged = { },
+            categoria = "",
+            onCategoriaChanged = { },
+            recorrencia = "",
+            onRecorrenciaChanged = { },
+            calendarState = rememberDatePickerState(),
+            onNavigateUp = { },
+            onSaveClick = {}
+        )
     }
 }

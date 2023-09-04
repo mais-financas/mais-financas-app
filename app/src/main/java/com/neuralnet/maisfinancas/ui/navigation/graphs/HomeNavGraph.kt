@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.navigation.graphs
 
+import androidx.annotation.StringRes
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.data.model.Despesa
 import com.neuralnet.maisfinancas.ui.components.items
 import com.neuralnet.maisfinancas.ui.screens.AddDespesaScreen
@@ -18,7 +20,6 @@ import com.neuralnet.maisfinancas.ui.screens.HomeContent
 import com.neuralnet.maisfinancas.ui.screens.despesas
 import com.neuralnet.maisfinancas.ui.screens.list
 import java.time.Instant
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +69,8 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                             categoria = categoria,
                             valor = valor.toDouble(),
                             recorrencia = recorrencia,
-                            dataEmMillis = calendarState.selectedDateMillis ?: Instant.now().toEpochMilli()
+                            dataEmMillis = calendarState.selectedDateMillis ?: Instant.now()
+                                .toEpochMilli()
                         )
                     )
                     navController.navigateUp()
@@ -77,9 +79,9 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
         despesasNavGraph(navController)
 
-        composable(route = HomeDestinations.Statistics.route) {
+        composable(route = HomeDestinations.Estatisticas.route) {
             Screen(
-                route = HomeDestinations.Statistics.route,
+                route = HomeDestinations.Estatisticas.route,
                 onClick = { navController.navigate(HomeDestinations.Home.route) })
         }
 
@@ -89,19 +91,19 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                 onClick = { navController.navigate(HomeDestinations.Home.route) })
         }
 
-        composable(route = HomeDestinations.Profile.route) {
+        composable(route = HomeDestinations.Perfil.route) {
             Screen(
-                route = HomeDestinations.Profile.route,
+                route = HomeDestinations.Perfil.route,
                 onClick = { navController.navigate(HomeDestinations.Home.route) })
         }
     }
 }
 
-sealed class HomeDestinations(val route: String) {
-    object Home : HomeDestinations("home")
-    object DespesasGraph : HomeDestinations("despesas_graph")
-    object AddDespesa : HomeDestinations("add_despesa")
-    object Statistics : HomeDestinations("statistics")
-    object FinancialGoals : HomeDestinations("financial_goals")
-    object Profile : HomeDestinations("profile")
+sealed class HomeDestinations(val route: String, @StringRes val title: Int) {
+    object Home : HomeDestinations("home", R.string.carteira)
+    object DespesasGraph : HomeDestinations("despesas_graph", R.string.despesas)
+    object AddDespesa : HomeDestinations("add_despesa", R.string.adicionar_despesa)
+    object Estatisticas : HomeDestinations("estatisticas", R.string.estatisticas)
+    object FinancialGoals : HomeDestinations("objetivos", R.string.objetivos)
+    object Perfil : HomeDestinations("profile", R.string.perfil)
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MaisFinancasApp</string>
+    <string name="app_name">+Finanças</string>
     <string name="add">Add</string>
     <string name="objetivos">Objetivos</string>
     <string name="objetivos_descricao">Confira seus objetivos</string>
@@ -16,4 +16,9 @@
     <string name="recorrencia_despesa">Recorrência da despesa</string>
     <string name="valor">Valor</string>
     <string name="recorrencia">Recorrência</string>
+    <string name="back_button">Voltar</string>
+    <string name="carteira">Carteira</string>
+    <string name="adicionar_despesa">Adicionar Despesa</string>
+    <string name="estatisticas">Estatísticas\n</string>
+    <string name="perfil">Perfil</string>
 </resources>
