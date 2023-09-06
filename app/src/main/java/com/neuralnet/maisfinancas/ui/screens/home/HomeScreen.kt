@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.neuralnet.maisfinancas.R
@@ -27,7 +28,7 @@ import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeNavGraph
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
-fun HomeScreen(navController: NavHostController = rememberNavController()) {
+fun HomeRoute(navController: NavHostController = rememberNavController()) {
     Scaffold(
         bottomBar = { FinancasNavigationBar(navController = navController) }
     ) { paddingValues ->
@@ -36,7 +37,20 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 }
 
 @Composable
-fun HomeContent(
+fun HomeScreen(
+    viewModel: HomeViewModel,
+    onAddClick: () -> Unit,
+) {
+    val homeUiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    HomeScreen(
+        uiState = homeUiState.value,
+        onAddClick = onAddClick
+    )
+}
+
+@Composable
+fun HomeScreen(
     uiState: HomeUiState,
     onAddClick: () -> Unit,
 ) {
@@ -84,7 +98,7 @@ fun HomeContent(
 @Composable
 fun HomeScreenPreview() {
     MaisFinancasTheme {
-        HomeContent(
+        HomeScreen(
             uiState = HomeUiState(),
             onAddClick = {},
         )

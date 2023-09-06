@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.ui.screens.depesas
+package com.neuralnet.maisfinancas.ui.screens.depesas.adicionar
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
 import com.neuralnet.maisfinancas.ui.components.RecorrenciaDespesa
@@ -49,6 +50,25 @@ val list = listOf(
     "Educação",
     "Dívidas"
 )
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddDespesaScreen(
+    viewModel: AddDespesaViewModel,
+    calendarState: DatePickerState = rememberDatePickerState(),
+    onNavigateUp: () -> Unit,
+    onSaveClick: () -> Unit,
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    AddDespesaScreen(
+        uiState = uiState.value,
+        onUiStateChanged = viewModel::updateUiState,
+        calendarState = calendarState,
+        onNavigateUp = onNavigateUp,
+        onSaveClick = onSaveClick,
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

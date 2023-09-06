@@ -4,22 +4,16 @@ import androidx.annotation.StringRes
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.data.model.Despesa
-import com.neuralnet.maisfinancas.ui.screens.depesas.AddDespesaScreen
-import com.neuralnet.maisfinancas.ui.screens.depesas.AddDespesaUiState
-import com.neuralnet.maisfinancas.ui.screens.depesas.despesas
-import com.neuralnet.maisfinancas.ui.screens.home.HomeContent
-import com.neuralnet.maisfinancas.ui.screens.home.HomeUiState
-import java.time.Instant
+import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaScreen
+import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaViewModel
+import com.neuralnet.maisfinancas.ui.screens.home.HomeScreen
+import com.neuralnet.maisfinancas.ui.screens.home.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,34 +26,25 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
     ) {
 
         composable(route = HomeDestinations.Home.route) {
-            HomeContent(
-                uiState = HomeUiState(),
+            val viewModel = hiltViewModel<HomeViewModel>()
+
+            HomeScreen(
+                viewModel = viewModel,
                 onAddClick = { navController.navigate(HomeDestinations.AddDespesa.route) }
             )
         }
 
         composable(route = HomeDestinations.AddDespesa.route) {
-            var uiState by remember {
-                mutableStateOf(AddDespesaUiState())
-            }
+            val viewModel = hiltViewModel<AddDespesaViewModel>()
             val calendarState = rememberDatePickerState()
 
             AddDespesaScreen(
-                uiState = uiState,
-                onUiStateChanged = { uiState = it },
+                viewModel = viewModel,
                 calendarState = calendarState,
-                onNavigateUp = { navController.navigateUp() }, onSaveClick = {
-                    despesas.add(
-                        Despesa(
-                            nome = uiState.nome,
-                            categoria = uiState.categoria,
-                            valor = uiState.valor.toDouble(),
-                            recorrencia = uiState.recorrencia,
-                            dataEmMillis = calendarState.selectedDateMillis ?: Instant.now()
-                                .toEpochMilli()
-                        )
-                    )
-                    navController.navigateUp()
+                onNavigateUp = { navController.navigateUp() },
+                onSaveClick = {
+                    viewModel.salvarDespesa(dataEmEpochMillis = calendarState.selectedDateMillis)
+                    navController.popBackStack()
                 }
             )
         }

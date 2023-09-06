@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.ui.screens.depesas
+package com.neuralnet.maisfinancas.ui.screens.depesas.adicionar
 
 import com.neuralnet.maisfinancas.ui.components.items
 

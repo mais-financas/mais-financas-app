@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.data.model.Despesa
 import com.neuralnet.maisfinancas.ui.components.ItemDespesa
 import com.neuralnet.maisfinancas.ui.components.toReal
@@ -20,13 +21,12 @@ import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
-val despesas = mutableListOf(
-    Despesa("Água", "Essenciais", 100.0, "Mensal", 1693577802000),
-    Despesa("Energia", "Essenciais", 123.0, "Mensal", 1693577802000),
-    Despesa("Almoço", "Alimentação", 30.0, "Diária", 1693064202000),
-    Despesa("Cinema", "Entretenimento", 70.0, "Nenhuma", 1693564202000),
-    Despesa("Jantar Restaurante", "Alimentação", 40.0, "Nenhuma", 1693064202000),
-)
+@Composable
+fun DespesasScreen(viewModel: DespesaViewModel) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    DespesasScreen(uiState = uiState.value)
+}
 
 @Composable
 fun DespesasScreen(

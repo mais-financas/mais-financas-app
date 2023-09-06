@@ -1,14 +1,12 @@
 package com.neuralnet.maisfinancas.ui.navigation.graphs
 
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.neuralnet.maisfinancas.ui.screens.depesas.DespesaViewModel
 import com.neuralnet.maisfinancas.ui.screens.depesas.DespesasScreen
-import com.neuralnet.maisfinancas.ui.screens.depesas.DespesasUiState
-import com.neuralnet.maisfinancas.ui.screens.depesas.despesas
 
 fun NavGraphBuilder.despesasNavGraph(navController: NavController) {
     navigation(
@@ -16,10 +14,11 @@ fun NavGraphBuilder.despesasNavGraph(navController: NavController) {
         startDestination = DespesasDestinations.Overview.route,
     ) {
         composable(route = DespesasDestinations.Overview.route) {
-            val despesasState = remember {
-                mutableStateListOf(*(despesas.toTypedArray()))
-            }
-            DespesasScreen(DespesasUiState(despesasState))
+            val viewModel = hiltViewModel<DespesaViewModel>()
+
+            DespesasScreen(
+                viewModel = viewModel,
+            )
         }
 
         composable(route = DespesasDestinations.DepesasByCategoria.route) {
