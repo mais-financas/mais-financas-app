@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.neuralnet.maisfinancas.data.model.Despesa
+import com.neuralnet.maisfinancas.model.Despesa
 import com.neuralnet.maisfinancas.ui.components.ItemDespesa
 import com.neuralnet.maisfinancas.ui.components.toReal
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
@@ -81,11 +81,11 @@ fun DespesasScreenPreview() {
         DespesasScreen(
             uiState = DespesasUiState(
                 listOf(
-                    Despesa("Água", "Essenciais", 100.0, "Mensal", 1693577802000),
-                    Despesa("Energia", "Essenciais", 123.0, "Mensal", 1693577802000),
-                    Despesa("Almoço", "Alimentação", 30.0, "Diária", 1693064202000),
-                    Despesa("Cinema", "Entretenimento", 70.0, "Nenhuma", 1693564202000),
-                    Despesa("Jantar Restaurante", "Alimentação", 40.0, "Nenhuma", 1693064202000),
+                    Despesa("Água", "Essenciais", 100.0, "Mensal", false, 1693577802000),
+                    Despesa("Energia", "Essenciais", 123.0, "Mensal", true, 1693577802000),
+                    Despesa("Almoço", "Alimentação", 30.0, "Diária", true, 1693064202000),
+                    Despesa("Cinema", "Entretenimento", 70.0, "Nenhuma", false, 1693564202000),
+                    Despesa("Jantar Restaurante", "Alimentação", 40.0, "Nenhuma", false, 1693064202000),
                 )
             )
         )

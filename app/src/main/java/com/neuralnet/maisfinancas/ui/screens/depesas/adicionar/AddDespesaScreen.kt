@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
@@ -73,8 +74,8 @@ fun AddDespesaScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDespesaScreen(
-    uiState: AddDespesaUiState,
-    onUiStateChanged: (AddDespesaUiState) -> Unit,
+    uiState: DespesaUiState,
+    onUiStateChanged: (DespesaUiState) -> Unit,
     calendarState: DatePickerState,
     onNavigateUp: () -> Unit,
     onSaveClick: () -> Unit,
@@ -120,7 +121,11 @@ fun AddDespesaScreen(
             OutlinedTextField(
                 placeholder = { Text(stringResource(R.string.valor)) },
                 value = uiState.valor,
-                onValueChange = { onUiStateChanged(uiState.copy(valor = it)) },
+                onValueChange = {
+                    if (it.isDigitsOnly()) {
+                        onUiStateChanged(uiState.copy(valor = it))
+                    }
+                },
                 singleLine = true,
                 prefix = { Text(stringResource(R.string.moeda)) },
                 modifier = Modifier
@@ -143,7 +148,7 @@ fun AddDespesaScreen(
 
             RecorrenciaDespesa(
                 recorrencia = uiState.recorrencia,
-                onRecorrenciaChanged = { onUiStateChanged(uiState.copy(nome = it)) },
+                onRecorrenciaChanged = { onUiStateChanged(uiState.copy(recorrencia = it)) },
                 modifier = Modifier.padding(top = 8.dp)
             )
 
@@ -175,7 +180,7 @@ fun AddDespesaScreen(
 fun AddDespesaScreenPreview() {
     MaisFinancasTheme {
         AddDespesaScreen(
-            uiState = AddDespesaUiState(),
+            uiState = DespesaUiState(),
             onUiStateChanged = {},
             calendarState = rememberDatePickerState(),
             onNavigateUp = {},
