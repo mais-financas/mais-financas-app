@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.neuralnet.maisfinancas.ui.navigation.graphs.RootNavGraph
+import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeNavGraph
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
@@ -19,7 +19,7 @@ fun MaisFinancasApp(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            RootNavGraph(navController = navController)
+            HomeNavGraph(navController = navController)
         }
     }
 }

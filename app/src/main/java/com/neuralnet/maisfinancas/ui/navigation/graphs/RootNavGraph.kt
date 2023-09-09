@@ -7,28 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.neuralnet.maisfinancas.ui.screens.home.HomeRoute
-
-@Composable
-fun RootNavGraph(
-    navController: NavHostController,
-) {
-    NavHost(
-        navController = navController,
-        route = AppGraph.ROOT,
-        startDestination = AppGraph.HOME
-    ) {
-        authNavGraph(navController)
-
-        composable(route = AppGraph.HOME) {
-            HomeRoute()
-        }
-    }
-}
-
 
 @Composable
 fun Screen(route: String, onClick: () -> Unit) {
@@ -44,7 +22,6 @@ fun Screen(route: String, onClick: () -> Unit) {
 }
 
 object AppGraph {
-    const val ROOT = "root_graph"
     const val AUTH = "auth_graph"
     const val HOME = "home_graph"
 }

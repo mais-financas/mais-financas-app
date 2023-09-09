@@ -30,6 +30,7 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
             HomeScreen(
                 viewModel = viewModel,
+                onNavigateToLogin = { navController.navigate(route = AppGraph.AUTH) },
                 onAddClick = { navController.navigate(HomeDestinations.AddDespesa.route) }
             )
         }
@@ -68,6 +69,8 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                 route = HomeDestinations.Perfil.route,
                 onClick = { navController.navigate(HomeDestinations.Home.route) })
         }
+
+        authNavGraph(navController)
     }
 }
 

@@ -10,6 +10,9 @@ import java.util.UUID
 @Dao
 interface GestorDao {
 
+    @Query("SELECT EXISTS(SELECT gestor_id FROM gestor WHERE gestor_id = :gestorId)")
+    fun existsById(gestorId: UUID?): Flow<Boolean>
+
     @Insert
     suspend fun insertGestor(gestorEntity: GestorEntity)
 

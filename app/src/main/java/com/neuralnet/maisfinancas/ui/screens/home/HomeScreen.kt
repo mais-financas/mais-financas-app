@@ -10,6 +10,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +27,8 @@ import com.neuralnet.maisfinancas.ui.navigation.FinancasNavigationBar
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeNavGraph
+import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
+import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
@@ -40,13 +44,30 @@ fun HomeRoute(navController: NavHostController = rememberNavController()) {
 fun HomeScreen(
     viewModel: HomeViewModel,
     onAddClick: () -> Unit,
+    onNavigateToLogin: () -> Unit,
 ) {
-    val homeUiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val authState by viewModel.authState.collectAsStateWithLifecycle()
 
-    HomeScreen(
-        uiState = homeUiState.value,
-        onAddClick = onAddClick
-    )
+    when (authState) {
+        AuthState.Loading -> {
+            LoadingScreen()
+        }
+
+        AuthState.NotLoggedIn -> {
+            LaunchedEffect(key1 = Unit) {
+                onNavigateToLogin()
+            }
+        }
+
+        AuthState.LoggedIn -> {
+            val homeUiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+            HomeScreen(
+                uiState = homeUiState.value,
+                onAddClick = onAddClick
+            )
+        }
+    }
 }
 
 @Composable

@@ -23,4 +23,5 @@
     <string name="perfil">Perfil</string>
     <string name="definir_lembrete">Definir Lembrete?</string>
     <string name="moeda">R$</string>
+    <string name="auth">Login</string>
 </resources>
