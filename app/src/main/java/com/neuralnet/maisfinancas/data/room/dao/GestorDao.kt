@@ -10,8 +10,8 @@ import java.util.UUID
 @Dao
 interface GestorDao {
 
-    @Query("SELECT EXISTS(SELECT gestor_id FROM gestor WHERE gestor_id = :gestorId)")
-    fun existsById(gestorId: UUID?): Flow<Boolean>
+    @Query("SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM gestor")
+    fun existsById(): Flow<Boolean>
 
     @Insert
     suspend fun insertGestor(gestorEntity: GestorEntity)

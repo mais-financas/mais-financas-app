@@ -16,6 +16,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.neuralnet.maisfinancas.ui.navigation.graphs.AuthScreen
+import com.neuralnet.maisfinancas.ui.navigation.graphs.DespesasDestinations
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 
 val screens = listOf(
@@ -24,6 +26,13 @@ val screens = listOf(
     HomeDestinations.Estatisticas,
     HomeDestinations.FinancialGoals,
 )
+
+val allowedRoutes = listOf(
+    *screens.map { it.route }.toTypedArray(),
+    DespesasDestinations.DetalhesDespesa.route,
+    DespesasDestinations.Overview.route,
+    DespesasDestinations.DepesasByCategoria.route,
+    )
 
 @Composable
 fun FinancasNavigationBar(navController: NavHostController) {

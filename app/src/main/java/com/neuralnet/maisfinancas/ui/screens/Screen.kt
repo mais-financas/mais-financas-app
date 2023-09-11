@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.ui.navigation.graphs
+package com.neuralnet.maisfinancas.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,9 +19,4 @@ fun Screen(route: String, onClick: () -> Unit) {
             modifier = Modifier.clickable { onClick() }
         )
     }
-}
-
-object AppGraph {
-    const val AUTH = "auth_graph"
-    const val HOME = "home_graph"
 }

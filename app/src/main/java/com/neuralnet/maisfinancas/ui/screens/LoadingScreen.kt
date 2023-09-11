@@ -11,8 +11,8 @@ import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize()) {
-        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
     }
 }
 

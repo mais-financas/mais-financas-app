@@ -10,17 +10,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.neuralnet.maisfinancas.R
+import com.neuralnet.maisfinancas.ui.screens.Screen
 import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaScreen
 import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaViewModel
 import com.neuralnet.maisfinancas.ui.screens.home.HomeScreen
 import com.neuralnet.maisfinancas.ui.screens.home.HomeViewModel
+
+const val HOME_GRAPH = "home_graph"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
-        route = AppGraph.HOME,
+        route = HOME_GRAPH,
         startDestination = HomeDestinations.Home.route,
         modifier = modifier,
     ) {
@@ -30,7 +33,7 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
             HomeScreen(
                 viewModel = viewModel,
-                onNavigateToLogin = { navController.navigate(route = AppGraph.AUTH) },
+                onNavigateToLogin = { navController.navigate(route = HomeDestinations.AuthGraph.route) },
                 onAddClick = { navController.navigate(HomeDestinations.AddDespesa.route) }
             )
         }
@@ -75,10 +78,11 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 }
 
 sealed class HomeDestinations(val route: String, @StringRes val title: Int) {
-    object Home : HomeDestinations("home", R.string.carteira)
-    object DespesasGraph : HomeDestinations("despesas_graph", R.string.despesas)
-    object AddDespesa : HomeDestinations("add_despesa", R.string.adicionar_despesa)
-    object Estatisticas : HomeDestinations("estatisticas", R.string.estatisticas)
-    object FinancialGoals : HomeDestinations("objetivos", R.string.objetivos)
-    object Perfil : HomeDestinations("profile", R.string.perfil)
+    data object Home : HomeDestinations("home", R.string.carteira)
+    data object DespesasGraph : HomeDestinations("despesas_graph", R.string.despesas)
+    data object AddDespesa : HomeDestinations("add_despesa", R.string.adicionar_despesa)
+    data object Estatisticas : HomeDestinations("estatisticas", R.string.estatisticas)
+    data object FinancialGoals : HomeDestinations("objetivos", R.string.objetivos)
+    data object Perfil : HomeDestinations("profile", R.string.perfil)
+    data object AuthGraph : HomeDestinations("auth_grpah", R.string.auth)
 }

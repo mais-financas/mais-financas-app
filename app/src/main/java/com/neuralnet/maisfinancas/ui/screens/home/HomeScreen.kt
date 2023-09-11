@@ -17,28 +17,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.ObjetivosOverview
 import com.neuralnet.maisfinancas.ui.components.OrcamentoOverview
 import com.neuralnet.maisfinancas.ui.components.TransferenciasSemana
-import com.neuralnet.maisfinancas.ui.navigation.FinancasNavigationBar
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
-import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeNavGraph
 import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
 import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
-
-@Composable
-fun HomeRoute(navController: NavHostController = rememberNavController()) {
-    Scaffold(
-        bottomBar = { FinancasNavigationBar(navController = navController) }
-    ) { paddingValues ->
-        HomeNavGraph(navController, modifier = Modifier.padding(paddingValues))
-    }
-}
 
 @Composable
 fun HomeScreen(

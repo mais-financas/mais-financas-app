@@ -24,4 +24,24 @@
     <string name="definir_lembrete">Definir Lembrete?</string>
     <string name="moeda">R$</string>
     <string name="auth">Login</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="entrar">Entrar</string>
+    <string name="welcome">Bem-vindo de volta</string>
+    <string name="app_slogan">Gerencie suas finanças</string>
+    <string name="nao_possui_conta">Não possui uma conta?</string>
+    <string name="registrar">Registrar</string>
+    <string name="login_options_description">ou continue com</string>
+    <string name="possui_conta">Já possui uma conta?</string>
+    <string name="fazer_login">" Fazer Login"</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="twitter">Twitter</string>
+    <string name="required">*Campo obrigatório</string>
+    <string name="confirmar_senha">Confirmar senha</string>
+    <string name="signup_options_description">ou cadastre-se com</string>
+    <string name="concordar_termos">Aceito os termos e condições</string>
+    <string name="crie_uma_conta">Crie uma conta</string>
+    <string name="remember_me">Lembrar de mim</string>
+    <string name="esqueceu_sua_senha">Esqueceu sua senha?</string>
 </resources>

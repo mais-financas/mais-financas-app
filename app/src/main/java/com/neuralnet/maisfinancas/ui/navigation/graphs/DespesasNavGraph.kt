@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.neuralnet.maisfinancas.ui.screens.Screen
 import com.neuralnet.maisfinancas.ui.screens.depesas.DespesaViewModel
 import com.neuralnet.maisfinancas.ui.screens.depesas.DespesasScreen
 
@@ -42,7 +43,7 @@ fun NavGraphBuilder.despesasNavGraph(navController: NavController) {
 }
 
 sealed class DespesasDestinations(val route: String) {
-    object Overview : DespesasDestinations("despesas_overview")
-    object DepesasByCategoria : DespesasDestinations("despesas_by_categoria")
-    object DetalhesDespesa : DespesasDestinations("detalhes_despesas")
+    data object Overview : DespesasDestinations("despesas_overview")
+    data object DepesasByCategoria : DespesasDestinations("despesas_by_categoria")
+    data object DetalhesDespesa : DespesasDestinations("detalhes_despesas")
 }
