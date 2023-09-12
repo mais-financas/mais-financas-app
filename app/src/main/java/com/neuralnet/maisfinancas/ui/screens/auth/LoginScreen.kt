@@ -1,9 +1,12 @@
 package com.neuralnet.maisfinancas.ui.screens.auth
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +21,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
+import com.neuralnet.maisfinancas.ui.components.MaisFinancasBackground
 import com.neuralnet.maisfinancas.ui.components.auth.LoginForm
 import com.neuralnet.maisfinancas.ui.components.auth.LoginOptions
-import com.neuralnet.maisfinancas.ui.components.MaisFinancasBackground
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
@@ -37,6 +40,7 @@ fun LoginScreen(
     MaisFinancasBackground(
         canNavigateBack = true,
         onNavigateUp = onNavigateBack,
+        modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
         Image(
             painter = painterResource(R.drawable.ic_launcher_background),
@@ -60,7 +64,6 @@ fun LoginScreen(
         )
 
         LoginOptions(
-            label = stringResource(id = R.string.login_options_description),
             onSigninWithFacebook = onSigninWithFacebook,
             onSigninWithGoogle = onSigninWithGoogle,
             onSigninWithTwitter = onSigninWithTwitter,
@@ -68,10 +71,10 @@ fun LoginScreen(
 
         ClickableText(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle()) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
                     append(stringResource(R.string.nao_possui_conta))
                 }
-                append(" ")
+
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                     append(stringResource(R.string.registrar))
                 }
@@ -81,7 +84,8 @@ fun LoginScreen(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun LoginScreenPreview() {
     MaisFinancasTheme {

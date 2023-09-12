@@ -52,9 +52,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                     signUpViewModel.cadastrarUsuario()
                     navController.navigate(HOME_GRAPH)
                 },
-                onSigninWithFacebook = { /*TODO*/ },
-                onSigninWithGoogle = { /*TODO*/ },
-                onSigninWithTwitter = { /*TODO*/ },
                 onNavigateLogin = { navController.navigate(AuthScreen.Login.route) }
             )
 

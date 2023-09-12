@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -42,7 +44,8 @@ fun WelcomeScreen(
             fontSize = MaterialTheme.typography.headlineMedium.fontSize,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
-                .padding(top = 16.dp)
+                .padding(top = 24.dp)
+                .align(Alignment.Start)
         )
 
         Button(
@@ -52,16 +55,15 @@ fun WelcomeScreen(
                 .padding(vertical = 16.dp)
         ) {
             Text(
-                text = stringResource(R.string.entrar)
+                text = stringResource(R.string.comece_aqui)
             )
         }
 
         ClickableText(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle()) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                     append(stringResource(R.string.nao_possui_conta))
                 }
-                append(" ")
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                     append(stringResource(R.string.registrar))
                 }
@@ -71,7 +73,8 @@ fun WelcomeScreen(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun WelcomeScreenPreview() {
     MaisFinancasTheme {

@@ -26,7 +26,6 @@ import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
 fun LoginOptions(
-    label: String,
     onSigninWithFacebook: () -> Unit,
     onSigninWithGoogle: () -> Unit,
     onSigninWithTwitter: () -> Unit,
@@ -44,7 +43,7 @@ fun LoginOptions(
                     .padding(8.dp)
             )
 
-            Text(text = label)
+            Text(text = stringResource(id = R.string.continue_com))
 
             Divider(
                 modifier = Modifier
@@ -113,7 +112,6 @@ fun LoginOption(
 fun LoginOptionsPreview() {
     MaisFinancasTheme {
         LoginOptions(
-            "ou continue com",
             onSigninWithFacebook = {},
             onSigninWithGoogle = {},
             onSigninWithTwitter = {}

@@ -1,11 +1,10 @@
 package com.neuralnet.maisfinancas.ui.components.auth
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,23 +40,10 @@ fun LoginForm(
             errorMessage = loginFormState.senhaErrorMessage,
             modifier = Modifier.fillMaxWidth()
         )
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = loginFormState.rememberMe,
-                onCheckedChange = {
-                    onLoginFormStateChange(
-                        loginFormState.copy(rememberMe = !loginFormState.rememberMe)
-                    )
-                }
-            )
-            Text(
-                text = stringResource(id = R.string.remember_me),
-                modifier = Modifier.weight(1f)
-            )
-
-            Text(text = stringResource(R.string.esqueceu_sua_senha))
-        }
+        Text(
+            text = stringResource(R.string.esqueceu_sua_senha),
+            modifier = Modifier.align(Alignment.End)
+        )
 
         Button(
             onClick = onLoginClick,
@@ -71,6 +57,7 @@ fun LoginForm(
 }
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun LoginFormPreview() {
     MaisFinancasTheme {

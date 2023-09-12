@@ -5,5 +5,4 @@ data class LoginFormState(
     val emailErrorMessage: String? = null,
     val senha: String = "",
     val senhaErrorMessage: String? = null,
-    val rememberMe: Boolean = false,
 )

@@ -19,7 +19,7 @@
     <string name="back_button">Voltar</string>
     <string name="carteira">Carteira</string>
     <string name="adicionar_despesa">Adicionar Despesa</string>
-    <string name="estatisticas">Estatísticas\n</string>
+    <string name="estatisticas">Estatísticas</string>
     <string name="perfil">Perfil</string>
     <string name="definir_lembrete">Definir Lembrete?</string>
     <string name="moeda">R$</string>
@@ -29,10 +29,10 @@
     <string name="entrar">Entrar</string>
     <string name="welcome">Bem-vindo de volta</string>
     <string name="app_slogan">Gerencie suas finanças</string>
-    <string name="nao_possui_conta">Não possui uma conta?</string>
+    <string name="nao_possui_conta">"Não possui uma conta? "</string>
+    <string name="possui_conta">"Já possui uma conta? "</string>
     <string name="registrar">Registrar</string>
-    <string name="login_options_description">ou continue com</string>
-    <string name="possui_conta">Já possui uma conta?</string>
+    <string name="continue_com">ou continue com</string>
     <string name="fazer_login">" Fazer Login"</string>
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
@@ -44,4 +44,5 @@
     <string name="crie_uma_conta">Crie uma conta</string>
     <string name="remember_me">Lembrar de mim</string>
     <string name="esqueceu_sua_senha">Esqueceu sua senha?</string>
+    <string name="comece_aqui">Comece aqui</string>
 </resources>

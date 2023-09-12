@@ -33,7 +33,7 @@ fun MaisFinancasBackground(
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
     onNavigateUp: () -> Unit = {},
-    content: @Composable ColumnScope.() -> Unit,
+    content: @Composable (ColumnScope.() -> Unit),
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -60,29 +60,27 @@ fun MaisFinancasBackground(
         }
     ) {
         Surface(
+            color = MaterialTheme.colorScheme.background,
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
                 .clip(
                     RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
-                )
-                .background(MaterialTheme.colorScheme.surface),
+                ),
         ) {
             Column(
                 modifier = modifier.padding(
                     start = 16.dp,
                     end = 16.dp,
                     top = 16.dp,
-                    bottom = 32.dp
+                    bottom = 24.dp
                 ),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceAround
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = stringResource(R.string.app_name),
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 16.dp),
+                    modifier = Modifier.padding(bottom = 16.dp),
                     fontSize = MaterialTheme.typography.displaySmall.fontSize,
                     fontWeight = FontWeight.Bold
                 )
