@@ -11,6 +11,7 @@ data class CategoriaEntity(
     @ColumnInfo(name = "categoria_id")
     val id: Int,
 
+    @ColumnInfo(name = "nome_categoria")
     val nome: String,
 
     @ColumnInfo("porcentagem_limite")

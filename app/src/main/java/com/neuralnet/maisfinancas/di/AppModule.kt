@@ -4,6 +4,8 @@ import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.repository.impl.DespesaRepositoryImpl
 import com.neuralnet.maisfinancas.data.repository.impl.GestorRepositoryImpl
+import com.neuralnet.maisfinancas.data.room.dao.CategoriaDao
+import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
 import com.neuralnet.maisfinancas.data.room.dao.GestorDao
 import dagger.Module
 import dagger.Provides
@@ -17,7 +19,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideDespesaRepository(): DespesaRepository = DespesaRepositoryImpl()
+    fun provideDespesaRepository(
+        despesaDao: DespesaDao,
+        categoriaDao: CategoriaDao,
+    ): DespesaRepository = DespesaRepositoryImpl(despesaDao, categoriaDao)
 
     @Singleton
     @Provides

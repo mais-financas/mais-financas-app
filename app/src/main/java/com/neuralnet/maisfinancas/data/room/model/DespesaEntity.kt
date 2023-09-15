@@ -30,17 +30,20 @@ data class DespesaEntity(
     @ColumnInfo("despesa_id")
     val id: Long = 0L,
 
+    @ColumnInfo("nome_despesa")
     val nome: String,
 
+    @ColumnInfo("valor_despesa")
     val valor: BigDecimal,
+
+    @ColumnInfo("data_despesa")
+    val data: Calendar,
 
     @ColumnInfo("recorrencia_em_dias")
     val recorrenciaEmDias: Int,
 
     @ColumnInfo("definir_lembrete")
     val definirLembrete: Boolean,
-
-    val data: Calendar,
 
     @ColumnInfo("gestor_id", index = true)
     val gestorId: UUID,

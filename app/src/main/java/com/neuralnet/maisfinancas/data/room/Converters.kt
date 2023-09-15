@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.neuralnet.maisfinancas.util.toCalendar
 import java.math.BigDecimal
 import java.util.Calendar
+import java.util.UUID
 
 class Converters {
 
@@ -18,4 +19,11 @@ class Converters {
 
     @TypeConverter
     fun bigDecimalToDouble(bigDecimal: BigDecimal): Double = bigDecimal.toDouble()
+
+    @TypeConverter
+    fun uuidFromString(value: String): UUID = UUID.fromString(value)
+
+    @TypeConverter
+    fun uuidToString(uuid: UUID): String = uuid.toString()
+
 }

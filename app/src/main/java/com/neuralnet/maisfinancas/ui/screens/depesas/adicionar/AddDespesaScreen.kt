@@ -1,6 +1,5 @@
 package com.neuralnet.maisfinancas.ui.screens.depesas.adicionar
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +21,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,16 +42,6 @@ import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
-val list = listOf(
-    "Essenciais",
-    "Transporte",
-    "Alimentação",
-    "Entretenimento",
-    "Saúde",
-    "Educação",
-    "Dívidas"
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDespesaScreen(
@@ -61,10 +51,18 @@ fun AddDespesaScreen(
     onSaveClick: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val categoriasState = viewModel.categorias.collectAsStateWithLifecycle()
+
+    val categorias by remember {
+        derivedStateOf {
+            categoriasState.value.map { it.nome }
+        }
+    }
 
     AddDespesaScreen(
         uiState = uiState.value,
         onUiStateChanged = viewModel::updateUiState,
+        categorias = categorias,
         calendarState = calendarState,
         onNavigateUp = onNavigateUp,
         onSaveClick = onSaveClick,
@@ -74,8 +72,9 @@ fun AddDespesaScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDespesaScreen(
-    uiState: DespesaUiState,
-    onUiStateChanged: (DespesaUiState) -> Unit,
+    uiState: AddDespesaUiState,
+    onUiStateChanged: (AddDespesaUiState) -> Unit,
+    categorias: List<String>,
     calendarState: DatePickerState,
     onNavigateUp: () -> Unit,
     onSaveClick: () -> Unit,
@@ -139,7 +138,7 @@ fun AddDespesaScreen(
             var expanded by remember { mutableStateOf(false) }
             AppDropdown(
                 label = R.string.categoria,
-                options = list,
+                options = categorias,
                 selectedOptionText = uiState.categoria,
                 onSelectedOptionText = { onUiStateChanged(uiState.copy(categoria = it)) },
                 expanded = expanded,
@@ -152,22 +151,22 @@ fun AddDespesaScreen(
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            AnimatedVisibility(visible = uiState.recorrencia != items[0]) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.definir_lembrete),
-                        modifier = Modifier.weight(1f)
-                    )
-                    Switch(
-                        checked = uiState.definirLembrete,
-                        onCheckedChange = { onUiStateChanged(uiState.copy(definirLembrete = it)) }
-                    )
-                }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.definir_lembrete),
+                    modifier = Modifier.weight(1f)
+                )
+                Switch(
+                    enabled = uiState.recorrencia != items.keys.first(),
+                    checked = uiState.definirLembrete && uiState.recorrencia != items.keys.first(),
+                    onCheckedChange = { onUiStateChanged(uiState.copy(definirLembrete = it)) }
+                )
             }
+
 
             DatePicker(state = calendarState, showModeToggle = false)
         }
@@ -180,7 +179,8 @@ fun AddDespesaScreen(
 fun AddDespesaScreenPreview() {
     MaisFinancasTheme {
         AddDespesaScreen(
-            uiState = DespesaUiState(),
+            uiState = AddDespesaUiState(),
+            categorias = listOf("Essenciais", "Entretenimento", "Saúde"),
             onUiStateChanged = {},
             calendarState = rememberDatePickerState(),
             onNavigateUp = {},

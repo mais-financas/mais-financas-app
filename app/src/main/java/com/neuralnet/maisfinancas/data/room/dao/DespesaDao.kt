@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.neuralnet.maisfinancas.data.room.model.DespesaEntity
+import com.neuralnet.maisfinancas.data.room.model.relationships.DespesaAndCategoria
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -14,6 +15,6 @@ interface DespesaDao {
     suspend fun insertDespesa(despesa: DespesaEntity)
 
     @Query("SELECT * FROM despesa WHERE gestor_id = :gestorId")
-    fun getDepesasByGestorId(gestorId: UUID): Flow<List<DespesaEntity>>
+    fun getDepesasByGestorId(gestorId: UUID): Flow<List<DespesaAndCategoria>>
 
 }

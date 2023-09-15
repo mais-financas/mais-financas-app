@@ -20,6 +20,8 @@ import com.neuralnet.maisfinancas.ui.components.toReal
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import com.neuralnet.maisfinancas.util.toCalendar
+import java.math.BigDecimal
 
 @Composable
 fun DespesasScreen(viewModel: DespesaViewModel) {
@@ -81,11 +83,11 @@ fun DespesasScreenPreview() {
         DespesasScreen(
             uiState = DespesasUiState(
                 listOf(
-                    Despesa("Água", "Essenciais", 100.0, "Mensal", false, 1693577802000),
-                    Despesa("Energia", "Essenciais", 123.0, "Mensal", true, 1693577802000),
-                    Despesa("Almoço", "Alimentação", 30.0, "Diária", true, 1693064202000),
-                    Despesa("Cinema", "Entretenimento", 70.0, "Nenhuma", false, 1693564202000),
-                    Despesa("Jantar Restaurante", "Alimentação", 40.0, "Nenhuma", false, 1693064202000),
+                    Despesa("Água", "Essenciais", BigDecimal.valueOf(100.0), 5, false, 1693577802000.toCalendar()),
+                    Despesa("Energia", "Essenciais", BigDecimal.valueOf(123.0), 5, true, 1693577802000.toCalendar()),
+                    Despesa("Almoço", "Alimentação", BigDecimal.valueOf(30.0), 5, true, 1693064202000.toCalendar()),
+                    Despesa("Cinema", "Entretenimento", BigDecimal.valueOf(70.0), 5, false, 1693564202000.toCalendar()),
+                    Despesa("Jantar Restaurante", "Alimentação", BigDecimal.valueOf(40.0), 5, false, 1693064202000.toCalendar()),
                 )
             )
         )
@@ -96,5 +98,6 @@ private fun valorPorCategoria(despesas: Map.Entry<String, List<Despesa>>): Strin
     return despesas.value
         .filter { despesa -> despesa.categoria == despesas.key }
         .sumOf { it.valor }
+        .toDouble()
         .toReal()
 }

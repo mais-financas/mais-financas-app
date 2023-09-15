@@ -24,7 +24,8 @@ object DatabaseModule {
             context = context,
             klass = MaisFinancasDatabase::class.java,
             name = "financas_db"
-        ).build()
+        ).createFromAsset("database/financas.db")
+            .build()
     }
 
     @Provides

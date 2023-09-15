@@ -13,6 +13,7 @@ data class GestorEntity(
     @ColumnInfo("gestor_id")
     val id: UUID,
 
+    @ColumnInfo("nome_gestor")
     val nome: String,
 
     val orcamento: BigDecimal
