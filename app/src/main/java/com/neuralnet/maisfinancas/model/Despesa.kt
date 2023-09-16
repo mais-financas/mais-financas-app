@@ -10,7 +10,7 @@ data class Despesa(
     val nome: String,
     val categoria: String,
     val valor: BigDecimal,
-    val recorrenciaEmDias: Int,
+    val recorrencia: Recorrencia,
     val definirLembrete: Boolean,
     val data: Calendar,
 )
@@ -20,7 +20,7 @@ fun Despesa.toEntity(gestorId: UUID, categoriaId: Int) = DespesaEntity(
     nome = nome,
     valor = valor,
     data = data,
-    recorrenciaEmDias = recorrenciaEmDias,
+    recorrencia = recorrencia,
     definirLembrete = definirLembrete,
     gestorId = gestorId,
     categoriaId = categoriaId,

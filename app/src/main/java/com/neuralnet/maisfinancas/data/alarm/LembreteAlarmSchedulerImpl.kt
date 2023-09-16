@@ -33,7 +33,7 @@ class LembreteAlarmSchedulerImpl(
         alarmManager.setInexactRepeating(
             AlarmManager.RTC,
             calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY * despesa.recorrenciaEmDias,
+            AlarmManager.INTERVAL_DAY * despesa.recorrencia.quantidade, // TODO consertar
             pendingIntent
         )
     }

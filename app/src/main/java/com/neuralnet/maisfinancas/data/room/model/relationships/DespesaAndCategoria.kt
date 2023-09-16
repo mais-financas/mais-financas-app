@@ -20,7 +20,7 @@ fun List<DespesaAndCategoria>.mapToModel(): List<Despesa> = map {
         nome = it.despesa.nome,
         categoria = it.categoria.nome,
         valor = it.despesa.valor,
-        recorrenciaEmDias = it.despesa.recorrenciaEmDias,
+        recorrencia = it.despesa.recorrencia,
         definirLembrete = it.despesa.definirLembrete,
         data = it.despesa.data,
     )

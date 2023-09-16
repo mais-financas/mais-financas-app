@@ -5,6 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmScheduler
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
+import com.neuralnet.maisfinancas.model.Recorrencia
+import com.neuralnet.maisfinancas.model.TipoRecorrencia
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.ANUAL
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.DIARIA
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.MENSAL
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.SEMANAL
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -48,20 +54,26 @@ class AddDespesaViewModel @Inject constructor(
 
         val despesaId = despesaRepository.salvarDespesa(despesa, gestorId, categoria.id)
 
-        val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrenciaEmDias)
+        val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)
         if (despesa.definirLembrete) {
             lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa.copy(id = despesaId))
         }
     }
 }
 
-fun definirProximoLembrete(selectedDateMillis: Long, recorrenciaEmDias: Int): Calendar {
+fun definirProximoLembrete(selectedDateMillis: Long, recorrencia: Recorrencia): Calendar {
     val dataAtual = System.currentTimeMillis()
     val calendarDataLembrete = Calendar.getInstance()
     calendarDataLembrete.timeInMillis = selectedDateMillis
 
     while (calendarDataLembrete.timeInMillis < dataAtual) {
-        calendarDataLembrete.add(Calendar.DATE, recorrenciaEmDias)
+        when (recorrencia.tipoRecorrencia) {
+            DIARIA -> calendarDataLembrete.add(Calendar.DATE, recorrencia.quantidade)
+            SEMANAL -> calendarDataLembrete.add(Calendar.DATE, 7 * recorrencia.quantidade)
+            MENSAL -> calendarDataLembrete.add(Calendar.MONTH, recorrencia.quantidade)
+            ANUAL -> calendarDataLembrete.add(Calendar.YEAR, recorrencia.quantidade)
+            else -> throw Exception("Impossível definir lembrete para ${TipoRecorrencia.NENHUMA}")
+        }
     }
 
     return calendarDataLembrete

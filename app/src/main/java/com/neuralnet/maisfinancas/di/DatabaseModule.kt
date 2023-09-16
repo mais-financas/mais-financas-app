@@ -25,6 +25,7 @@ object DatabaseModule {
             klass = MaisFinancasDatabase::class.java,
             name = "financas_db"
         ).createFromAsset("database/financas.db")
+            .fallbackToDestructiveMigration()
             .build()
     }
 

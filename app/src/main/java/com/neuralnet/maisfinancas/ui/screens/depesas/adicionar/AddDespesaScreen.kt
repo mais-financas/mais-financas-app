@@ -36,15 +36,15 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
+import com.neuralnet.maisfinancas.model.Recorrencia
+import com.neuralnet.maisfinancas.model.TipoRecorrencia
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
 import com.neuralnet.maisfinancas.ui.components.RecorrenciaDespesa
 import com.neuralnet.maisfinancas.ui.components.getDate
-import com.neuralnet.maisfinancas.ui.components.items
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import java.time.Instant
-import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -150,12 +150,13 @@ fun AddDespesaScreen(
             )
 
             RecorrenciaDespesa(
-                recorrencia = uiState.recorrencia,
-                onRecorrenciaChanged = { onUiStateChanged(uiState.copy(recorrencia = it)) },
+                recorrencia = uiState.tipoRecorrencia,
+                onRecorrenciaChanged = { onUiStateChanged(uiState.copy(tipoRecorrencia = it)) },
                 modifier = Modifier.padding(top = 8.dp)
             )
 
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -165,23 +166,34 @@ fun AddDespesaScreen(
                     modifier = Modifier.weight(1f)
                 )
                 Switch(
-                    enabled = uiState.recorrencia != items.keys.first(),
-                    checked = uiState.definirLembrete && uiState.recorrencia != items.keys.first(),
+                    enabled = uiState.tipoRecorrencia != TipoRecorrencia.NENHUMA,
+                    checked = uiState.definirLembrete && uiState.tipoRecorrencia != TipoRecorrencia.NENHUMA,
                     onCheckedChange = { onUiStateChanged(uiState.copy(definirLembrete = it)) }
                 )
             }
 
             AnimatedVisibility(visible = uiState.definirLembrete) {
-                val dataProximoLembrete = remember(calendarState.selectedDateMillis, uiState.recorrencia) {
-                    derivedStateOf {
-                        definirProximoLembrete(
-                            selectedDateMillis = calendarState.selectedDateMillis
-                                ?: Instant.now().toEpochMilli(),
-                            recorrenciaEmDias = items[uiState.recorrencia] ?: items.values.first()
-                        )
+                val dataProximoLembrete =
+                    remember(calendarState.selectedDateMillis, uiState.tipoRecorrencia) {
+                        derivedStateOf {
+                            definirProximoLembrete(
+                                selectedDateMillis = calendarState.selectedDateMillis
+                                    ?: Instant.now().toEpochMilli(),
+                                recorrencia = Recorrencia(
+                                    tipoRecorrencia = uiState.tipoRecorrencia,
+                                    quantidade = uiState.quantidadeRecorrencia
+                                )
+                            )
+                        }
                     }
-                }
-                Text(text = dataProximoLembrete.value.timeInMillis.getDate())
+                Text(
+                    text = stringResource(
+                        R.string.prximo_lembrete,
+                        dataProximoLembrete.value.timeInMillis.getDate()
+                    ),
+                    modifier = Modifier.padding(vertical = 8.dp)
+                    ,
+                )
             }
 
             DatePicker(state = calendarState, showModeToggle = false)
@@ -195,7 +207,7 @@ fun AddDespesaScreen(
 fun AddDespesaScreenPreview() {
     MaisFinancasTheme {
         AddDespesaScreen(
-            uiState = AddDespesaUiState(),
+            uiState = AddDespesaUiState(tipoRecorrencia = TipoRecorrencia.ANUAL, definirLembrete = true),
             onUiStateChanged = {},
             categorias = listOf("Essenciais", "Entretenimento", "Saúde"),
             calendarState = rememberDatePickerState(),

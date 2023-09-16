@@ -14,21 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
-import java.time.Instant
-import java.time.LocalDate
-import java.util.Calendar
-import java.util.Date
-
-val items: Map<String, Int> = mapOf(
-    "Nenhuma" to 0,
-    "Diária" to 1,
-    "Semanal" to 7,
-    "Mensal" to 30,
-    "Anual" to 365,
-)
+import com.neuralnet.maisfinancas.model.TipoRecorrencia
 
 @Composable
-fun RecorrenciaDespesa(recorrencia: String, onRecorrenciaChanged: (String) -> Unit, modifier: Modifier = Modifier) {
+fun RecorrenciaDespesa(recorrencia: TipoRecorrencia, onRecorrenciaChanged: (TipoRecorrencia) -> Unit, modifier: Modifier = Modifier) {
 
     Column(modifier = modifier) {
         Text(
@@ -40,9 +29,9 @@ fun RecorrenciaDespesa(recorrencia: String, onRecorrenciaChanged: (String) -> Un
 
         var expanded by remember { mutableStateOf(false) }
 
-        AppDropdown(
+        RecorrenciaDespesaDropdown(
             label = R.string.recorrencia,
-            options = items.keys.toList(),
+            options = TipoRecorrencia.values(),
             selectedOptionText = recorrencia,
             onSelectedOptionText = onRecorrenciaChanged,
             expanded = expanded,

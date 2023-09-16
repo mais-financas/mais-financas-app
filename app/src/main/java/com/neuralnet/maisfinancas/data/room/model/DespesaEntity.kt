@@ -1,9 +1,11 @@
 package com.neuralnet.maisfinancas.data.room.model
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.neuralnet.maisfinancas.model.Recorrencia
 import java.math.BigDecimal
 import java.util.Calendar
 import java.util.UUID
@@ -39,8 +41,8 @@ data class DespesaEntity(
     @ColumnInfo("data_despesa")
     val data: Calendar,
 
-    @ColumnInfo("recorrencia_em_dias")
-    val recorrenciaEmDias: Int,
+    @Embedded
+    val recorrencia: Recorrencia,
 
     @ColumnInfo("definir_lembrete")
     val definirLembrete: Boolean,
