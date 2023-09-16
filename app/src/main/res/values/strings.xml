@@ -45,4 +45,7 @@
     <string name="remember_me">Lembrar de mim</string>
     <string name="esqueceu_sua_senha">Esqueceu sua senha?</string>
     <string name="comece_aqui">Comece aqui</string>
+    <string name="channel_name">Lembretes</string>
+    <string name="channel_description">Define lembretes às despesas selecionadas ao usuário</string>
+    <string name="mensagem_lembrete">O prazo para pagar a despesa de %s está chegando</string>
 </resources>

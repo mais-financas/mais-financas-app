@@ -15,6 +15,7 @@ import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaScreen
 import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaViewModel
 import com.neuralnet.maisfinancas.ui.screens.home.HomeScreen
 import com.neuralnet.maisfinancas.ui.screens.home.HomeViewModel
+import java.time.Instant
 
 const val HOME_GRAPH = "home_graph"
 
@@ -40,7 +41,9 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
         composable(route = HomeDestinations.AddDespesa.route) {
             val viewModel = hiltViewModel<AddDespesaViewModel>()
-            val calendarState = rememberDatePickerState()
+            val calendarState = rememberDatePickerState(
+                initialSelectedDateMillis = Instant.now().toEpochMilli()
+            )
 
             AddDespesaScreen(
                 viewModel = viewModel,

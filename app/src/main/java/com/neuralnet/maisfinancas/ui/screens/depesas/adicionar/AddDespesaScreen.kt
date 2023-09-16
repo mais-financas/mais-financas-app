@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.screens.depesas.adicionar
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,10 +38,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
 import com.neuralnet.maisfinancas.ui.components.RecorrenciaDespesa
+import com.neuralnet.maisfinancas.ui.components.getDate
 import com.neuralnet.maisfinancas.ui.components.items
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import java.time.Instant
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -167,6 +171,18 @@ fun AddDespesaScreen(
                 )
             }
 
+            AnimatedVisibility(visible = uiState.definirLembrete) {
+                val dataProximoLembrete = remember(calendarState.selectedDateMillis, uiState.recorrencia) {
+                    derivedStateOf {
+                        definirProximoLembrete(
+                            selectedDateMillis = calendarState.selectedDateMillis
+                                ?: Instant.now().toEpochMilli(),
+                            recorrenciaEmDias = items[uiState.recorrencia] ?: items.values.first()
+                        )
+                    }
+                }
+                Text(text = dataProximoLembrete.value.timeInMillis.getDate())
+            }
 
             DatePicker(state = calendarState, showModeToggle = false)
         }
@@ -180,8 +196,8 @@ fun AddDespesaScreenPreview() {
     MaisFinancasTheme {
         AddDespesaScreen(
             uiState = AddDespesaUiState(),
-            categorias = listOf("Essenciais", "Entretenimento", "Saúde"),
             onUiStateChanged = {},
+            categorias = listOf("Essenciais", "Entretenimento", "Saúde"),
             calendarState = rememberDatePickerState(),
             onNavigateUp = {},
             onSaveClick = {}

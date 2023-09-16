@@ -6,6 +6,7 @@ import java.util.Calendar
 import java.util.UUID
 
 data class Despesa(
+    val id: Long,
     val nome: String,
     val categoria: String,
     val valor: BigDecimal,
@@ -15,6 +16,7 @@ data class Despesa(
 )
 
 fun Despesa.toEntity(gestorId: UUID, categoriaId: Int) = DespesaEntity(
+    id = id,
     nome = nome,
     valor = valor,
     data = data,
