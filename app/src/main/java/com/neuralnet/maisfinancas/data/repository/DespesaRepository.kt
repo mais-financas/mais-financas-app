@@ -9,7 +9,7 @@ interface DespesaRepository {
 
     fun getDespesas(gestorId: UUID): Flow<List<Despesa>>
 
-    suspend fun salvarDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int)
+    suspend fun salvarDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int): Long
 
     fun getCategorias(): Flow<List<CategoriaEntity>>
 

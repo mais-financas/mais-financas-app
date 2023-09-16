@@ -18,6 +18,7 @@ import com.neuralnet.maisfinancas.util.formattedDate
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 @Composable
 fun ItemDespesa(despesa: Despesa, modifier: Modifier = Modifier) {
@@ -37,6 +38,7 @@ fun ItemDespesa(despesa: Despesa, modifier: Modifier = Modifier) {
 fun Long.getDate(): String {
     return try {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+        sdf.timeZone = TimeZone.getTimeZone("Etc/UTC");
         sdf.format(Date(this))
     } catch (e: Exception) {
         e.toString()

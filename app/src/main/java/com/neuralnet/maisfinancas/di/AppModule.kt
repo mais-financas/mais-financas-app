@@ -1,5 +1,9 @@
 package com.neuralnet.maisfinancas.di
 
+import android.content.Context
+import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmScheduler
+import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmSchedulerImpl
+import com.neuralnet.maisfinancas.data.alarm.NotificationReceiver
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.repository.impl.DespesaRepositoryImpl
@@ -10,6 +14,7 @@ import com.neuralnet.maisfinancas.data.room.dao.GestorDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -28,5 +33,11 @@ object AppModule {
     @Provides
     fun provideGestorRepository(gestorDao: GestorDao): GestorRepository =
         GestorRepositoryImpl(gestorDao)
+
+    @Singleton
+    @Provides
+    fun provideLembreteAlarmScheduler(
+        @ApplicationContext context: Context,
+    ): LembreteAlarmScheduler = LembreteAlarmSchedulerImpl(context)
 
 }

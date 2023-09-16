@@ -20,9 +20,9 @@ class DespesaRepositoryImpl(
     override fun getDespesas(gestorId: UUID): Flow<List<Despesa>> =
         despesaDao.getDepesasByGestorId(gestorId).map(List<DespesaAndCategoria>::mapToModel)
 
-    override suspend fun salvarDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int) {
+    override suspend fun salvarDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int): Long {
         val despesaEntity = despesa.toEntity(gestorId, categoriaId)
-        despesaDao.insertDespesa(despesaEntity)
+        return despesaDao.insertDespesa(despesaEntity)
     }
 
     override fun getCategorias(): Flow<List<CategoriaEntity>> = categoriaDao.getCategorias()

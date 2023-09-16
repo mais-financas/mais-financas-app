@@ -12,7 +12,7 @@ import java.util.UUID
 interface DespesaDao {
 
     @Insert
-    suspend fun insertDespesa(despesa: DespesaEntity)
+    suspend fun insertDespesa(despesa: DespesaEntity): Long
 
     @Query("SELECT * FROM despesa WHERE gestor_id = :gestorId")
     fun getDepesasByGestorId(gestorId: UUID): Flow<List<DespesaAndCategoria>>

@@ -83,11 +83,42 @@ fun DespesasScreenPreview() {
         DespesasScreen(
             uiState = DespesasUiState(
                 listOf(
-                    Despesa("Água", "Essenciais", BigDecimal.valueOf(100.0), 5, false, 1693577802000.toCalendar()),
-                    Despesa("Energia", "Essenciais", BigDecimal.valueOf(123.0), 5, true, 1693577802000.toCalendar()),
-                    Despesa("Almoço", "Alimentação", BigDecimal.valueOf(30.0), 5, true, 1693064202000.toCalendar()),
-                    Despesa("Cinema", "Entretenimento", BigDecimal.valueOf(70.0), 5, false, 1693564202000.toCalendar()),
-                    Despesa("Jantar Restaurante", "Alimentação", BigDecimal.valueOf(40.0), 5, false, 1693064202000.toCalendar()),
+                    Despesa(
+                        id = 0,
+                        nome = "Água",
+                        categoria = "Essenciais",
+                        valor = BigDecimal.valueOf(100.0),
+                        recorrenciaEmDias = 5,
+                        definirLembrete = false,
+                        data = 1693577802000.toCalendar()
+                    ),
+                    Despesa(
+                        id = 0,
+                        nome = "Energia",
+                        categoria = "Essenciais",
+                        valor = BigDecimal.valueOf(123.0),
+                        recorrenciaEmDias = 5,
+                        definirLembrete = true,
+                        data = 1693577802000.toCalendar()
+                    ),
+                    Despesa(
+                        id = 0,
+                        nome = "Almoço",
+                        categoria = "Alimentação",
+                        valor = BigDecimal.valueOf(30.0),
+                        recorrenciaEmDias = 5,
+                        definirLembrete = true,
+                        data = 1693064202000.toCalendar()
+                    ),
+                    Despesa(
+                        id = 0,
+                        nome = "Cinema",
+                        categoria = "Entretenimento",
+                        valor = BigDecimal.valueOf(70.0),
+                        recorrenciaEmDias = 5,
+                        definirLembrete = false,
+                        data = 1693564202000.toCalendar()
+                    ),
                 )
             )
         )

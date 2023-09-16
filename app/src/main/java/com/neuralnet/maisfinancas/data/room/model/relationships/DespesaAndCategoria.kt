@@ -16,6 +16,7 @@ data class DespesaAndCategoria(
 
 fun List<DespesaAndCategoria>.mapToModel(): List<Despesa> = map {
     Despesa(
+        id = it.despesa.id,
         nome = it.despesa.nome,
         categoria = it.categoria.nome,
         valor = it.despesa.valor,
