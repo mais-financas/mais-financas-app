@@ -17,25 +17,28 @@ import javax.inject.Singleton
 @Module
 object DatabaseModule {
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): MaisFinancasDatabase {
         return Room.databaseBuilder(
             context = context,
             klass = MaisFinancasDatabase::class.java,
             name = "financas_db"
         ).createFromAsset("database/financas.db")
-            .fallbackToDestructiveMigration()
+//            .fallbackToDestructiveMigration()
             .build()
     }
 
     @Provides
+    @Singleton
     fun provideGestorDao(database: MaisFinancasDatabase): GestorDao = database.gestorDao()
 
     @Provides
+    @Singleton
     fun provideDespesaDao(database: MaisFinancasDatabase): DespesaDao = database.despesaDao()
 
     @Provides
+    @Singleton
     fun provideCategoriaDao(database: MaisFinancasDatabase): CategoriaDao = database.categoriaDao()
 
 }

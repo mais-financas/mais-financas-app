@@ -11,6 +11,7 @@ import com.neuralnet.maisfinancas.model.TipoRecorrencia.ANUAL
 import com.neuralnet.maisfinancas.model.TipoRecorrencia.DIARIA
 import com.neuralnet.maisfinancas.model.TipoRecorrencia.MENSAL
 import com.neuralnet.maisfinancas.model.TipoRecorrencia.SEMANAL
+import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -54,10 +55,24 @@ class AddDespesaViewModel @Inject constructor(
 
         val despesaId = despesaRepository.salvarDespesa(despesa, gestorId, categoria.id)
 
-        val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)
         if (despesa.definirLembrete) {
+            val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)
             lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa.copy(id = despesaId))
         }
+    }
+
+    fun isFormValid(): Boolean = with(uiState.value) {
+        if (nome.isBlank()) {
+            _uiState.value = _uiState.value.copy(nomeErrorField = FieldValidationError.VAZIO)
+        }
+        if (valor.toBigDecimalOrNull() == null) {
+            _uiState.value =
+                _uiState.value.copy(valorErrorField = FieldValidationError.NUMERO_INVALIDO)
+        }
+        if (categoria.isBlank()) {
+            _uiState.value = _uiState.value.copy(categoriaErrorField = FieldValidationError.VAZIO)
+        }
+        return _uiState.value.isFormValid()
     }
 }
 

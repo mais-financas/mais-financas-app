@@ -6,9 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.neuralnet.maisfinancas.model.Despesa
-import com.neuralnet.maisfinancas.ui.components.getDate
-import com.neuralnet.maisfinancas.util.toCalendar
-import java.time.LocalDate
+import com.neuralnet.maisfinancas.model.Recorrencia
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.ANUAL
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.DIARIA
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.MENSAL
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.NENHUMA
+import com.neuralnet.maisfinancas.model.TipoRecorrencia.SEMANAL
 import java.util.Calendar
 
 class LembreteAlarmSchedulerImpl(
@@ -33,7 +36,7 @@ class LembreteAlarmSchedulerImpl(
         alarmManager.setInexactRepeating(
             AlarmManager.RTC,
             calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY * despesa.recorrencia.quantidade, // TODO consertar
+            recorrenciaEmMillis(despesa.recorrencia),
             pendingIntent
         )
     }
@@ -47,5 +50,19 @@ class LembreteAlarmSchedulerImpl(
                 "cancelarAlarme: não pode ser cancelado antes de ser definido"
             )
         }
+    }
+
+    private fun recorrenciaEmMillis(recorrencia: Recorrencia): Long {
+        val calendar = Calendar.getInstance().apply {clear() }
+
+        when (recorrencia.tipoRecorrencia) {
+            DIARIA -> calendar.add(Calendar.DAY_OF_YEAR, recorrencia.quantidade)
+            SEMANAL -> calendar.add(Calendar.WEEK_OF_YEAR, recorrencia.quantidade)
+            MENSAL -> calendar.add(Calendar.MONTH, recorrencia.quantidade)
+            ANUAL -> calendar.add(Calendar.YEAR, recorrencia.quantidade)
+            else -> throw Exception("Impossível definir lembrete para $NENHUMA")
+        }
+
+        return calendar.timeInMillis.also { println(it) }
     }
 }

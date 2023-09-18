@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @Composable
 fun AppDropdown(
@@ -34,6 +35,7 @@ fun AppDropdown(
     expanded: Boolean,
     onExpandedChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    errorMessage: FieldValidationError? = null,
 ) {
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -42,7 +44,9 @@ fun AppDropdown(
     else
         Icons.Filled.KeyboardArrowDown
 
-    Column(modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)) {
+    val isError = errorMessage != null
+    val bottomPadding = if (isError) 8.dp else 0.dp
+    Column(modifier.padding(bottom = bottomPadding, start = 16.dp, end = 16.dp)) {
 
         OutlinedTextField(
             value = selectedOptionText,
@@ -60,11 +64,11 @@ fun AppDropdown(
                     contentDescription = "up/down",
                     modifier = Modifier.clickable { onExpandedChanged(!expanded) }
                 )
-            }
+            },
+            isError = isError,
+            supportingText = { errorMessage?.let { Text(text = stringResource(id = it.message)) } },
         )
 
-        // Create a drop-down menu with list of cities,
-        // when clicked, set the Text Field text as the city selected
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { onExpandedChanged(false) },

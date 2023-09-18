@@ -50,8 +50,10 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                 calendarState = calendarState,
                 onNavigateUp = { navController.navigateUp() },
                 onSaveClick = {
-                    viewModel.salvarDespesa(dataEmEpochMillis = calendarState.selectedDateMillis)
-                    navController.popBackStack()
+                    if (viewModel.isFormValid()) {
+                        viewModel.salvarDespesa(dataEmEpochMillis = calendarState.selectedDateMillis)
+                        navController.popBackStack()
+                    }
                 }
             )
         }

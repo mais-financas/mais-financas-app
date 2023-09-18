@@ -54,4 +54,6 @@
     <string name="recorrencia_mensal">Mensal</string>
     <string name="recorrencia_anual">Anual</string>
     <string name="prximo_lembrete">Próximo lembrete: %1$s</string>
+    <string name="message_campo_vazio">*Campo obrigaratório</string>
+    <string name="message_numero_invalido">Entre com um número válido</string>
 </resources>

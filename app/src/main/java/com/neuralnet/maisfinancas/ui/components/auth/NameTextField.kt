@@ -46,11 +46,7 @@ fun NameTextField(
         isError = isError,
         supportingText = {
             if (errorMessage != null) {
-                Text(text = errorMessage,
-                    style = TextStyle(
-                        lineBreak = LineBreak.Paragraph
-                    )
-                )
+                Text(text = errorMessage)
             } else if (required) {
                 Text(text = stringResource(R.string.required))
             }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -16,7 +15,6 @@ import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -30,15 +28,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.model.Recorrencia
 import com.neuralnet.maisfinancas.model.TipoRecorrencia
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
+import com.neuralnet.maisfinancas.ui.components.NomeDespesaTextField
+import com.neuralnet.maisfinancas.ui.components.NumberTextField
 import com.neuralnet.maisfinancas.ui.components.RecorrenciaDespesa
 import com.neuralnet.maisfinancas.ui.components.getDate
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
@@ -93,7 +91,7 @@ fun AddDespesaScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { onSaveClick() }) {
+            FloatingActionButton(onClick = onSaveClick) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = stringResource(R.string.add)
@@ -104,6 +102,7 @@ fun AddDespesaScreen(
         Column(
             modifier = modifier
                 .padding(paddingValues)
+                .padding(top = 8.dp)
                 .verticalScroll(
                     state = rememberScrollState()
                 ),
@@ -111,32 +110,26 @@ fun AddDespesaScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
 
-            OutlinedTextField(
-                placeholder = { Text(stringResource(R.string.nome)) },
+            NomeDespesaTextField(
                 value = uiState.nome,
-                onValueChange = { onUiStateChanged(uiState.copy(nome = it)) },
-                singleLine = true,
+                onValueChange = {
+                    onUiStateChanged(uiState.copy(nome = it, nomeErrorField = null))
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    .padding(horizontal = 16.dp),
+                errorMessage = uiState.nomeErrorField,
             )
 
-            OutlinedTextField(
-                placeholder = { Text(stringResource(R.string.valor)) },
-                value = uiState.valor,
+            NumberTextField(
+                valor = uiState.valor,
                 onValueChange = {
-                    if (it.isDigitsOnly()) {
-                        onUiStateChanged(uiState.copy(valor = it))
-                    }
+                    onUiStateChanged(uiState.copy(valor = it, valorErrorField = null))
                 },
-                singleLine = true,
-                prefix = { Text(stringResource(R.string.moeda)) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, start = 16.dp, end = 16.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                )
+                    .padding(horizontal = 16.dp),
+                errorMessage = uiState.valorErrorField,
             )
 
             var expanded by remember { mutableStateOf(false) }
@@ -144,9 +137,12 @@ fun AddDespesaScreen(
                 label = R.string.categoria,
                 options = categorias,
                 selectedOptionText = uiState.categoria,
-                onSelectedOptionText = { onUiStateChanged(uiState.copy(categoria = it)) },
+                onSelectedOptionText = {
+                    onUiStateChanged(uiState.copy(categoria = it, categoriaErrorField = null))
+                },
                 expanded = expanded,
                 onExpandedChanged = { expanded = it },
+                errorMessage = uiState.categoriaErrorField,
             )
 
             RecorrenciaDespesa(
@@ -191,8 +187,7 @@ fun AddDespesaScreen(
                         R.string.prximo_lembrete,
                         dataProximoLembrete.value.timeInMillis.getDate()
                     ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                    ,
+                    modifier = Modifier.padding(vertical = 8.dp),
                 )
             }
 
@@ -207,7 +202,10 @@ fun AddDespesaScreen(
 fun AddDespesaScreenPreview() {
     MaisFinancasTheme {
         AddDespesaScreen(
-            uiState = AddDespesaUiState(tipoRecorrencia = TipoRecorrencia.ANUAL, definirLembrete = true),
+            uiState = AddDespesaUiState(
+                tipoRecorrencia = TipoRecorrencia.ANUAL,
+                definirLembrete = true
+            ),
             onUiStateChanged = {},
             categorias = listOf("Essenciais", "Entretenimento", "Saúde"),
             calendarState = rememberDatePickerState(),
