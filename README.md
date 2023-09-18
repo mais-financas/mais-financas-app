@@ -23,7 +23,7 @@ O Mais Finanças App é um aplicativo de gerenciamento de despesas e auxílio pa
 
 ## ⇩ Instalação
 
-O download do arquivo APK mais recente do aplicativo está disponível através deste [link](https://github.com/mais-financas/mais-financas-app/tree/main/app/release/app-release.apk?raw=true).
+O download do arquivo APK mais recente do aplicativo está disponível através deste [link](https://github.com/mais-financas/mais-financas-app/tree/main/app/release/mais-financas.apk?raw=true).
 
 ## 🫴Autores
 
