@@ -43,7 +43,7 @@ fun LoginScreen(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
+            painter = painterResource(R.drawable.logo),
             contentDescription = stringResource(R.string.app_name),
             modifier = Modifier.heightIn(48.dp)
         )

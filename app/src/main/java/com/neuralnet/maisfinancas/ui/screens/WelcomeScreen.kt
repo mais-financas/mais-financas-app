@@ -3,7 +3,9 @@ package com.neuralnet.maisfinancas.ui.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -33,9 +35,9 @@ fun WelcomeScreen(
         canNavigateBack = false,
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
+            painter = painterResource(R.drawable.logo),
             contentDescription = stringResource(R.string.app_name),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(.85f),
             contentScale = ContentScale.Crop
         )
 
@@ -45,6 +47,7 @@ fun WelcomeScreen(
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .padding(top = 24.dp)
+                .weight(.15f)
                 .align(Alignment.Start)
         )
 

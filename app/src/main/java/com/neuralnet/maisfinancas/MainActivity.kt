@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.neuralnet.maisfinancas.data.alarm.CHANNEL_ID
 import com.neuralnet.maisfinancas.ui.MaisFinancasApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,6 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createNotificationChannel()
+        installSplashScreen()
         setContent {
             MaisFinancasApp()
         }

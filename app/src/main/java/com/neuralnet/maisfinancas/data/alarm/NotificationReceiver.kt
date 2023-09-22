@@ -18,7 +18,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val despesa = intent.getStringExtra(TITULO_DESPESA_EXTRA)
         val despesaId = intent.getIntExtra(DESPESA_ID_EXTRA, -1)
         val notification: Notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.logo)
             .setContentTitle(context.getString(R.string.mensagem_lembrete, despesa))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
