@@ -3,6 +3,8 @@ package com.neuralnet.maisfinancas.ui.screens.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FabPosition
@@ -85,7 +87,9 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .padding(paddingValues), verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(paddingValues)
+                .verticalScroll(state = rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             OrcamentoOverview(
                 gasto = uiState.gastoMensal,

@@ -7,6 +7,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -57,7 +58,7 @@ fun RowScope.BottomNavItem(
     NavigationBarItem(
         selected = selected,
         onClick = onItemClick,
-        label = { Text(stringResource(item.title)) },
+        label = { Text(stringResource(item.title), maxLines = 1, overflow = TextOverflow.Ellipsis) },
         alwaysShowLabel = false,
         icon = {
             Icon(

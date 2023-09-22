@@ -75,7 +75,7 @@ fun CardOrcamentoSemanal(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            Text(text = valor.toReal(), fontWeight = FontWeight.SemiBold)
+            Text(text = valor.toReal(), fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(8.dp))
             
             Text(text = descricao, modifier = Modifier.padding(8.dp))
         }
