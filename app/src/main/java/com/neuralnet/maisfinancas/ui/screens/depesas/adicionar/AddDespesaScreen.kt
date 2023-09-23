@@ -169,26 +169,28 @@ fun AddDespesaScreen(
             }
 
             AnimatedVisibility(visible = uiState.definirLembrete) {
-                val dataProximoLembrete =
-                    remember(calendarState.selectedDateMillis, uiState.tipoRecorrencia) {
-                        derivedStateOf {
-                            definirProximoLembrete(
-                                selectedDateMillis = calendarState.selectedDateMillis
-                                    ?: Instant.now().toEpochMilli(),
-                                recorrencia = Recorrencia(
-                                    tipoRecorrencia = uiState.tipoRecorrencia,
-                                    quantidade = uiState.quantidadeRecorrencia
+                if (uiState.tipoRecorrencia != TipoRecorrencia.NENHUMA) {
+                    val dataProximoLembrete =
+                        remember(calendarState.selectedDateMillis, uiState.tipoRecorrencia) {
+                            derivedStateOf {
+                                definirProximoLembrete(
+                                    selectedDateMillis = calendarState.selectedDateMillis
+                                        ?: Instant.now().toEpochMilli(),
+                                    recorrencia = Recorrencia(
+                                        tipoRecorrencia = uiState.tipoRecorrencia,
+                                        quantidade = uiState.quantidadeRecorrencia
+                                    )
                                 )
-                            )
+                            }
                         }
-                    }
-                Text(
-                    text = stringResource(
-                        R.string.prximo_lembrete,
-                        dataProximoLembrete.value.timeInMillis.getDate()
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp),
-                )
+                    Text(
+                        text = stringResource(
+                            R.string.prximo_lembrete,
+                            dataProximoLembrete.value.timeInMillis.getDate()
+                        ),
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                }
             }
 
             DatePicker(state = calendarState, showModeToggle = false)

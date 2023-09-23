@@ -56,4 +56,5 @@
     <string name="prximo_lembrete">Próximo lembrete: %1$s</string>
     <string name="message_campo_vazio">*Campo obrigaratório</string>
     <string name="message_numero_invalido">Entre com um número válido</string>
+    <string name="lembrete_despesa_mensagem">Lembrete para %1$s</string>
 </resources>
