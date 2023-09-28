@@ -6,7 +6,7 @@ import java.util.UUID
 
 interface GestorRepository {
 
-    fun hasLoggedIn(userId: UUID?): Flow<Boolean>
+    fun getGestor(userId: UUID?): Flow<GestorEntity?>
 
     suspend fun inserirGestor(gestorEntity: GestorEntity)
 }

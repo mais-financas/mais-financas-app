@@ -15,6 +15,6 @@ interface DespesaDao {
     suspend fun insertDespesa(despesa: DespesaEntity): Long
 
     @Query("SELECT * FROM despesa WHERE gestor_id = :gestorId")
-    fun getDepesasByGestorId(gestorId: UUID): Flow<List<DespesaAndCategoria>>
+    fun getDepesasByGestorId(gestorId: UUID?): Flow<List<DespesaAndCategoria>>
 
 }

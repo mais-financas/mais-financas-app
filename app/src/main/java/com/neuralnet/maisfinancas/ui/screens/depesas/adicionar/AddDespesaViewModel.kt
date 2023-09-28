@@ -53,8 +53,7 @@ class AddDespesaViewModel @Inject constructor(
         val categoria = categorias.value.find { it.nome == uiState.value.categoria }
             ?: categorias.value.first()
 
-        val despesaId = 8L
-//            despesaRepository.salvarDespesa(despesa, gestorId, categoria.id)
+        val despesaId = despesaRepository.salvarDespesa(despesa, gestorId, categoria.id)
 
         if (despesa.definirLembrete) {
             val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)

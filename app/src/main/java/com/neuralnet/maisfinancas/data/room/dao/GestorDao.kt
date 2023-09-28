@@ -17,6 +17,6 @@ interface GestorDao {
     suspend fun insertGestor(gestorEntity: GestorEntity)
 
     @Query("SELECT * from gestor WHERE gestor_id = :gestorId")
-    fun getGestor(gestorId: UUID): Flow<GestorEntity>
+    fun getGestor(gestorId: UUID?): Flow<GestorEntity?>
 
 }

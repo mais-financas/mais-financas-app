@@ -8,7 +8,7 @@ import java.util.UUID
 
 class GestorRepositoryImpl(private val gestorDao: GestorDao) : GestorRepository {
 
-    override fun hasLoggedIn(userId: UUID?): Flow<Boolean> = gestorDao.existsById()
+    override fun getGestor(userId: UUID?): Flow<GestorEntity?> = gestorDao.getGestor(userId)
 
     override suspend fun inserirGestor(gestorEntity: GestorEntity) {
         gestorDao.insertGestor(gestorEntity)

@@ -9,16 +9,18 @@ import java.util.UUID
 class Converters {
 
     @TypeConverter
-    fun calendarfromDatestamp(value: Long): Calendar = value.toCalendar()
+    fun calendarFromDatestamp(value: Long): Calendar = value.toCalendar()
 
     @TypeConverter
     fun calendarToDatestamp(calendar: Calendar): Long = calendar.timeInMillis
 
     @TypeConverter
-    fun bigDecimalfromDouble(value: Double): BigDecimal = BigDecimal.valueOf(value)
+    fun bigDecimalFromLong(valueInCents: Long): BigDecimal = BigDecimal.valueOf(valueInCents)
+        .divide(BigDecimal.valueOf(100))
 
     @TypeConverter
-    fun bigDecimalToDouble(bigDecimal: BigDecimal): Double = bigDecimal.toDouble()
+    fun bigDecimalToDouble(bigDecimal: BigDecimal): Long = bigDecimal.multiply(
+        BigDecimal.valueOf(100)).longValueExact()
 
     @TypeConverter
     fun uuidFromString(value: String): UUID = UUID.fromString(value)

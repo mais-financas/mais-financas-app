@@ -7,7 +7,7 @@ import java.util.UUID
 
 interface DespesaRepository {
 
-    fun getDespesas(gestorId: UUID): Flow<List<Despesa>>
+    fun getDespesas(gestorId: UUID?): Flow<List<Despesa>>
 
     suspend fun salvarDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int): Long
 

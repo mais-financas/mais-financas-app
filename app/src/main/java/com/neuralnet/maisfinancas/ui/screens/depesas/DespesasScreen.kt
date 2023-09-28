@@ -47,7 +47,7 @@ fun DespesasScreen(
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
 
             for (grupos in uiState.despesas.groupBy { it.categoria }) {
-                item(grupos.key) {
+                item(key = grupos.key) {
                     Row {
                         Text(
                             text = grupos.key,
@@ -63,7 +63,7 @@ fun DespesasScreen(
                         )
                     }
                 }
-                items(grupos.value, key = { it.nome }) { despesa ->
+                items(items = grupos.value, key = { it.id }) { despesa ->
                     ItemDespesa(
                         despesa = despesa,
                         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
