@@ -9,10 +9,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.neuralnet.maisfinancas.ui.screens.Screen
 import com.neuralnet.maisfinancas.ui.screens.WelcomeScreen
-import com.neuralnet.maisfinancas.ui.screens.auth.SignUpViewModel
 import com.neuralnet.maisfinancas.ui.screens.auth.LoginFormState
 import com.neuralnet.maisfinancas.ui.screens.auth.LoginScreen
-import com.neuralnet.maisfinancas.ui.screens.auth.SignUpFormState
+import com.neuralnet.maisfinancas.ui.screens.auth.SignUpViewModel
 import com.neuralnet.maisfinancas.ui.screens.auth.SignupScreen
 
 fun NavGraphBuilder.authNavGraph(navController: NavController) {

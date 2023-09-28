@@ -24,11 +24,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import com.neuralnet.maisfinancas.util.toReal
+import java.math.BigDecimal
 
 @Composable
 fun TransferenciasSemana(
-    rendaSemanal: Double,
-    despesasSemanais: Double,
+    rendaSemanal: BigDecimal,
+    despesasSemanais: BigDecimal,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -61,7 +63,7 @@ fun TransferenciasSemana(
 @Composable
 fun CardOrcamentoSemanal(
     descricao: String,
-    valor: Double,
+    valor: BigDecimal,
     color: Color,
     modifier: Modifier = Modifier,
 ) {
@@ -87,7 +89,7 @@ fun CardOrcamentoSemanal(
 fun TransferenciasSemanaPreview() {
     MaisFinancasTheme {
         TransferenciasSemana(
-            1237.2, 292.5
+            BigDecimal.valueOf(1237.2), BigDecimal.valueOf(292.5)
         )
     }
 }

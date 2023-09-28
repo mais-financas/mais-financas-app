@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import java.math.BigDecimal
 import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
@@ -51,10 +52,10 @@ class HomeViewModel @Inject constructor(
         val despesasSemana = despesas.filter { it.data.after(ultimaSemana) }
 
         HomeUiState(
-            gastoMensal = 0.0,
-            saldoMensal = 0.0,
-            despesasSemanais = despesasSemana.sumOf { it.valor.toDouble() },
-            rendaSemanal = 0.0
+            gastoMensal = BigDecimal.ZERO,
+            saldoMensal = BigDecimal.ZERO,
+            despesasSemanais = despesasSemana.sumOf { it.valor },
+            rendaSemanal = BigDecimal.ZERO,
         )
     }.stateIn(
         scope = viewModelScope,

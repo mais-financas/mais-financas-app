@@ -17,7 +17,11 @@ import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.model.TipoRecorrencia
 
 @Composable
-fun RecorrenciaDespesa(recorrencia: TipoRecorrencia, onRecorrenciaChanged: (TipoRecorrencia) -> Unit, modifier: Modifier = Modifier) {
+fun RecorrenciaDespesa(
+    recorrencia: TipoRecorrencia,
+    onRecorrenciaChanged: (TipoRecorrencia) -> Unit,
+    modifier: Modifier = Modifier,
+) {
 
     Column(modifier = modifier) {
         Text(

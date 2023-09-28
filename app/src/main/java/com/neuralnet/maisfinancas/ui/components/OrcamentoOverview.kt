@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,16 +19,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
-import java.text.NumberFormat
+import com.neuralnet.maisfinancas.util.toReal
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.TextStyle
-import java.util.Currency
 import java.util.Locale
 
 @Composable
 fun OrcamentoOverview(
-    gasto: Double,
-    saldo: Double,
+    gasto: BigDecimal,
+    saldo: BigDecimal,
     modifier: Modifier = Modifier,
     data: LocalDate = LocalDate.now()
 ) {
@@ -42,7 +41,7 @@ fun OrcamentoOverview(
 
 @Composable
 fun GastoMensal(
-    gasto: Double,
+    gasto: BigDecimal,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -77,7 +76,7 @@ fun GastoMensal(
 
 @Composable
 fun SaldoDisponivel(
-    saldo: Double,
+    saldo: BigDecimal,
     data: LocalDate,
     modifier: Modifier = Modifier,
 ) {
@@ -117,8 +116,8 @@ fun SaldoDisponivel(
 fun OrcamentoOverviewPreview() {
     MaisFinancasTheme {
         OrcamentoOverview(
-            gasto = 235.4,
-            saldo = 4389.0,
+            gasto = BigDecimal.valueOf(235.4),
+            saldo = BigDecimal.valueOf(4389.0),
         )
     }
 }
@@ -128,7 +127,7 @@ fun OrcamentoOverviewPreview() {
 fun SaldoDisponivelPreview() {
     MaisFinancasTheme {
         SaldoDisponivel(
-            saldo = 123.12,
+            saldo = BigDecimal.valueOf(123.12),
             data = LocalDate.now().plusMonths(2)
         )
     }
@@ -140,10 +139,3 @@ fun LocalDate.mesAtual(): String {
         .replaceFirstChar { it.uppercase() }
 }
 
-fun Double.toReal(): String {
-    val format: NumberFormat = NumberFormat.getCurrencyInstance()
-    format.maximumFractionDigits = 2
-    format.currency = Currency.getInstance(Locale("pt", "BR"))
-
-    return format.format(this)
-}

@@ -18,7 +18,7 @@ import com.neuralnet.maisfinancas.model.Despesa
 import com.neuralnet.maisfinancas.model.Recorrencia
 import com.neuralnet.maisfinancas.model.TipoRecorrencia
 import com.neuralnet.maisfinancas.ui.components.ItemDespesa
-import com.neuralnet.maisfinancas.ui.components.toReal
+import com.neuralnet.maisfinancas.util.toReal
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
@@ -131,6 +131,5 @@ private fun valorPorCategoria(despesas: Map.Entry<String, List<Despesa>>): Strin
     return despesas.value
         .filter { despesa -> despesa.categoria == despesas.key }
         .sumOf { it.valor }
-        .toDouble()
         .toReal()
 }

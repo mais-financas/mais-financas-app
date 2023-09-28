@@ -3,7 +3,6 @@ package com.neuralnet.maisfinancas.di
 import android.content.Context
 import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmScheduler
 import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmSchedulerImpl
-import com.neuralnet.maisfinancas.data.alarm.NotificationReceiver
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.repository.impl.DespesaRepositoryImpl

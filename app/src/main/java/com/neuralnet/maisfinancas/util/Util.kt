@@ -1,7 +1,10 @@
 package com.neuralnet.maisfinancas.util
 
+import java.math.BigDecimal
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Currency
 import java.util.Date
 import java.util.Locale
 
@@ -15,4 +18,12 @@ fun Calendar.formattedDate(): String {
     } catch (e: Exception) {
         e.toString()
     }
+}
+
+fun BigDecimal.toReal(): String {
+    val format: NumberFormat = NumberFormat.getCurrencyInstance()
+    format.maximumFractionDigits = 2
+    format.currency = Currency.getInstance(Locale("pt", "BR"))
+
+    return format.format(this)
 }
