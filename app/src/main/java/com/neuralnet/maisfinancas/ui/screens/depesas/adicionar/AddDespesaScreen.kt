@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.TipoRecorrencia
+import com.neuralnet.maisfinancas.model.Frequencia
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
 import com.neuralnet.maisfinancas.ui.components.NomeDespesaTextField
 import com.neuralnet.maisfinancas.ui.components.NumberTextField
@@ -146,8 +146,8 @@ fun AddDespesaScreen(
             )
 
             RecorrenciaDespesa(
-                recorrencia = uiState.tipoRecorrencia,
-                onRecorrenciaChanged = { onUiStateChanged(uiState.copy(tipoRecorrencia = it)) },
+                frequencia = uiState.frequencia,
+                onRecorrenciaChanged = { onUiStateChanged(uiState.copy(frequencia = it)) },
                 modifier = Modifier.padding(top = 8.dp)
             )
 
@@ -162,22 +162,22 @@ fun AddDespesaScreen(
                     modifier = Modifier.weight(1f)
                 )
                 Switch(
-                    enabled = uiState.tipoRecorrencia != TipoRecorrencia.NENHUMA,
-                    checked = uiState.definirLembrete && uiState.tipoRecorrencia != TipoRecorrencia.NENHUMA,
+                    enabled = uiState.frequencia != Frequencia.NENHUMA,
+                    checked = uiState.definirLembrete && uiState.frequencia != Frequencia.NENHUMA,
                     onCheckedChange = { onUiStateChanged(uiState.copy(definirLembrete = it)) }
                 )
             }
 
             AnimatedVisibility(visible = uiState.definirLembrete) {
-                if (uiState.tipoRecorrencia != TipoRecorrencia.NENHUMA) {
+                if (uiState.frequencia != Frequencia.NENHUMA) {
                     val dataProximoLembrete =
-                        remember(calendarState.selectedDateMillis, uiState.tipoRecorrencia) {
+                        remember(calendarState.selectedDateMillis, uiState.frequencia) {
                             derivedStateOf {
                                 definirProximoLembrete(
                                     selectedDateMillis = calendarState.selectedDateMillis
                                         ?: Instant.now().toEpochMilli(),
                                     recorrencia = Recorrencia(
-                                        tipoRecorrencia = uiState.tipoRecorrencia,
+                                        frequencia = uiState.frequencia,
                                         quantidade = uiState.quantidadeRecorrencia
                                     )
                                 )
@@ -205,7 +205,7 @@ fun AddDespesaScreenPreview() {
     MaisFinancasTheme {
         AddDespesaScreen(
             uiState = AddDespesaUiState(
-                tipoRecorrencia = TipoRecorrencia.ANUAL,
+                frequencia = Frequencia.ANUAL,
                 definirLembrete = true
             ),
             onUiStateChanged = {},

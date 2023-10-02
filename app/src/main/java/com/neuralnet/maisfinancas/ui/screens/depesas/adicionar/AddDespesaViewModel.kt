@@ -6,11 +6,11 @@ import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmScheduler
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
 import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.TipoRecorrencia
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.ANUAL
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.DIARIA
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.MENSAL
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.SEMANAL
+import com.neuralnet.maisfinancas.model.Frequencia
+import com.neuralnet.maisfinancas.model.Frequencia.ANUAL
+import com.neuralnet.maisfinancas.model.Frequencia.DIARIA
+import com.neuralnet.maisfinancas.model.Frequencia.MENSAL
+import com.neuralnet.maisfinancas.model.Frequencia.SEMANAL
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -82,12 +82,12 @@ fun definirProximoLembrete(selectedDateMillis: Long, recorrencia: Recorrencia): 
     calendarDataLembrete.timeInMillis = selectedDateMillis
 
     while (calendarDataLembrete.timeInMillis < dataAtual) {
-        when (recorrencia.tipoRecorrencia) {
+        when (recorrencia.frequencia) {
             DIARIA -> calendarDataLembrete.add(Calendar.DATE, recorrencia.quantidade)
             SEMANAL -> calendarDataLembrete.add(Calendar.DATE, 7 * recorrencia.quantidade)
             MENSAL -> calendarDataLembrete.add(Calendar.MONTH, recorrencia.quantidade)
             ANUAL -> calendarDataLembrete.add(Calendar.YEAR, recorrencia.quantidade)
-            else -> throw Exception("Impossível definir lembrete para ${TipoRecorrencia.NENHUMA}")
+            else -> throw Exception("Impossível definir lembrete para ${Frequencia.NENHUMA}")
         }
     }
 

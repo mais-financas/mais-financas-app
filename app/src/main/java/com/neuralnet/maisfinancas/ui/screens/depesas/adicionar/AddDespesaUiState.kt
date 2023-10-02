@@ -2,7 +2,7 @@ package com.neuralnet.maisfinancas.ui.screens.depesas.adicionar
 
 import com.neuralnet.maisfinancas.model.Despesa
 import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.TipoRecorrencia
+import com.neuralnet.maisfinancas.model.Frequencia
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import com.neuralnet.maisfinancas.util.toCalendar
 
@@ -14,7 +14,7 @@ data class AddDespesaUiState(
     val valorErrorField: FieldValidationError? = null,
     val categoria: String = "",
     val categoriaErrorField: FieldValidationError? = null,
-    val tipoRecorrencia: TipoRecorrencia = TipoRecorrencia.NENHUMA,
+    val frequencia: Frequencia = Frequencia.NENHUMA,
     val quantidadeRecorrencia: Int = 1,
     val definirLembrete: Boolean = false,
 ) {
@@ -27,7 +27,7 @@ fun AddDespesaUiState.toDespesaModel(dataEmEpochMillis: Long) = Despesa(
     nome = nome,
     valor = valor.toBigDecimal(),
     categoria = categoria,
-    recorrencia = Recorrencia(tipoRecorrencia, quantidadeRecorrencia),
+    recorrencia = Recorrencia(frequencia, quantidadeRecorrencia),
     definirLembrete = definirLembrete,
     data = dataEmEpochMillis.toCalendar(),
 )

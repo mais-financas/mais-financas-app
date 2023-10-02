@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.model.Despesa
 import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.TipoRecorrencia
+import com.neuralnet.maisfinancas.model.Frequencia
 import com.neuralnet.maisfinancas.ui.components.ItemDespesa
 import com.neuralnet.maisfinancas.util.toReal
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
@@ -90,7 +90,7 @@ fun DespesasScreenPreview() {
                         nome = "Água",
                         categoria = "Essenciais",
                         valor = BigDecimal.valueOf(100.0),
-                        Recorrencia(TipoRecorrencia.MENSAL, 1),
+                        Recorrencia(Frequencia.MENSAL, 1),
                         definirLembrete = false,
                         data = 1693577802000.toCalendar()
                     ),
@@ -99,7 +99,7 @@ fun DespesasScreenPreview() {
                         nome = "Energia",
                         categoria = "Essenciais",
                         valor = BigDecimal.valueOf(123.0),
-                        Recorrencia(TipoRecorrencia.MENSAL, 1),
+                        Recorrencia(Frequencia.MENSAL, 1),
                         definirLembrete = true,
                         data = 1693577802000.toCalendar()
                     ),
@@ -108,7 +108,7 @@ fun DespesasScreenPreview() {
                         nome = "Almoço",
                         categoria = "Alimentação",
                         valor = BigDecimal.valueOf(30.0),
-                        Recorrencia(TipoRecorrencia.MENSAL, 1),
+                        Recorrencia(Frequencia.MENSAL, 1),
                         definirLembrete = true,
                         data = 1693064202000.toCalendar()
                     ),
@@ -117,7 +117,7 @@ fun DespesasScreenPreview() {
                         nome = "Cinema",
                         categoria = "Entretenimento",
                         valor = BigDecimal.valueOf(70.0),
-                        Recorrencia(TipoRecorrencia.MENSAL, 1),
+                        Recorrencia(Frequencia.MENSAL, 1),
                         definirLembrete = false,
                         data = 1693564202000.toCalendar()
                     ),

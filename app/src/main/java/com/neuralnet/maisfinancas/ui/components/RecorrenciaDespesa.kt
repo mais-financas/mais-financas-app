@@ -14,12 +14,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.model.TipoRecorrencia
+import com.neuralnet.maisfinancas.model.Frequencia
 
 @Composable
 fun RecorrenciaDespesa(
-    recorrencia: TipoRecorrencia,
-    onRecorrenciaChanged: (TipoRecorrencia) -> Unit,
+    frequencia: Frequencia,
+    onRecorrenciaChanged: (Frequencia) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -35,8 +35,8 @@ fun RecorrenciaDespesa(
 
         RecorrenciaDespesaDropdown(
             label = R.string.recorrencia,
-            options = TipoRecorrencia.values(),
-            selectedOptionText = recorrencia,
+            options = Frequencia.values(),
+            selectedOptionText = frequencia,
             onSelectedOptionText = onRecorrenciaChanged,
             expanded = expanded,
             onExpandedChanged = { expanded = it }
