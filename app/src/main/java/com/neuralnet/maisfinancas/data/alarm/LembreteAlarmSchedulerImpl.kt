@@ -7,11 +7,11 @@ import android.content.Intent
 import android.util.Log
 import com.neuralnet.maisfinancas.model.Despesa
 import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.ANUAL
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.DIARIA
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.MENSAL
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.NENHUMA
-import com.neuralnet.maisfinancas.model.TipoRecorrencia.SEMANAL
+import com.neuralnet.maisfinancas.model.Frequencia.ANUAL
+import com.neuralnet.maisfinancas.model.Frequencia.DIARIA
+import com.neuralnet.maisfinancas.model.Frequencia.MENSAL
+import com.neuralnet.maisfinancas.model.Frequencia.NENHUMA
+import com.neuralnet.maisfinancas.model.Frequencia.SEMANAL
 import java.util.Calendar
 
 class LembreteAlarmSchedulerImpl(
@@ -55,7 +55,7 @@ class LembreteAlarmSchedulerImpl(
     private fun recorrenciaEmMillis(recorrencia: Recorrencia): Long {
         val calendar = Calendar.getInstance().apply {clear() }
 
-        when (recorrencia.tipoRecorrencia) {
+        when (recorrencia.frequencia) {
             DIARIA -> calendar.add(Calendar.DAY_OF_YEAR, recorrencia.quantidade)
             SEMANAL -> calendar.add(Calendar.WEEK_OF_YEAR, recorrencia.quantidade)
             MENSAL -> calendar.add(Calendar.MONTH, recorrencia.quantidade)

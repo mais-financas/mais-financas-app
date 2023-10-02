@@ -24,14 +24,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import com.neuralnet.maisfinancas.model.TipoRecorrencia
+import com.neuralnet.maisfinancas.model.Frequencia
 
 @Composable
 fun RecorrenciaDespesaDropdown(
     label: Int,
-    options: Array<TipoRecorrencia>,
-    selectedOptionText: TipoRecorrencia,
-    onSelectedOptionText: (TipoRecorrencia) -> Unit,
+    options: Array<Frequencia>,
+    selectedOptionText: Frequencia,
+    onSelectedOptionText: (Frequencia) -> Unit,
     expanded: Boolean,
     onExpandedChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -74,7 +74,7 @@ fun RecorrenciaDespesaDropdown(
         ) {
             options.forEach {
                 DropdownMenuItem(onClick = {
-                    onSelectedOptionText(TipoRecorrencia.from(it.descricao))
+                    onSelectedOptionText(Frequencia.from(it.descricao))
                     onExpandedChanged(false)
                 }, text = {
                     Text(text = stringResource(id = it.descricao))

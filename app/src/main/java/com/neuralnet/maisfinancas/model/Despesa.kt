@@ -1,7 +1,8 @@
 package com.neuralnet.maisfinancas.model
 
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaEntity
-import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistro
+import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistroAndRecorrencia
+import com.neuralnet.maisfinancas.data.room.model.despesa.RecorrenciaDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import java.math.BigDecimal
 import java.util.Calendar
@@ -17,17 +18,21 @@ data class Despesa(
     val data: Calendar,
 )
 
-fun Despesa.toRegistroDespesaEntity(gestorId: UUID, categoriaId: Int) = DespesaWithRegistro(
+fun Despesa.toRegistroDespesaEntity(gestorId: UUID, categoriaId: Int) = DespesaWithRegistroAndRecorrencia(
     DespesaEntity(
         id = id,
         nome = nome,
-        recorrencia = recorrencia,
         definirLembrete = definirLembrete,
         gestorId = gestorId,
         categoriaId = categoriaId,
     ), RegistroDespesaEntity(
         valor = valor,
         data = data,
+        despesaId = id
+    ),
+    RecorrenciaDespesaEntity(
+        frequencia = recorrencia.frequencia,
+        quantidade = recorrencia.quantidade,
         despesaId = id
     )
 )
