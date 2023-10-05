@@ -1,6 +1,5 @@
 package com.neuralnet.maisfinancas.ui.navigation
 
-import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -16,14 +15,14 @@ import com.neuralnet.maisfinancas.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MaisFinancasTopAppBar(
-    @StringRes title: Int,
+    title: String,
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
 ) {
     if (canNavigateBack) {
         CenterAlignedTopAppBar(
-            title = { Text(stringResource(title)) },
+            title = { Text(title) },
             modifier = modifier,
             navigationIcon = {
                 IconButton(onClick = navigateUp) {
@@ -35,6 +34,6 @@ fun MaisFinancasTopAppBar(
             }
         )
     } else {
-        CenterAlignedTopAppBar(title = { Text(stringResource(title)) }, modifier = modifier)
+        CenterAlignedTopAppBar(title = { Text(title) }, modifier = modifier)
     }
 }

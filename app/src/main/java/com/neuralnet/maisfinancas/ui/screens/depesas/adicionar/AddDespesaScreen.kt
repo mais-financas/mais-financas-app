@@ -85,7 +85,7 @@ fun AddDespesaScreen(
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
-                title = HomeDestinations.AddDespesa.title,
+                title = stringResource(id = HomeDestinations.AddDespesa.title),
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
