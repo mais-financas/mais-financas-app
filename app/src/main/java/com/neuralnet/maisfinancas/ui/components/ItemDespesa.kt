@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,16 +22,32 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemDespesa(despesa: Despesa, modifier: Modifier = Modifier) {
-    Card(modifier = modifier.fillMaxWidth()) {
+fun ItemDespesa(
+    despesa: Despesa,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    Card(modifier = modifier.fillMaxWidth(), onClick = onClick) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(16.dp)) {
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = despesa.nome, fontStyle = MaterialTheme.typography.bodyMedium.fontStyle, fontWeight = FontWeight.Medium)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = despesa.nome,
+                    fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
+                    fontWeight = FontWeight.Medium
+                )
                 Text(text = despesa.data.formattedDate(), fontWeight = FontWeight.Light)
             }
 
-            Text(text = despesa.valor.toReal(), fontStyle = MaterialTheme.typography.bodyMedium.fontStyle, fontWeight = FontWeight.Medium)
+            Text(
+                text = despesa.valor.toReal(),
+                fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
+                fontWeight = FontWeight.Medium
+            )
 
         }
     }

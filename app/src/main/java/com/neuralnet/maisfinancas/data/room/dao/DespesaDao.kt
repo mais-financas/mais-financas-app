@@ -4,9 +4,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistroAndRecorrencia
+import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.RecorrenciaDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.model.Frequencia
@@ -20,7 +22,7 @@ interface DespesaDao {
     suspend fun insertDespesa(despesa: DespesaEntity): Long
 
     @Insert
-    suspend fun insertRegistro(registroDespesaEntity: RegistroDespesaEntity): Long
+    suspend fun insertRegistro(registroDespesaEntity: RegistroDespesaEntity)
 
     @Insert
     suspend fun insertRecorrencia(recorrencia: RecorrenciaDespesaEntity)
@@ -43,5 +45,15 @@ interface DespesaDao {
 
         return despesaId
     }
+
+    @Transaction
+    @Query("SELECT * FROM despesa WHERE gestor_id =:gestorId AND despesa_id =:despesaId")
+    fun getDespesaAndRegistro(
+        gestorId: UUID,
+        despesaId: Long,
+    ): Flow<DespesaWithRegistrosAndCategoria>
+
+    @Update
+    suspend fun updateDespesa(despesa: DespesaEntity)
 
 }

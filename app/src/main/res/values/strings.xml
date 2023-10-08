@@ -57,4 +57,19 @@
     <string name="message_campo_vazio">*Campo obrigaratório</string>
     <string name="message_numero_invalido">Entre com um número válido</string>
     <string name="lembrete_despesa_mensagem">Lembrete para %1$s</string>
+    <string name="registros">Registros</string>
+    <string name="detalhes_despesa">Detalhes da Despesa</string>
+    <string name="dias">dias</string>
+    <string name="semanas">semanas</string>
+    <string name="meses">meses</string>
+    <string name="anos">anos</string>
+    <string name="data">Data</string>
+    <string name="lista_despesas_vazia">Não há despesas no momento</string>
+    <string name="categoria_detalhe">"Categoria: "</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="salvar">Salvar</string>
+    <plurals name="recorrencia_despesa">
+        <item quantity="one">Ocorre de forma %1$s</item>
+        <item quantity="other">Ocorre a cada %d %1$s</item>
+    </plurals>
 </resources>
