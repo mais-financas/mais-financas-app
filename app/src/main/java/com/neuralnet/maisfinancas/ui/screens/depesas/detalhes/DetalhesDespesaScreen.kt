@@ -60,6 +60,7 @@ fun DetalhesDespesaScreen(
             if (viewModel.isRegistroValid()) {
                 viewModel.adicionarRegistro(calendarState.selectedDateMillis)
                 isSheetOpen = false
+                calendarState.setSelection(Instant.now().toEpochMilli())
             }
         },
         sheetState = sheetState,

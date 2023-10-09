@@ -1,8 +1,9 @@
 package com.neuralnet.maisfinancas.ui.screens.depesas.adicionar
 
-import com.neuralnet.maisfinancas.model.Despesa
-import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.Frequencia
+import android.icu.util.UniversalTimeScale.toBigDecimal
+import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import com.neuralnet.maisfinancas.util.toCalendar
 

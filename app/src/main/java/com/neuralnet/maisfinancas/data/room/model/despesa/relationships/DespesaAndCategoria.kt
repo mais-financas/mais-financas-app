@@ -1,12 +1,12 @@
-package com.neuralnet.maisfinancas.data.room.model.despesa
+package com.neuralnet.maisfinancas.data.room.model.despesa.relationships
 
 import androidx.room.Embedded
 import androidx.room.Relation
 import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
-import com.neuralnet.maisfinancas.model.Despesa
-import com.neuralnet.maisfinancas.model.Frequencia
-import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.toModel
+import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
+import com.neuralnet.maisfinancas.model.despesa.toModel
 
 data class DespesaAndCategoria(
     @Embedded val registroDespesa: DespesaWithRegistroAndRecorrencia,

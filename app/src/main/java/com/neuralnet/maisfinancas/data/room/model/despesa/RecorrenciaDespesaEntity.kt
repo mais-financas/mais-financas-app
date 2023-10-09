@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.neuralnet.maisfinancas.model.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
 
 @Entity(
     tableName = "recorrencia_despesa",

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.room.model.GestorEntity
-import com.neuralnet.maisfinancas.model.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Despesa
 import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

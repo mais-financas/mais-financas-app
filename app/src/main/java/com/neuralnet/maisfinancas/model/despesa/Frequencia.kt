@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.model
+package com.neuralnet.maisfinancas.model.despesa
 
 import androidx.annotation.StringRes
 import com.neuralnet.maisfinancas.R
@@ -14,7 +14,7 @@ enum class Frequencia(@StringRes val descricao: Int, @StringRes val unidadeTempo
     ;
 
     companion object {
-        infix fun from(value: Int): Frequencia = Frequencia.values()
+        fun from(value: Int): Frequencia = Frequencia.values()
             .firstOrNull { it.descricao == value } ?: NENHUMA
     }
 }

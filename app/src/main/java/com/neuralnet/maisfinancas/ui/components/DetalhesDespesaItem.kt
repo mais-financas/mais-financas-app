@@ -1,7 +1,6 @@
 package com.neuralnet.maisfinancas.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,8 +20,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.model.Frequencia
-import com.neuralnet.maisfinancas.model.Recorrencia
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable

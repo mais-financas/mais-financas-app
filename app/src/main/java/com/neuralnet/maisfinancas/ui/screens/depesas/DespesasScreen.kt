@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.model.Despesa
-import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.ui.components.ItemDespesa
 import com.neuralnet.maisfinancas.util.toReal
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
@@ -99,7 +99,9 @@ fun DespesasListContent(
             }
             items(items = grupos.value, key = { it.id }) { despesa ->
                 ItemDespesa(
-                    despesa = despesa,
+                    nome = despesa.nome,
+                    valor = despesa.valor,
+                    data = despesa.data,
                     modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
                     onClick = { onDetailsClick(despesa.id) }
                 )

@@ -2,7 +2,7 @@ package com.neuralnet.maisfinancas.data.repository
 
 import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
-import com.neuralnet.maisfinancas.model.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Despesa
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 

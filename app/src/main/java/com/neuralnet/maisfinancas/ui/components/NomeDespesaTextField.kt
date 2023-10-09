@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.util.FieldValidationError
@@ -17,8 +16,8 @@ import com.neuralnet.maisfinancas.util.FieldValidationError
 fun NomeDespesaTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    errorMessage: FieldValidationError? = null,
     modifier: Modifier = Modifier,
+    errorMessage: FieldValidationError? = null,
 ) {
     val isError = errorMessage != null
     val bottomPadding = if (isError) 8.dp else 0.dp

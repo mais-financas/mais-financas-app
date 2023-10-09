@@ -4,14 +4,14 @@ import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.room.dao.CategoriaDao
 import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
 import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
-import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaAndCategoria
-import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistrosAndCategoria
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaAndCategoria
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
-import com.neuralnet.maisfinancas.data.room.model.despesa.mapToModel
-import com.neuralnet.maisfinancas.model.Despesa
-import com.neuralnet.maisfinancas.model.toDespesaModel
-import com.neuralnet.maisfinancas.model.toEntity
-import com.neuralnet.maisfinancas.model.toRegistroDespesaEntity
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.mapToModel
+import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.toDespesaModel
+import com.neuralnet.maisfinancas.model.despesa.toEntity
+import com.neuralnet.maisfinancas.model.despesa.toRegistroDespesaEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.UUID
@@ -44,4 +44,5 @@ class DespesaRepositoryImpl(
 
     override suspend fun inserirRegistro(registroDespesa: RegistroDespesaEntity) =
         despesaDao.insertRegistro(registroDespesa)
+
 }

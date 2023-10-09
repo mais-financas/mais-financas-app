@@ -1,9 +1,9 @@
 package com.neuralnet.maisfinancas.ui.screens.depesas.detalhes
 
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
-import com.neuralnet.maisfinancas.model.Despesa
-import com.neuralnet.maisfinancas.model.Frequencia
-import com.neuralnet.maisfinancas.model.Recorrencia
+import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 
 data class DetalhesDespesaUiState(
     val despesaId: Long = 0L,

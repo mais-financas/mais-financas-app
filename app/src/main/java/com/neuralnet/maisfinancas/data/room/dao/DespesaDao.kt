@@ -5,13 +5,13 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaAndCategoria
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaEntity
-import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistroAndRecorrencia
-import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistrosAndCategoria
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistroAndRecorrencia
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.RecorrenciaDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
-import com.neuralnet.maisfinancas.model.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 

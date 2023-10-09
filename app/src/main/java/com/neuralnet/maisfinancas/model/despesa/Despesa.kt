@@ -1,10 +1,10 @@
-package com.neuralnet.maisfinancas.model
+package com.neuralnet.maisfinancas.model.despesa
 
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaEntity
-import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistroAndRecorrencia
-import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.RecorrenciaDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistroAndRecorrencia
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
 import java.math.BigDecimal
 import java.util.Calendar
 import java.util.UUID

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
-import com.neuralnet.maisfinancas.model.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Despesa
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,15 +68,19 @@ class DetalhesDespesaViewModel @Inject constructor(
         )
 
         despesaRepository.inserirRegistro(registroDespesa)
+        clearRegistro()
     }
 
     fun isRegistroValid(): Boolean {
-        if (registroUiState.value.valor.toDoubleOrNull() == null) {
+        if (registroUiState.value.valor.toBigDecimalOrNull() == null) {
             _registroUiState.update {
                 it.copy(valorErrorField = FieldValidationError.NUMERO_INVALIDO)
             }
         }
-        val isValid = registroUiState.value.isRegistroValid()
-        return isValid
+        return registroUiState.value.isRegistroValid()
+    }
+
+    private fun clearRegistro() {
+        _registroUiState.update { it.copy(valor = "") }
     }
 }
