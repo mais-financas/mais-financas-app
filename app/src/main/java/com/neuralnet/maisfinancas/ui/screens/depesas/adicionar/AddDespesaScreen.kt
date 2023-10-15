@@ -32,8 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.ui.components.AppDropdown
 import com.neuralnet.maisfinancas.ui.components.NomeDespesaTextField
 import com.neuralnet.maisfinancas.ui.components.NumberTextField
@@ -85,7 +85,7 @@ fun AddDespesaScreen(
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
-                title = HomeDestinations.AddDespesa.title,
+                title = stringResource(id = HomeDestinations.AddDespesa.title),
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
@@ -148,7 +148,7 @@ fun AddDespesaScreen(
             RecorrenciaDespesa(
                 frequencia = uiState.frequencia,
                 onRecorrenciaChanged = { onUiStateChanged(uiState.copy(frequencia = it)) },
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 0.dp)
             )
 
             Row(

@@ -24,7 +24,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import com.neuralnet.maisfinancas.model.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
 
 @Composable
 fun RecorrenciaDespesaDropdown(
@@ -64,8 +64,6 @@ fun RecorrenciaDespesaDropdown(
             }
         )
 
-        // Create a drop-down menu with list of cities,
-        // when clicked, set the Text Field text as the city selected
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { onExpandedChanged(false) },

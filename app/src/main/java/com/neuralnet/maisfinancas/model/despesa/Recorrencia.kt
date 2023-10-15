@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.model
+package com.neuralnet.maisfinancas.model.despesa
 
 import com.neuralnet.maisfinancas.data.room.model.despesa.RecorrenciaDespesaEntity
 

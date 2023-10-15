@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.room.model.GestorEntity
-import com.neuralnet.maisfinancas.model.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Despesa
 import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -49,12 +49,12 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = depesas.map { despesas ->
         val ultimaSemana = Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }
 
-        val despesasSemana = despesas.filter { it.data.after(ultimaSemana) }
+//        val despesasSemana = despesas.filter { it.data.after(ultimaSemana) }
 
         HomeUiState(
             gastoMensal = BigDecimal.ZERO,
             saldoMensal = BigDecimal.ZERO,
-            despesasSemanais = despesasSemana.sumOf { it.valor },
+            despesasSemanais = BigDecimal.ZERO,
             rendaSemanal = BigDecimal.ZERO,
         )
     }.stateIn(

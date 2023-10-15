@@ -1,13 +1,15 @@
 package com.neuralnet.maisfinancas.ui.screens.depesas.adicionar
 
-import com.neuralnet.maisfinancas.model.Despesa
-import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
+import com.neuralnet.maisfinancas.model.despesa.RegistroDespesa
+import com.neuralnet.maisfinancas.model.input.DespesaInput
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import com.neuralnet.maisfinancas.util.toCalendar
+import java.util.UUID
 
 data class AddDespesaUiState(
-    val id: Long = 0,
     val nome: String = "",
     val nomeErrorField: FieldValidationError? = null,
     val valor: String = "",
@@ -22,12 +24,23 @@ data class AddDespesaUiState(
             valorErrorField == null && categoriaErrorField == null
 }
 
-fun AddDespesaUiState.toDespesaModel(dataEmEpochMillis: Long) = Despesa(
-    id = id,
-    nome = nome,
-    valor = valor.toBigDecimal(),
-    categoria = categoria,
-    recorrencia = Recorrencia(frequencia, quantidadeRecorrencia),
-    definirLembrete = definirLembrete,
-    data = dataEmEpochMillis.toCalendar(),
+fun AddDespesaUiState.toDespesaInput(
+    gestorId: UUID,
+    categoriaId: Int,
+    dataInMillis: Long,
+) = DespesaInput(
+    Despesa(
+        id = 0,
+        nome = nome,
+        categoria = categoria,
+        recorrencia = Recorrencia(frequencia, quantidadeRecorrencia),
+        definirLembrete = definirLembrete,
+    ),
+    gestorId = gestorId,
+    categoriaId = categoriaId,
+    registro = RegistroDespesa(
+        id = 0,
+        valor = valor.toBigDecimal(),
+        data = dataInMillis.toCalendar()
+    )
 )

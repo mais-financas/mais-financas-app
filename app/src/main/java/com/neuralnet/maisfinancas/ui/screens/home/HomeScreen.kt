@@ -67,7 +67,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
-                title = HomeDestinations.Home.title,
+                title = stringResource(id = HomeDestinations.Home.title),
                 canNavigateBack = false,
             )
         },

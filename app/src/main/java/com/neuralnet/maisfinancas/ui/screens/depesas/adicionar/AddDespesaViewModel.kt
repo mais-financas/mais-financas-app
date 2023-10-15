@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmScheduler
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
-import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
-import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.Frequencia
-import com.neuralnet.maisfinancas.model.Frequencia.ANUAL
-import com.neuralnet.maisfinancas.model.Frequencia.DIARIA
-import com.neuralnet.maisfinancas.model.Frequencia.MENSAL
-import com.neuralnet.maisfinancas.model.Frequencia.SEMANAL
+import com.neuralnet.maisfinancas.model.despesa.Categoria
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.ANUAL
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.DIARIA
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.MENSAL
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.SEMANAL
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +33,7 @@ class AddDespesaViewModel @Inject constructor(
 
     private val gestorId: UUID = UUID.fromString("00a7b810-9dad-11d1-80b4-00c04fd430c8")
 
-    val categorias: StateFlow<List<CategoriaEntity>> = despesaRepository.getCategorias()
+    val categorias: StateFlow<List<Categoria>> = despesaRepository.getCategorias()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
@@ -49,15 +49,21 @@ class AddDespesaViewModel @Inject constructor(
 
     fun salvarDespesa(dataEmEpochMillis: Long?) = viewModelScope.launch {
         val selectedDateInMillis = dataEmEpochMillis ?: Instant.now().toEpochMilli()
-        val despesa = uiState.value.toDespesaModel(selectedDateInMillis)
         val categoria = categorias.value.find { it.nome == uiState.value.categoria }
             ?: categorias.value.first()
 
-        val despesaId = despesaRepository.salvarDespesa(despesa, gestorId, categoria.id)
+        val despesaInput = uiState.value.toDespesaInput(
+            gestorId = gestorId,
+            categoriaId = categoria.id,
+            dataInMillis = selectedDateInMillis
+        )
+
+        val despesaId = despesaRepository.registrarDespesa(despesaInput)
+        val despesa = despesaInput.despesa.copy(id = despesaId)
 
         if (despesa.definirLembrete) {
             val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)
-            lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa.copy(id = despesaId))
+            lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa)
         }
     }
 

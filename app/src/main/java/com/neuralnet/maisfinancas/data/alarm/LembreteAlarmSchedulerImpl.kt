@@ -5,13 +5,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.neuralnet.maisfinancas.model.Despesa
-import com.neuralnet.maisfinancas.model.Recorrencia
-import com.neuralnet.maisfinancas.model.Frequencia.ANUAL
-import com.neuralnet.maisfinancas.model.Frequencia.DIARIA
-import com.neuralnet.maisfinancas.model.Frequencia.MENSAL
-import com.neuralnet.maisfinancas.model.Frequencia.NENHUMA
-import com.neuralnet.maisfinancas.model.Frequencia.SEMANAL
+import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.ANUAL
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.DIARIA
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.MENSAL
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.NENHUMA
+import com.neuralnet.maisfinancas.model.despesa.Frequencia.SEMANAL
 import java.util.Calendar
 
 class LembreteAlarmSchedulerImpl(
