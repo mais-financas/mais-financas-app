@@ -8,10 +8,12 @@ import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaA
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.mapToModel
+import com.neuralnet.maisfinancas.model.despesa.Categoria
 import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.asModel
 import com.neuralnet.maisfinancas.model.despesa.toDespesaModel
 import com.neuralnet.maisfinancas.model.despesa.toEntity
-import com.neuralnet.maisfinancas.model.despesa.toRegistroDespesaEntity
+import com.neuralnet.maisfinancas.model.input.DespesaInput
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.UUID
@@ -24,12 +26,12 @@ class DespesaRepositoryImpl(
     override fun getDespesas(gestorId: UUID?): Flow<List<Despesa>> =
         despesaDao.getDepesasByGestorId(gestorId).map(List<DespesaAndCategoria>::mapToModel)
 
-    override suspend fun salvarDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int): Long {
-        val registroDespesa = despesa.toRegistroDespesaEntity(gestorId, categoriaId)
-        return despesaDao.insertRegistroDespesa(registroDespesa)
+    override suspend fun registrarDespesa(despesaInput: DespesaInput): Long {
+        return despesaDao.cadastrarDepesaComRegistro(despesaInput)
     }
 
-    override fun getCategorias(): Flow<List<CategoriaEntity>> = categoriaDao.getCategorias()
+    override fun getCategorias(): Flow<List<Categoria>> = categoriaDao.getCategorias()
+        .map(List<CategoriaEntity>::asModel)
 
     override suspend fun findCategoriaIdByNome(nome: String): Int =
         categoriaDao.findCategoriaIdByNome(nome)

@@ -5,13 +5,15 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaEntity
-import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistroAndRecorrencia
-import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.RecorrenciaDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaAndCategoria
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.input.DespesaInput
+import com.neuralnet.maisfinancas.model.input.toDespesaEntity
+import com.neuralnet.maisfinancas.model.input.toRegistroEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -33,13 +35,20 @@ interface DespesaDao {
 
 
     @Transaction
-    suspend fun insertRegistroDespesa(registroDespesa: DespesaWithRegistroAndRecorrencia): Long {
-        val despesaId = insertDespesa(registroDespesa.despesa)
-        insertRegistro(registroDespesa.registro.copy(despesaId = despesaId))
+    suspend fun cadastrarDepesaComRegistro(despesaInput: DespesaInput): Long {
+        val despesaId = insertDespesa(despesaInput.toDespesaEntity())
+        val registroDespesa = despesaInput.toRegistroEntity(despesaId)
 
-        registroDespesa.recorrencia?.let {
-            if (it.frequencia != Frequencia.NENHUMA) {
-                insertRecorrencia(it.copy(despesaId = despesaId))
+        insertRegistro(registroDespesa)
+
+        despesaInput.despesa.recorrencia.run {
+            if (frequencia != Frequencia.NENHUMA) {
+                val recorrenciaDespesaEntity = RecorrenciaDespesaEntity(
+                    frequencia = frequencia,
+                    quantidade = quantidade,
+                    despesaId = despesaId
+                )
+                insertRecorrencia(recorrenciaDespesaEntity)
             }
         }
 

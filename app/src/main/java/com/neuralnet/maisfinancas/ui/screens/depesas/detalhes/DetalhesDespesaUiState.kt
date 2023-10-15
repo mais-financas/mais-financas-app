@@ -20,8 +20,6 @@ fun DetalhesDespesaUiState.toModel() = Despesa(
     categoria = categoria,
     recorrencia = recorrencia,
     definirLembrete = definirLembrete,
-    valor = registros.first().valor,
-    data = registros.first().data,
 )
 
 fun Despesa.toDetalhesUiState() = DetalhesDespesaUiState(

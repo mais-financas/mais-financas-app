@@ -14,11 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.neuralnet.maisfinancas.util.formattedDate
-import com.neuralnet.maisfinancas.util.toReal
-import java.math.BigDecimal
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -27,8 +23,6 @@ import java.util.TimeZone
 @Composable
 fun ItemDespesa(
     nome: String,
-    valor: BigDecimal,
-    data: Calendar,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
@@ -43,15 +37,7 @@ fun ItemDespesa(
                     fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
                     fontWeight = FontWeight.Medium
                 )
-                Text(text = data.formattedDate(), fontWeight = FontWeight.Light)
             }
-
-            Text(
-                text = valor.toReal(),
-                fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
-                fontWeight = FontWeight.Medium
-            )
-
         }
     }
 }

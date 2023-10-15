@@ -49,12 +49,12 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = depesas.map { despesas ->
         val ultimaSemana = Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }
 
-        val despesasSemana = despesas.filter { it.data.after(ultimaSemana) }
+//        val despesasSemana = despesas.filter { it.data.after(ultimaSemana) }
 
         HomeUiState(
             gastoMensal = BigDecimal.ZERO,
             saldoMensal = BigDecimal.ZERO,
-            despesasSemanais = despesasSemana.sumOf { it.valor },
+            despesasSemanais = BigDecimal.ZERO,
             rendaSemanal = BigDecimal.ZERO,
         )
     }.stateIn(

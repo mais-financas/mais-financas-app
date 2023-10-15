@@ -20,14 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.model.despesa.Despesa
-import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.ui.components.ItemDespesa
-import com.neuralnet.maisfinancas.util.toReal
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
-import com.neuralnet.maisfinancas.util.toCalendar
+import com.neuralnet.maisfinancas.util.toReal
 import java.math.BigDecimal
 
 @Composable
@@ -90,18 +89,11 @@ fun DespesasListContent(
                             .padding(start = 16.dp)
                             .weight(1f)
                     )
-                    Text(
-                        text = "(${valorPorCategoria(grupos)})",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
                 }
             }
             items(items = grupos.value, key = { it.id }) { despesa ->
                 ItemDespesa(
                     nome = despesa.nome,
-                    valor = despesa.valor,
-                    data = despesa.data,
                     modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
                     onClick = { onDetailsClick(despesa.id) }
                 )
@@ -125,37 +117,29 @@ fun DespesasScreenPreview() {
                         id = 0,
                         nome = "Água",
                         categoria = "Essenciais",
-                        valor = BigDecimal.valueOf(100.0),
                         Recorrencia(Frequencia.MENSAL, 1),
                         definirLembrete = false,
-                        data = 1693577802000.toCalendar()
                     ),
                     Despesa(
                         id = 0,
                         nome = "Energia",
                         categoria = "Essenciais",
-                        valor = BigDecimal.valueOf(123.0),
                         Recorrencia(Frequencia.MENSAL, 1),
                         definirLembrete = true,
-                        data = 1693577802000.toCalendar()
                     ),
                     Despesa(
                         id = 0,
                         nome = "Almoço",
                         categoria = "Alimentação",
-                        valor = BigDecimal.valueOf(30.0),
                         Recorrencia(Frequencia.MENSAL, 1),
                         definirLembrete = true,
-                        data = 1693064202000.toCalendar()
                     ),
                     Despesa(
                         id = 0,
                         nome = "Cinema",
                         categoria = "Entretenimento",
-                        valor = BigDecimal.valueOf(70.0),
                         Recorrencia(Frequencia.MENSAL, 1),
                         definirLembrete = false,
-                        data = 1693564202000.toCalendar()
                     ),
                 )
             ),
@@ -167,6 +151,6 @@ fun DespesasScreenPreview() {
 private fun valorPorCategoria(despesas: Map.Entry<String, List<Despesa>>): String {
     return despesas.value
         .filter { despesa -> despesa.categoria == despesas.key }
-        .sumOf { it.valor }
+        .sumOf { BigDecimal.ZERO }
         .toReal()
 }
