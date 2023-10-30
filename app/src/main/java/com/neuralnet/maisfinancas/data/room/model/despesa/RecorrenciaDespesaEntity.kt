@@ -27,6 +27,6 @@ data class RecorrenciaDespesaEntity(
 
     val quantidade: Int,
 
-    @ColumnInfo(name = "despesa_id")
+    @ColumnInfo(name = "despesa_id", index = true)
     val despesaId: Long,
 )

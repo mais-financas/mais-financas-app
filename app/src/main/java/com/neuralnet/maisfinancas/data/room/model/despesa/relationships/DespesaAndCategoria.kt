@@ -6,6 +6,7 @@ import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RecorrenciaDespesaEntity
 import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.model.despesa.toModel
 
 data class DespesaAndCategoria(
@@ -18,7 +19,7 @@ data class DespesaAndCategoria(
     @Relation(
         parentColumn = "despesa_id",
         entityColumn = "despesa_id"
-    ) val recorrencia: RecorrenciaDespesaEntity,
+    ) val recorrencia: RecorrenciaDespesaEntity? = null,
 )
 
 fun List<DespesaAndCategoria>.mapToModel(): List<Despesa> = map {
@@ -26,7 +27,7 @@ fun List<DespesaAndCategoria>.mapToModel(): List<Despesa> = map {
         id = it.despesa.id,
         nome = it.despesa.nome,
         categoria = it.categoria.nome,
-        recorrencia = it.recorrencia.toModel(),
+        recorrencia = it.recorrencia?.toModel() ?: Recorrencia(),
         definirLembrete = it.despesa.definirLembrete,
     )
 }
