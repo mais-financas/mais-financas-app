@@ -27,3 +27,14 @@ fun BigDecimal.toReal(): String {
 
     return format.format(this)
 }
+
+fun Calendar.formattedMonth(): String {
+    return try {
+        val locale = Locale("pt", "BR")
+        val sdf = SimpleDateFormat("MMMM yyyy", locale)
+        sdf.format(Date(this.timeInMillis))
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+    } catch (e: Exception) {
+        e.toString()
+    }
+}

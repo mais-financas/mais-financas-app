@@ -68,6 +68,9 @@
     <string name="categoria_detalhe">"Categoria: "</string>
     <string name="adicionar">Adicionar</string>
     <string name="salvar">Salvar</string>
+    <string name="gestao_de_gastos">Gestão de Gastos</string>
+    <string name="mes_anterior">Mês anterior</string>
+    <string name="proximo_mes">Próximo mês</string>
     <plurals name="recorrencia_despesa">
         <item quantity="one">Ocorre de forma %1$s</item>
         <item quantity="other">Ocorre a cada %d %1$s</item>

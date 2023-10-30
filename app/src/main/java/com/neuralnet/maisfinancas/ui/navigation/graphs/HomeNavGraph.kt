@@ -13,6 +13,8 @@ import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.screens.Screen
 import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaScreen
 import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaViewModel
+import com.neuralnet.maisfinancas.ui.screens.estatisticas.EstatisticaScreen
+import com.neuralnet.maisfinancas.ui.screens.estatisticas.EstatisticaViewModel
 import com.neuralnet.maisfinancas.ui.screens.home.HomeScreen
 import com.neuralnet.maisfinancas.ui.screens.home.HomeViewModel
 import java.time.Instant
@@ -61,9 +63,8 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
         despesasNavGraph(navController)
 
         composable(route = HomeDestinations.Estatisticas.route) {
-            Screen(
-                route = HomeDestinations.Estatisticas.route,
-                onClick = { navController.navigate(HomeDestinations.Home.route) })
+            val viewModel = hiltViewModel<EstatisticaViewModel>()
+            EstatisticaScreen(viewModel = viewModel)
         }
 
         composable(route = HomeDestinations.FinancialGoals.route) {

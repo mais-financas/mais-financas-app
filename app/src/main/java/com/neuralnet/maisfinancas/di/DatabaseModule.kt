@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.neuralnet.maisfinancas.data.room.MaisFinancasDatabase
 import com.neuralnet.maisfinancas.data.room.dao.CategoriaDao
 import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
+import com.neuralnet.maisfinancas.data.room.dao.EstatisticaDao
 import com.neuralnet.maisfinancas.data.room.dao.GestorDao
 import dagger.Module
 import dagger.Provides
@@ -25,7 +26,6 @@ object DatabaseModule {
             klass = MaisFinancasDatabase::class.java,
             name = "financas_db"
         ).createFromAsset("database/financas.db")
-            .fallbackToDestructiveMigration()
             .build()
     }
 
@@ -40,5 +40,10 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideCategoriaDao(database: MaisFinancasDatabase): CategoriaDao = database.categoriaDao()
+
+    @Provides
+    @Singleton
+    fun provideEstatisticaDao(database: MaisFinancasDatabase): EstatisticaDao =
+        database.estatisticaDao()
 
 }

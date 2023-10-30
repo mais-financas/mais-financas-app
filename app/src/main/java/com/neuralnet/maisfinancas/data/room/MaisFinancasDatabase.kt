@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.neuralnet.maisfinancas.data.room.dao.CategoriaDao
 import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
+import com.neuralnet.maisfinancas.data.room.dao.EstatisticaDao
 import com.neuralnet.maisfinancas.data.room.dao.GestorDao
 import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.DespesaEntity
@@ -31,5 +32,7 @@ abstract class MaisFinancasDatabase : RoomDatabase() {
     abstract fun despesaDao(): DespesaDao
 
     abstract fun categoriaDao(): CategoriaDao
+
+    abstract fun estatisticaDao(): EstatisticaDao
 
 }
