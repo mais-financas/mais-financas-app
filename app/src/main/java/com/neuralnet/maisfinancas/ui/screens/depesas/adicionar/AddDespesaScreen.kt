@@ -193,7 +193,11 @@ fun AddDespesaScreen(
                 }
             }
 
-            DatePicker(state = calendarState, showModeToggle = false)
+            DatePicker(
+                state = calendarState,
+                showModeToggle = false,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
         }
     }
 }

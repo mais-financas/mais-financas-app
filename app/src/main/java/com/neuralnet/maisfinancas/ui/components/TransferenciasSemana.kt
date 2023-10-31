@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
@@ -71,15 +72,24 @@ fun CardOrcamentoSemanal(
         Column(modifier = Modifier.padding(16.dp)) {
             Box(
                 modifier = Modifier
-                .background(color, CircleShape)
-                .size(36.dp)
+                    .background(color, CircleShape)
+                    .size(36.dp)
             )
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            Text(text = valor.toReal(), fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(8.dp))
-            
-            Text(text = descricao, modifier = Modifier.padding(8.dp))
+            Text(
+                text = valor.toReal(),
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(8.dp)
+            )
+
+            Text(
+                text = descricao,
+                modifier = Modifier.padding(8.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }

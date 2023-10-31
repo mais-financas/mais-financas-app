@@ -2,7 +2,6 @@ package com.neuralnet.maisfinancas.ui.components.estatisticas
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.Icon
@@ -17,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import com.neuralnet.maisfinancas.util.formattedMonth
@@ -38,32 +36,36 @@ fun PeriodoSelector(
             text = stringResource(R.string.gestao_de_gastos),
             fontWeight = FontWeight.SemiBold,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(end = 16.dp)
+            modifier = Modifier.weight(.35f),
         )
 
-        IconButton(
-            onClick = onPreviousClick,
-            modifier = Modifier.graphicsLayer(rotationZ = 180f)
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowForwardIos,
-                contentDescription = stringResource(R.string.mes_anterior),
-            )
-        }
+        Row(modifier = Modifier.weight(.65f), verticalAlignment = Alignment.CenterVertically) {
 
-        Text(
-            text = data.formattedMonth(),
-            fontWeight = FontWeight.SemiBold,
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
-        )
 
-        IconButton(onClick = onNextClick) {
-            Icon(
-                imageVector = Icons.Default.ArrowForwardIos,
-                contentDescription = stringResource(R.string.proximo_mes),
+            IconButton(
+                onClick = onPreviousClick,
+                modifier = Modifier.graphicsLayer(rotationZ = 180f)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowForwardIos,
+                    contentDescription = stringResource(R.string.mes_anterior),
+                )
+            }
+
+            Text(
+                text = data.formattedMonth(),
+                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f),
             )
+
+            IconButton(onClick = onNextClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowForwardIos,
+                    contentDescription = stringResource(R.string.proximo_mes),
+                )
+            }
         }
     }
 }
