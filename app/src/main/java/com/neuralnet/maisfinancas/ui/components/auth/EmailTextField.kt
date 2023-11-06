@@ -1,6 +1,5 @@
 package com.neuralnet.maisfinancas.ui.components.auth
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -13,19 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @Composable
 fun EmailTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    errorMessage: String? = null,
+    errorMessage: FieldValidationError? = null,
 ) {
     val isError = errorMessage != null
-    val bottomPadding = if (isError) 8.dp else 0.dp
 
     OutlinedTextField(
         value = value,
@@ -37,7 +35,7 @@ fun EmailTextField(
                 contentDescription = null,
             )
         },
-        modifier = modifier.padding(bottom = bottomPadding),
+        modifier = modifier,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email
         ),
@@ -46,15 +44,17 @@ fun EmailTextField(
             if (isError) {
                 Icon(
                     imageVector = Icons.Default.Info,
-                    contentDescription = errorMessage
+                    contentDescription = errorMessage?.message?.let { stringResource(id = it) }
                 )
             }
         },
-        supportingText = { errorMessage?.let { Text(text = it) } }
+        supportingText = errorMessage?.let { error ->
+            { Text(text = stringResource(id = error.message)) }
+        }
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun EmailTextFieldPreview() {
     MaisFinancasTheme {
@@ -65,14 +65,14 @@ private fun EmailTextFieldPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true, widthDp = 350)
 @Composable
 private fun EmailTextFieldWithErrorPreview() {
     MaisFinancasTheme {
         EmailTextField(
             value = "",
             onValueChange = {},
-            errorMessage = "Email não deve conter espaços em branco"
+            errorMessage = FieldValidationError.EMAIL_INVALIDO
         )
     }
 }

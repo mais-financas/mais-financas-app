@@ -1,8 +1,10 @@
 package com.neuralnet.maisfinancas.ui.screens.auth
 
+import com.neuralnet.maisfinancas.util.FieldValidationError
+
 data class LoginFormState(
     val email: String = "",
-    val emailErrorMessage: String? = null,
+    val emailErrorMessage: FieldValidationError? = null,
     val senha: String = "",
-    val senhaErrorMessage: String? = null,
+    val senhaErrorMessage: FieldValidationError? = null,
 )

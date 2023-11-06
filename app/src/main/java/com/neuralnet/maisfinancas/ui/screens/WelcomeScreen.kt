@@ -21,7 +21,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.ui.components.MaisFinancasBackground
+import com.neuralnet.maisfinancas.ui.components.core.MaisFinancasBackground
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable

@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.ui.components
+package com.neuralnet.maisfinancas.ui.components.core
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -76,12 +76,15 @@ fun AppDropdown(
                 .width(textFieldSize.width.dp)
         ) {
             options.forEach { label ->
-                DropdownMenuItem(onClick = {
-                    onSelectedOptionText(label)
-                    onExpandedChanged(false)
-                }, text = {
-                    Text(text = label)
-                })
+                DropdownMenuItem(
+                    onClick = {
+                        onSelectedOptionText(label)
+                        onExpandedChanged(false)
+                    },
+                    text = {
+                        Text(text = label)
+                    }
+                )
             }
         }
     }

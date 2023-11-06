@@ -22,7 +22,7 @@ import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.model.despesa.Despesa
 import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.model.despesa.Recorrencia
-import com.neuralnet.maisfinancas.ui.components.ItemDespesa
+import com.neuralnet.maisfinancas.ui.components.despesa.ItemDespesa
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme

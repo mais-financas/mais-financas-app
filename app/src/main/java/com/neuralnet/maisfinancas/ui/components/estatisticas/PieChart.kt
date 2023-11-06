@@ -93,7 +93,7 @@ fun PieChart(
 
 @Preview(showBackground = true, widthDp = 300)
 @Composable
-fun PieChartPreview() {
+private fun PieChartPreview() {
     MaisFinancasTheme {
         PieChart(
             dados = listOf(

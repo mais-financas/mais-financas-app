@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -28,17 +29,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.model.despesa.Recorrencia
-import com.neuralnet.maisfinancas.ui.components.AppDropdown
-import com.neuralnet.maisfinancas.ui.components.NomeDespesaTextField
-import com.neuralnet.maisfinancas.ui.components.NumberTextField
-import com.neuralnet.maisfinancas.ui.components.RecorrenciaDespesa
-import com.neuralnet.maisfinancas.ui.components.getDate
+import com.neuralnet.maisfinancas.ui.components.core.AppDropdown
+import com.neuralnet.maisfinancas.ui.components.core.NumberTextField
+import com.neuralnet.maisfinancas.ui.components.despesa.DespesaTextField
+import com.neuralnet.maisfinancas.ui.components.despesa.RecorrenciaDespesa
+import com.neuralnet.maisfinancas.ui.components.despesa.getDate
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
@@ -110,7 +112,7 @@ fun AddDespesaScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
 
-            NomeDespesaTextField(
+            DespesaTextField(
                 value = uiState.nome,
                 onValueChange = {
                     onUiStateChanged(uiState.copy(nome = it, nomeErrorField = null))
@@ -118,6 +120,9 @@ fun AddDespesaScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences
+                ),
                 errorMessage = uiState.nomeErrorField,
             )
 

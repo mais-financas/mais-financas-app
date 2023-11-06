@@ -56,6 +56,7 @@
     <string name="prximo_lembrete">Próximo lembrete: %1$s</string>
     <string name="message_campo_vazio">*Campo obrigaratório</string>
     <string name="message_numero_invalido">Entre com um número válido</string>
+    <string name="message_nome_invalido">Nome não deve conter números ou caracteres especiais</string>
     <string name="lembrete_despesa_mensagem">Lembrete para %1$s</string>
     <string name="registros">Registros</string>
     <string name="detalhes_despesa">Detalhes da Despesa</string>
@@ -71,6 +72,9 @@
     <string name="gestao_de_gastos">Gestão de Gastos</string>
     <string name="mes_anterior">Mês anterior</string>
     <string name="proximo_mes">Próximo mês</string>
+    <string name="message_senha_invalida">Senha deve conter pelo menos 8 caracteres</string>
+    <string name="message_confirmar_senha_invalida">Senhas não coincidem</string>
+    <string name="message_email_invalido">Email não deve conter espaçoes em branco</string>
     <plurals name="recorrencia_despesa">
         <item quantity="one">Ocorre de forma %1$s</item>
         <item quantity="other">Ocorre a cada %d %1$s</item>

@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.ui.components
+package com.neuralnet.maisfinancas.ui.components.despesa
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
+import com.neuralnet.maisfinancas.ui.components.core.NumberTextField
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import com.neuralnet.maisfinancas.util.FieldValidationError
 

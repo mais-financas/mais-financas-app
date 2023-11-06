@@ -1,9 +1,9 @@
 package com.neuralnet.maisfinancas.ui.components.auth
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -13,52 +13,80 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.screens.auth.SignUpFormState
+import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @Composable
 fun SignUpForm(
-    signUpFormState: SignUpFormState,
+    formState: SignUpFormState,
     onSignUpFormStateChange: (SignUpFormState) -> Unit,
-    modifier: Modifier = Modifier,
     onSignUpClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.padding(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         Text(
             text = stringResource(R.string.crie_uma_conta),
             fontSize = MaterialTheme.typography.headlineSmall.fontSize,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier
-                .align(Alignment.Start)
-                .padding(bottom = 16.dp)
+            modifier = Modifier.align(Alignment.Start)
         )
 
-        NameTextField(
-            value = signUpFormState.nome,
-            onValueChange = { onSignUpFormStateChange(signUpFormState.copy(nome = it)) },
+        PersonNameTextField(
+            value = formState.nome,
+            onValueChange = {
+                onSignUpFormStateChange(
+                    formState.copy(nome = it, nomeErrorMessage = null)
+                )
+            },
+            errorMessage = formState.nomeErrorMessage,
             modifier = Modifier.fillMaxWidth(),
         )
 
         EmailTextField(
-            value = signUpFormState.email,
-            onValueChange = { onSignUpFormStateChange(signUpFormState.copy(email = it)) },
+            value = formState.email,
+            onValueChange = {
+                onSignUpFormStateChange(
+                    formState.copy(email = it, emailErrorMessage = null)
+                )
+            },
+            errorMessage = formState.emailErrorMessage,
             modifier = Modifier.fillMaxWidth(),
         )
 
         PasswordTextField(
-            value = signUpFormState.senha,
-            onValueChange = { onSignUpFormStateChange(signUpFormState.copy(senha = it)) },
+            value = formState.senha,
+            onValueChange = {
+                onSignUpFormStateChange(
+                    formState.copy(
+                        senha = it,
+                        senhaErrorMessage = null
+                    )
+                )
+            },
+            errorMessage = formState.senhaErrorMessage,
             modifier = Modifier.fillMaxWidth(),
         )
 
         PasswordTextField(
-            value = signUpFormState.confirmarSenha,
-            onValueChange = { onSignUpFormStateChange(signUpFormState.copy(confirmarSenha = it)) },
+            value = formState.confirmarSenha,
+            onValueChange = {
+                onSignUpFormStateChange(
+                    formState.copy(
+                        confirmarSenha = it,
+                        confirmarSenhaErrorMessage = null
+                    )
+                )
+            },
             confirmPassword = true,
+            errorMessage = formState.confirmarSenhaErrorMessage,
             modifier = Modifier.fillMaxWidth(),
         )
 
@@ -67,11 +95,11 @@ fun SignUpForm(
             modifier = Modifier.align(Alignment.Start),
         ) {
             Checkbox(
-                checked = signUpFormState.agreeWithTermsAndConditions,
+                checked = formState.agreeWithTermsAndConditions,
                 onCheckedChange = {
                     onSignUpFormStateChange(
-                        signUpFormState.copy(
-                            agreeWithTermsAndConditions = !signUpFormState.agreeWithTermsAndConditions
+                        formState.copy(
+                            agreeWithTermsAndConditions = !formState.agreeWithTermsAndConditions
                         )
                     )
                 }
@@ -79,9 +107,38 @@ fun SignUpForm(
             Text(text = stringResource(id = R.string.concordar_termos))
         }
 
-        Button(onClick = onSignUpClick, Modifier.fillMaxWidth().padding(top = 16.dp)) {
+        Button(onClick = onSignUpClick, modifier = Modifier.fillMaxWidth()) {
             Text(text = stringResource(id = R.string.registrar))
         }
 
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SignUpFormPreview() {
+    MaisFinancasTheme {
+        SignUpForm(
+            formState = SignUpFormState(),
+            onSignUpFormStateChange = {},
+            onSignUpClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SignUpFormWithErrorPreview() {
+    MaisFinancasTheme {
+        SignUpForm(
+            formState = SignUpFormState(
+                nomeErrorMessage = FieldValidationError.NOME_INVALIDO,
+                emailErrorMessage = FieldValidationError.EMAIL_INVALIDO,
+                senhaErrorMessage = FieldValidationError.SENHA_INVALIDA,
+                confirmarSenhaErrorMessage = FieldValidationError.CONFIRMAR_SENHA_INVALIDA
+            ),
+            onSignUpFormStateChange = {},
+            onSignUpClick = {}
+        )
     }
 }

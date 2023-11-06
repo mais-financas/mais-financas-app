@@ -1,6 +1,5 @@
 package com.neuralnet.maisfinancas.ui.components.auth
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -21,21 +20,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @Composable
 fun PasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    errorMessage: String? = null,
+    errorMessage: FieldValidationError? = null,
     confirmPassword: Boolean = false,
 ) {
-    var passwordVisibility by remember {
-        mutableStateOf(false)
-    }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     val visibilityIcon = if (passwordVisibility)
         painterResource(R.drawable.ic_visibility)
@@ -43,18 +40,17 @@ fun PasswordTextField(
         painterResource(R.drawable.ic_visibility_off)
 
     val isError = errorMessage != null
-    val bottomPadding = if (isError) 8.dp else 0.dp
-
-    val label = if (confirmPassword)
+    val label = if (confirmPassword) {
+        stringResource(id = R.string.senha)
+    } else
         stringResource(id = R.string.confirmar_senha)
-    else stringResource(id = R.string.senha)
 
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(text = label) },
         leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
-        modifier = modifier.padding(bottom = bottomPadding),
+        modifier = modifier,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password
         ),
@@ -68,7 +64,7 @@ fun PasswordTextField(
                 if (isError) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = errorMessage
+                        contentDescription = errorMessage?.message?.let { stringResource(id = it) }
                     )
                 } else {
                     Icon(
@@ -79,14 +75,15 @@ fun PasswordTextField(
             }
         },
         isError = isError,
-        supportingText = { errorMessage?.let { Text(text = it) } }
-
+        supportingText = errorMessage?.let { error ->
+            { Text(text = stringResource(id = error.message)) }
+        }
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun PasswordTextFieldPreview() {
+private fun PasswordTextFieldPreview() {
     MaisFinancasTheme {
         PasswordTextField(
             value = "",
@@ -95,14 +92,39 @@ fun PasswordTextFieldPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun PasswordTextFieldWithErrorPreview() {
+private fun PasswordTextFieldWithErrorPreview() {
     MaisFinancasTheme {
         PasswordTextField(
             value = "",
             onValueChange = {},
-            errorMessage = "Senha deve conter pelo menos 8 caracteres",
+            errorMessage = FieldValidationError.SENHA_INVALIDA,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ConfirmPasswordTextFieldPreview() {
+    MaisFinancasTheme {
+        PasswordTextField(
+            value = "",
+            onValueChange = {},
+            confirmPassword = true,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ConfirmPasswordTextFieldWithErrorPreview() {
+    MaisFinancasTheme {
+        PasswordTextField(
+            value = "",
+            onValueChange = {},
+            errorMessage = FieldValidationError.CONFIRMAR_SENHA_INVALIDA,
+            confirmPassword = true,
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.ui.components
+package com.neuralnet.maisfinancas.ui.components.despesa
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

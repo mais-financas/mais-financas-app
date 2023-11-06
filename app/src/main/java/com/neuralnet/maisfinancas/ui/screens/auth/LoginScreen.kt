@@ -8,22 +8,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.ui.components.MaisFinancasBackground
 import com.neuralnet.maisfinancas.ui.components.auth.LoginForm
 import com.neuralnet.maisfinancas.ui.components.auth.LoginOptions
+import com.neuralnet.maisfinancas.ui.components.core.MaisFinancasBackground
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
@@ -45,22 +42,14 @@ fun LoginScreen(
         Image(
             painter = painterResource(R.drawable.logo),
             contentDescription = stringResource(R.string.app_name),
-            modifier = Modifier.heightIn(48.dp)
-        )
-
-        Text(
-            text = stringResource(R.string.welcome),
-            fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier
-                .align(Alignment.Start)
-                .padding(top = 16.dp)
+            modifier = Modifier.heightIn(36.dp)
         )
 
         LoginForm(
             onLoginClick = onLoginClick,
             loginFormState = loginFormState,
-            onLoginFormStateChange = onLoginFormStateChange
+            onLoginFormStateChange = onLoginFormStateChange,
+            modifier = Modifier.padding(vertical = 16.dp)
         )
 
         LoginOptions(
@@ -83,6 +72,7 @@ fun LoginScreen(
         )
     }
 }
+
 @Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Preview(name = "pixel4", device = "id:pixel_4")
 @Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")

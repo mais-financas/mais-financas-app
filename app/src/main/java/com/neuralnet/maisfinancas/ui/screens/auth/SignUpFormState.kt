@@ -1,13 +1,15 @@
 package com.neuralnet.maisfinancas.ui.screens.auth
 
+import com.neuralnet.maisfinancas.util.FieldValidationError
+
 data class SignUpFormState(
     val nome: String = "",
-    val nomeErrorMessage: String? = null,
+    val nomeErrorMessage: FieldValidationError? = null,
     val email: String = "",
-    val emailErrorMessage: String? = null,
+    val emailErrorMessage: FieldValidationError? = null,
     val senha: String = "",
-    val senhaErrorMessage: String? = null,
+    val senhaErrorMessage: FieldValidationError? = null,
     val confirmarSenha: String = "",
-    val confirmarSenhaErrorMessage: String? = null,
+    val confirmarSenhaErrorMessage: FieldValidationError? = null,
     val agreeWithTermsAndConditions: Boolean = false
 )

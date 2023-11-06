@@ -41,7 +41,6 @@ fun PeriodoSelector(
 
         Row(modifier = Modifier.weight(.65f), verticalAlignment = Alignment.CenterVertically) {
 
-
             IconButton(
                 onClick = onPreviousClick,
                 modifier = Modifier.graphicsLayer(rotationZ = 180f)
@@ -72,7 +71,7 @@ fun PeriodoSelector(
 
 @Preview(showBackground = true)
 @Composable
-fun PeriodoSelectorPreview() {
+private fun PeriodoSelectorPreview() {
     MaisFinancasTheme {
         PeriodoSelector(
             data = Calendar.getInstance(),
@@ -81,5 +80,3 @@ fun PeriodoSelectorPreview() {
         )
     }
 }
-
-

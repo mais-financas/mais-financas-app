@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.ui.components
+package com.neuralnet.maisfinancas.ui.components.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

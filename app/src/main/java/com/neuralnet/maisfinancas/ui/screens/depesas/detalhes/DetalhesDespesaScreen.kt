@@ -26,9 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.ui.components.DetalhesDespesaItem
-import com.neuralnet.maisfinancas.ui.components.InserirRegistroBottomSheet
-import com.neuralnet.maisfinancas.ui.components.RegistroDespesaItem
+import com.neuralnet.maisfinancas.ui.components.despesa.DetalhesDespesaItem
+import com.neuralnet.maisfinancas.ui.components.despesa.InserirRegistroBottomSheet
+import com.neuralnet.maisfinancas.ui.components.despesa.RegistroDespesaItem
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import java.time.Instant

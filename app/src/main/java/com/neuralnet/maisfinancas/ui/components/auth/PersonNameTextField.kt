@@ -1,6 +1,5 @@
 package com.neuralnet.maisfinancas.ui.components.auth
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -12,20 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @Composable
-fun NameTextField(
+fun PersonNameTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    errorMessage: String? = null,
+    errorMessage: FieldValidationError? = null,
     required: Boolean = false,
 ) {
     val isError = errorMessage != null
-    val bottomPadding = if (isError || required) 8.dp else 0.dp
 
     OutlinedTextField(
         value = value,
@@ -37,37 +35,37 @@ fun NameTextField(
                 contentDescription = null,
             )
         },
-        modifier = modifier.padding(bottom = bottomPadding),
+        modifier = modifier,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Words,
         ),
         isError = isError,
-        supportingText = {
-            if (errorMessage != null) {
-                Text(text = errorMessage)
-            } else if (required) {
-                Text(text = stringResource(R.string.required))
+        supportingText = if (required) {
+            { Text(text = stringResource(id = R.string.required)) }
+        } else {
+            errorMessage?.let { error ->
+                { Text(text = stringResource(id = error.message)) }
             }
         },
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun NameTextFieldPreview() {
+private fun NameTextFieldPreview() {
     MaisFinancasTheme {
-        NameTextField(
+        PersonNameTextField(
             value = "",
             onValueChange = {},
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun NameTextFieldRequiredPreview() {
     MaisFinancasTheme {
-        NameTextField(
+        PersonNameTextField(
             value = "",
             onValueChange = {},
             required = true,
@@ -75,14 +73,14 @@ private fun NameTextFieldRequiredPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true, widthDp = 380)
 @Composable
-fun NameTextFieldWithErrorPreview() {
+private fun NameTextFieldWithErrorPreview() {
     MaisFinancasTheme {
-        NameTextField(
+        PersonNameTextField(
             value = "",
             onValueChange = {},
-            errorMessage = "Nome não deve conter números ou caracteres especiais"
+            errorMessage = FieldValidationError.NOME_INVALIDO
         )
     }
 }

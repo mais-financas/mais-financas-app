@@ -20,9 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.ui.components.ObjetivosOverview
-import com.neuralnet.maisfinancas.ui.components.OrcamentoOverview
-import com.neuralnet.maisfinancas.ui.components.TransferenciasSemana
+import com.neuralnet.maisfinancas.ui.components.home.ObjetivosOverview
+import com.neuralnet.maisfinancas.ui.components.home.OrcamentoOverview
+import com.neuralnet.maisfinancas.ui.components.home.TransferenciasSemana
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.screens.LoadingScreen

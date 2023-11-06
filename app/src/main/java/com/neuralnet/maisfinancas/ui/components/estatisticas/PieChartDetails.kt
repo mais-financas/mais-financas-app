@@ -37,11 +37,10 @@ fun PieChartDetails(item: FinancasChartItem, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PieChartDetailsPreview() {
+private fun PieChartDetailsPreview() {
     MaisFinancasTheme {
         PieChartDetails(
             FinancasChartItem("Saúde", BigDecimal.valueOf(300L)),
         )
     }
 }
-

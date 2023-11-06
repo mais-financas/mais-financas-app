@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
         UUID.fromString("00a7b810-9dad-11d1-80b4-00c04fd430c8")
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor(gestorId)
 
-    private val hasLoggedIn: Flow<Boolean> = gestor.map { it != null }
+    private val hasLoggedIn: Flow<Boolean> = gestor.map { it == null }
 
     val authState: StateFlow<AuthState> = hasLoggedIn.map { hasLoggedIn ->
         if (hasLoggedIn) {
