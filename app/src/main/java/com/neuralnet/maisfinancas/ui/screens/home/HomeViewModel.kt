@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.math.BigDecimal
-import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
 
@@ -30,7 +29,7 @@ class HomeViewModel @Inject constructor(
         UUID.fromString("00a7b810-9dad-11d1-80b4-00c04fd430c8")
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor(gestorId)
 
-    private val hasLoggedIn: Flow<Boolean> = gestor.map { it == null }
+    private val hasLoggedIn: Flow<Boolean> = gestor.map { it != null }
 
     val authState: StateFlow<AuthState> = hasLoggedIn.map { hasLoggedIn ->
         if (hasLoggedIn) {
@@ -46,10 +45,7 @@ class HomeViewModel @Inject constructor(
 
     private val depesas: Flow<List<Despesa>> = despesaRepository.getDespesas(gestorId)
 
-    val uiState: StateFlow<HomeUiState> = depesas.map { despesas ->
-        val ultimaSemana = Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }
-
-//        val despesasSemana = despesas.filter { it.data.after(ultimaSemana) }
+    val uiState: StateFlow<HomeUiState> = depesas.map { _ ->
 
         HomeUiState(
             gastoMensal = BigDecimal.ZERO,

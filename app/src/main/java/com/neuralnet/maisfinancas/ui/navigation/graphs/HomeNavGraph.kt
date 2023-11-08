@@ -11,12 +11,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.screens.Screen
-import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaScreen
-import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.AddDespesaViewModel
 import com.neuralnet.maisfinancas.ui.screens.estatisticas.EstatisticaScreen
 import com.neuralnet.maisfinancas.ui.screens.estatisticas.EstatisticaViewModel
 import com.neuralnet.maisfinancas.ui.screens.home.HomeScreen
 import com.neuralnet.maisfinancas.ui.screens.home.HomeViewModel
+import com.neuralnet.maisfinancas.ui.screens.rendas.AddRendaScreen
+import com.neuralnet.maisfinancas.ui.screens.rendas.AddRendaViewModel
+import com.neuralnet.maisfinancas.ui.screens.saldo.SaldoScreen
 import java.time.Instant
 
 const val HOME_GRAPH = "home_graph"
@@ -36,24 +37,32 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
             HomeScreen(
                 viewModel = viewModel,
-                onNavigateToLogin = { navController.navigate(route = HomeDestinations.AuthGraph.route) },
-                onAddClick = { navController.navigate(HomeDestinations.AddDespesa.route) }
+                onCardClick = { navController.navigate(route = HomeDestinations.Saldo.route) },
+                onNavigateToLogin = {
+                    navController.navigate(route = HomeDestinations.AuthGraph.route)
+                },
             )
         }
 
-        composable(route = HomeDestinations.AddDespesa.route) {
-            val viewModel = hiltViewModel<AddDespesaViewModel>()
+        composable(route = HomeDestinations.Saldo.route) {
+            SaldoScreen(
+                onAddClick = { navController.navigate(route = HomeDestinations.AddRenda.route) },
+            )
+        }
+
+        composable(route = HomeDestinations.AddRenda.route) {
+            val viewModel = hiltViewModel<AddRendaViewModel>()
             val calendarState = rememberDatePickerState(
                 initialSelectedDateMillis = Instant.now().toEpochMilli()
             )
 
-            AddDespesaScreen(
+            AddRendaScreen(
                 viewModel = viewModel,
-                calendarState = calendarState,
                 onNavigateUp = { navController.navigateUp() },
+                calendarState = calendarState,
                 onSaveClick = {
                     if (viewModel.isFormValid()) {
-                        viewModel.salvarDespesa(dataEmEpochMillis = calendarState.selectedDateMillis)
+                        viewModel.salvarRenda(calendarState.selectedDateMillis)
                         navController.popBackStack()
                     }
                 }
@@ -86,7 +95,8 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 sealed class HomeDestinations(val route: String, @StringRes val title: Int) {
     data object Home : HomeDestinations("home", R.string.carteira)
     data object DespesasGraph : HomeDestinations("despesas_graph", R.string.despesas)
-    data object AddDespesa : HomeDestinations("add_despesa", R.string.adicionar_despesa)
+    data object AddRenda : HomeDestinations("add_renda", R.string.adicionar_renda)
+    data object Saldo : HomeDestinations("saldo", R.string.saldo)
     data object Estatisticas : HomeDestinations("estatisticas", R.string.estatisticas)
     data object FinancialGoals : HomeDestinations("objetivos", R.string.objetivos)
     data object Perfil : HomeDestinations("profile", R.string.perfil)

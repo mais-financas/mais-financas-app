@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,23 +30,27 @@ import com.neuralnet.maisfinancas.ui.components.despesa.ItemDespesa
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
-import com.neuralnet.maisfinancas.util.toReal
-import java.math.BigDecimal
 
 @Composable
 fun DespesasScreen(
     viewModel: DespesaViewModel,
+    onAddClick: () -> Unit,
     onDetailsClick: (Long) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    DespesasScreen(uiState = uiState.value, onDetailsClick = onDetailsClick)
+    DespesasScreen(
+        uiState = uiState.value,
+        onAddClick = onAddClick,
+        onDetailsClick = onDetailsClick
+    )
 }
 
 @Composable
 fun DespesasScreen(
     uiState: DespesasUiState,
     onDetailsClick: (Long) -> Unit,
+    onAddClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -50,7 +58,15 @@ fun DespesasScreen(
                 title = stringResource(id = HomeDestinations.DespesasGraph.title),
                 canNavigateBack = false,
             )
-        }
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddClick) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.add)
+                )
+            }
+        },
     ) { paddingValues ->
         if (uiState.despesas.isEmpty()) {
             Box(
@@ -143,14 +159,8 @@ fun DespesasScreenPreview() {
                     ),
                 )
             ),
-            onDetailsClick = {}
+            onDetailsClick = {},
+            onAddClick = {},
         )
     }
-}
-
-private fun valorPorCategoria(despesas: Map.Entry<String, List<Despesa>>): String {
-    return despesas.value
-        .filter { despesa -> despesa.categoria == despesas.key }
-        .sumOf { BigDecimal.ZERO }
-        .toReal()
 }

@@ -7,4 +7,5 @@ data class HomeUiState(
     val saldoMensal: BigDecimal = BigDecimal.ZERO,
     val rendaSemanal: BigDecimal = BigDecimal.ZERO,
     val despesasSemanais: BigDecimal = BigDecimal.ZERO,
+    val movimentacoes: List<MovimentacaoItem> = emptyList()
 )

@@ -38,3 +38,14 @@ fun Calendar.formattedMonth(): String {
         e.toString()
     }
 }
+
+fun Calendar.displayMonth(): String {
+    return try {
+        val locale = Locale("pt", "BR")
+        val sdf = SimpleDateFormat("MMMM", locale)
+        sdf.format(Date(this.timeInMillis))
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+    } catch (e: Exception) {
+        e.toString()
+    }
+}

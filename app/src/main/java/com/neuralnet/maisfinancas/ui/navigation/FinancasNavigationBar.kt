@@ -13,6 +13,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.neuralnet.maisfinancas.ui.navigation.graphs.DespesasDestinations
+import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 
 val screens = listOf(
     BottomNavItem.Home,
@@ -25,7 +26,9 @@ val allowedRoutes = listOf(
     *screens.map { it.route }.toTypedArray(),
     DespesasDestinations.DetalhesDespesa.route,
     DespesasDestinations.Overview.route,
-    DespesasDestinations.DepesasByCategoria.route,
+    DespesasDestinations.AddDespesa.route,
+    HomeDestinations.AddRenda.route,
+    HomeDestinations.Saldo.route,
 )
 
 @Composable

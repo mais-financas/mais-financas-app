@@ -12,7 +12,7 @@ import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @Composable
-fun DespesaTextField(
+fun ValorDescricaoTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,

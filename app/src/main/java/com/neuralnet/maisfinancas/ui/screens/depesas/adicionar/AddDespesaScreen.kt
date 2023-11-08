@@ -38,11 +38,11 @@ import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.ui.components.core.AppDropdown
 import com.neuralnet.maisfinancas.ui.components.core.NumberTextField
-import com.neuralnet.maisfinancas.ui.components.despesa.DespesaTextField
+import com.neuralnet.maisfinancas.ui.components.despesa.ValorDescricaoTextField
 import com.neuralnet.maisfinancas.ui.components.despesa.RecorrenciaDespesa
 import com.neuralnet.maisfinancas.ui.components.despesa.getDate
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
-import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
+import com.neuralnet.maisfinancas.ui.navigation.graphs.DespesasDestinations
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import java.time.Instant
 
@@ -87,7 +87,7 @@ fun AddDespesaScreen(
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
-                title = stringResource(id = HomeDestinations.AddDespesa.title),
+                title = stringResource(id = DespesasDestinations.AddDespesa.title),
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )
@@ -112,7 +112,7 @@ fun AddDespesaScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
 
-            DespesaTextField(
+            ValorDescricaoTextField(
                 value = uiState.nome,
                 onValueChange = {
                     onUiStateChanged(uiState.copy(nome = it, nomeErrorField = null))
@@ -210,7 +210,7 @@ fun AddDespesaScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
-fun AddDespesaScreenPreview() {
+private fun AddDespesaScreenPreview() {
     MaisFinancasTheme {
         AddDespesaScreen(
             uiState = AddDespesaUiState(
