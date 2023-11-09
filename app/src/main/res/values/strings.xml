@@ -76,6 +76,7 @@
     <string name="income_symbol">+</string>
     <string name="expense_symbol">-</string>
     <string name="adicionar_renda">Adicionar Renda</string>
+    <string name="saldo">Saldo Mensal</string>
     <plurals name="recorrencia_despesa">
         <item quantity="one">Ocorre de forma %1$s</item>
         <item quantity="other">Ocorre a cada %d %1$s</item>

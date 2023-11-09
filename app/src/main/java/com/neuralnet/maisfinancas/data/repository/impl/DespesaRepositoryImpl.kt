@@ -7,6 +7,7 @@ import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.RegistroAndDespesa
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.mapToModel
 import com.neuralnet.maisfinancas.model.despesa.Categoria
 import com.neuralnet.maisfinancas.model.despesa.Despesa
@@ -14,8 +15,11 @@ import com.neuralnet.maisfinancas.model.despesa.asModel
 import com.neuralnet.maisfinancas.model.despesa.toDespesaModel
 import com.neuralnet.maisfinancas.model.despesa.toEntity
 import com.neuralnet.maisfinancas.model.input.DespesaInput
+import com.neuralnet.maisfinancas.util.toMonthQuery
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.math.BigDecimal
+import java.util.Calendar
 import java.util.UUID
 
 class DespesaRepositoryImpl(
@@ -47,4 +51,9 @@ class DespesaRepositoryImpl(
     override suspend fun inserirRegistro(registroDespesa: RegistroDespesaEntity) =
         despesaDao.insertRegistro(registroDespesa)
 
+    override fun getGastosPorMes(calendar: Calendar): Flow<BigDecimal> =
+        despesaDao.getGastosDoMes(calendar.toMonthQuery())
+
+    override fun getUltimasDespeas(): Flow<List<RegistroAndDespesa>> =
+        despesaDao.getUltimasDespesas()
 }

@@ -10,11 +10,13 @@ import com.neuralnet.maisfinancas.data.room.model.despesa.RecorrenciaDespesaEnti
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
+import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.RegistroAndDespesa
 import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.model.input.DespesaInput
 import com.neuralnet.maisfinancas.model.input.toDespesaEntity
 import com.neuralnet.maisfinancas.model.input.toRegistroEntity
 import kotlinx.coroutines.flow.Flow
+import java.math.BigDecimal
 import java.util.UUID
 
 @Dao
@@ -64,5 +66,13 @@ interface DespesaDao {
 
     @Update
     suspend fun updateDespesa(despesa: DespesaEntity)
+
+    @Query("SELECT SUM(valor) FROM registro_despesa " +
+            "WHERE strftime('%Y-%m', datetime(registro_despesa.data / 1000, 'unixepoch')) = :mes")
+    fun getGastosDoMes(mes: String): Flow<BigDecimal>
+
+    @Transaction
+    @Query("SELECT * FROM registro_despesa ORDER BY data DESC LIMIT 5")
+    fun getUltimasDespesas(): Flow<List<RegistroAndDespesa>>
 
 }

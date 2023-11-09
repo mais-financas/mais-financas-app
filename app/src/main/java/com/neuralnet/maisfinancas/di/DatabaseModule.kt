@@ -7,6 +7,7 @@ import com.neuralnet.maisfinancas.data.room.dao.CategoriaDao
 import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
 import com.neuralnet.maisfinancas.data.room.dao.EstatisticaDao
 import com.neuralnet.maisfinancas.data.room.dao.GestorDao
+import com.neuralnet.maisfinancas.data.room.dao.RendaDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,5 +46,10 @@ object DatabaseModule {
     @Singleton
     fun provideEstatisticaDao(database: MaisFinancasDatabase): EstatisticaDao =
         database.estatisticaDao()
+
+    @Provides
+    @Singleton
+    fun provideRendaDao(database: MaisFinancasDatabase): RendaDao =
+        database.rendaDao()
 
 }

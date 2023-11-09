@@ -49,3 +49,9 @@ fun Calendar.displayMonth(): String {
         e.toString()
     }
 }
+
+fun Calendar.toMonthQuery(): String {
+    val ano = get(Calendar.YEAR)
+    val mes = get(Calendar.MONTH) + 1 // Meses começam em 0
+    return String.format("%04d-%02d", ano, mes)
+}
