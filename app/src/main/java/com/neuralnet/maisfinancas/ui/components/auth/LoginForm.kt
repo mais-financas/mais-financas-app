@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.ui.screens.auth.LoginFormState
+import com.neuralnet.maisfinancas.ui.screens.auth.login.LoginFormState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import com.neuralnet.maisfinancas.util.FieldValidationError
 

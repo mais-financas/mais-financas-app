@@ -13,7 +13,6 @@ import com.neuralnet.maisfinancas.ui.screens.home.toMovimentacoesRenda
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import java.util.UUID
 
 class GestorRepositoryImpl(
     private val gestorDao: GestorDao,
@@ -21,7 +20,7 @@ class GestorRepositoryImpl(
     private val rendaRepository: RendaRepository
 ) : GestorRepository {
 
-    override fun getGestor(userId: UUID?): Flow<GestorEntity?> = gestorDao.getGestor(userId)
+    override fun getGestor(): Flow<GestorEntity?> = gestorDao.getGestor().map { it.firstOrNull() }
 
     override suspend fun inserirGestor(gestorEntity: GestorEntity) {
         gestorDao.insertGestor(gestorEntity)

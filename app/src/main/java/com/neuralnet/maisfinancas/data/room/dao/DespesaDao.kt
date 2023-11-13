@@ -17,7 +17,6 @@ import com.neuralnet.maisfinancas.model.input.toDespesaEntity
 import com.neuralnet.maisfinancas.model.input.toRegistroEntity
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
-import java.util.UUID
 
 @Dao
 interface DespesaDao {
@@ -32,9 +31,8 @@ interface DespesaDao {
     suspend fun insertRecorrencia(recorrencia: RecorrenciaDespesaEntity)
 
     @Transaction
-    @Query("SELECT * FROM despesa WHERE gestor_id = :gestorId")
-    fun getDepesasByGestorId(gestorId: UUID?): Flow<List<DespesaAndCategoria>>
-
+    @Query("SELECT * FROM despesa")
+    fun getDepesas(): Flow<List<DespesaAndCategoria>>
 
     @Transaction
     suspend fun cadastrarDepesaComRegistro(despesaInput: DespesaInput): Long {
@@ -58,9 +56,8 @@ interface DespesaDao {
     }
 
     @Transaction
-    @Query("SELECT * FROM despesa WHERE gestor_id =:gestorId AND despesa_id =:despesaId")
+    @Query("SELECT * FROM despesa WHERE despesa_id =:despesaId")
     fun getDespesaAndRegistro(
-        gestorId: UUID,
         despesaId: Long,
     ): Flow<DespesaWithRegistrosAndCategoria>
 
@@ -74,5 +71,13 @@ interface DespesaDao {
     @Transaction
     @Query("SELECT * FROM registro_despesa ORDER BY data DESC LIMIT 5")
     fun getUltimasDespesas(): Flow<List<RegistroAndDespesa>>
+
+    @Transaction
+    suspend fun registrarDespesas(despesas: List<DespesaInput>) {
+        despesas.forEach { despesaInput ->
+            println(despesaInput)
+            cadastrarDepesaComRegistro(despesaInput)
+        }
+    }
 
 }

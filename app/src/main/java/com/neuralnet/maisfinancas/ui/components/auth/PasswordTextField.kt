@@ -41,9 +41,9 @@ fun PasswordTextField(
 
     val isError = errorMessage != null
     val label = if (confirmPassword) {
-        stringResource(id = R.string.senha)
-    } else
         stringResource(id = R.string.confirmar_senha)
+    } else
+        stringResource(id = R.string.senha)
 
     OutlinedTextField(
         value = value,

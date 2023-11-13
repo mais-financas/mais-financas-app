@@ -12,13 +12,15 @@ import java.util.UUID
 
 interface DespesaRepository {
 
-    fun getDespesas(gestorId: UUID?): Flow<List<Despesa>>
+    fun getDespesas(): Flow<List<Despesa>>
 
     suspend fun registrarDespesa(despesaInput: DespesaInput): Long
 
+    suspend fun registrarDespesas(despesas: List<DespesaInput>)
+
     fun getCategorias(): Flow<List<Categoria>>
 
-    fun getDespesasAndRegistros(gestorId: UUID, despesaId: Long): Flow<Despesa>
+    fun getDespesasAndRegistros(despesaId: Long): Flow<Despesa>
 
     suspend fun updateDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int)
 

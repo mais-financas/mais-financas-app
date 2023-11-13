@@ -11,5 +11,6 @@ enum class FieldValidationError(@StringRes val message: Int) {
     EMAIL_INVALIDO(R.string.message_email_invalido),
     SENHA_INVALIDA(R.string.message_senha_invalida),
     CONFIRMAR_SENHA_INVALIDA(R.string.message_confirmar_senha_invalida),
+    TERMOS_INVALIDOS(R.string.termos_invalidos),
 
 }

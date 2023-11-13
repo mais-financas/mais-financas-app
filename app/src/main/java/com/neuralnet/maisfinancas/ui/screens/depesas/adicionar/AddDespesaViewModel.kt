@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmScheduler
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
+import com.neuralnet.maisfinancas.data.repository.GestorRepository
+import com.neuralnet.maisfinancas.data.room.model.GestorEntity
 import com.neuralnet.maisfinancas.model.despesa.Categoria
 import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.model.despesa.Frequencia.ANUAL
@@ -13,25 +15,27 @@ import com.neuralnet.maisfinancas.model.despesa.Frequencia.SEMANAL
 import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.Calendar
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class AddDespesaViewModel @Inject constructor(
     private val lembreteAlarmScheduler: LembreteAlarmScheduler,
     private val despesaRepository: DespesaRepository,
+    gestorRepository: GestorRepository,
 ) : ViewModel() {
 
-    private val gestorId: UUID = UUID.fromString("00a7b810-9dad-11d1-80b4-00c04fd430c8")
+    private val gestorId: Flow<GestorEntity?> = gestorRepository.getGestor()
 
     val categorias: StateFlow<List<Categoria>> = despesaRepository.getCategorias()
         .stateIn(
@@ -51,6 +55,8 @@ class AddDespesaViewModel @Inject constructor(
         val selectedDateInMillis = dataEmEpochMillis ?: Instant.now().toEpochMilli()
         val categoria = categorias.value.find { it.nome == uiState.value.categoria }
             ?: categorias.value.first()
+
+        val gestorId = checkNotNull(gestorId.first()?.id)
 
         val despesaInput = uiState.value.toDespesaInput(
             gestorId = gestorId,

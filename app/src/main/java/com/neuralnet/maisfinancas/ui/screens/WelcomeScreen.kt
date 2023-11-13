@@ -26,8 +26,8 @@ import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
 fun WelcomeScreen(
-    onEntrarClick: () -> Unit,
-    onNavigateSignup: (Int) -> Unit,
+    onNavigateSignup: () -> Unit,
+    onNavigateLogin: () -> Unit,
 ) {
     MaisFinancasBackground(
         canNavigateBack = false,
@@ -49,7 +49,7 @@ fun WelcomeScreen(
         )
 
         Button(
-            onClick = onEntrarClick,
+            onClick = onNavigateSignup,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
@@ -61,14 +61,15 @@ fun WelcomeScreen(
 
         ClickableText(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                    append(stringResource(R.string.nao_possui_conta))
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
+                    append(stringResource(R.string.possui_conta))
                 }
+                append(" ")
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                    append(stringResource(R.string.registrar))
+                    append(stringResource(R.string.fazer_login))
                 }
             },
-            onClick = onNavigateSignup,
+            onClick = { onNavigateLogin() },
         )
     }
 }
@@ -79,8 +80,8 @@ fun WelcomeScreen(
 fun WelcomeScreenPreview() {
     MaisFinancasTheme {
         WelcomeScreen(
-            onEntrarClick = {},
             onNavigateSignup = {},
+            onNavigateLogin = {},
         )
     }
 }

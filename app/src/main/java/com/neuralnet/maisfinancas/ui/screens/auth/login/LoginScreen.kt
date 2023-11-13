@@ -1,4 +1,4 @@
-package com.neuralnet.maisfinancas.ui.screens.auth
+package com.neuralnet.maisfinancas.ui.screens.auth.login
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
@@ -17,11 +17,32 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.auth.LoginForm
-import com.neuralnet.maisfinancas.ui.components.auth.LoginOptions
 import com.neuralnet.maisfinancas.ui.components.core.MaisFinancasBackground
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+
+@Composable
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onNavigateBack: () -> Unit,
+    onLoginClick: () -> Unit,
+    onNavigateSignUp: (Int) -> Unit
+) {
+    val loginFormState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    LoginScreen(
+        onNavigateBack = onNavigateBack,
+        loginFormState = loginFormState.value,
+        onLoginFormStateChange = viewModel::updateLoginFormState,
+        onLoginClick = onLoginClick,
+        onSigninWithFacebook = { /*TODO*/ },
+        onSigninWithGoogle = { /*TODO*/ },
+        onSigninWithTwitter = { /*TODO*/ },
+        onNavigateSignup = onNavigateSignUp
+    )
+}
 
 @Composable
 fun LoginScreen(
@@ -51,12 +72,13 @@ fun LoginScreen(
             onLoginFormStateChange = onLoginFormStateChange,
             modifier = Modifier.padding(vertical = 16.dp)
         )
-
+        /*
         LoginOptions(
             onSigninWithFacebook = onSigninWithFacebook,
             onSigninWithGoogle = onSigninWithGoogle,
             onSigninWithTwitter = onSigninWithTwitter,
         )
+        */
 
         ClickableText(
             text = buildAnnotatedString {

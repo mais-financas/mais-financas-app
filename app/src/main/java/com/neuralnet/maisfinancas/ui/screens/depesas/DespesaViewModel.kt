@@ -16,9 +16,7 @@ class DespesaViewModel @Inject constructor(
     despesaRepository: DespesaRepository,
 ) : ViewModel() {
 
-    private val gestorId: UUID = UUID.fromString("00a7b810-9dad-11d1-80b4-00c04fd430c8")
-
-    val uiState: StateFlow<DespesasUiState> = despesaRepository.getDespesas(gestorId)
+    val uiState: StateFlow<DespesasUiState> = despesaRepository.getDespesas()
         .map { DespesasUiState(despesas = it) }
         .stateIn(
             scope = viewModelScope,

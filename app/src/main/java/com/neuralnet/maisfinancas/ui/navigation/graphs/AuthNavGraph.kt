@@ -1,18 +1,17 @@
 package com.neuralnet.maisfinancas.ui.navigation.graphs
 
-import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.neuralnet.maisfinancas.ui.screens.Screen
 import com.neuralnet.maisfinancas.ui.screens.WelcomeScreen
-import com.neuralnet.maisfinancas.ui.screens.auth.LoginFormState
-import com.neuralnet.maisfinancas.ui.screens.auth.LoginScreen
-import com.neuralnet.maisfinancas.ui.screens.auth.SignUpViewModel
-import com.neuralnet.maisfinancas.ui.screens.auth.SignupScreen
+import com.neuralnet.maisfinancas.ui.screens.auth.login.LoginScreen
+import com.neuralnet.maisfinancas.ui.screens.auth.login.LoginViewModel
+import com.neuralnet.maisfinancas.ui.screens.auth.signup.SignUpViewModel
+import com.neuralnet.maisfinancas.ui.screens.auth.signup.SignupScreen
+import com.neuralnet.maisfinancas.ui.screens.setup.SetupScreen
+import com.neuralnet.maisfinancas.ui.screens.setup.SetupViewModel
 
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(
@@ -21,45 +20,55 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
     ) {
         composable(route = AuthScreen.Welcome.route) {
             WelcomeScreen(
-                onEntrarClick = { navController.navigate(AuthScreen.Login.route) },
-                onNavigateSignup = { navController.navigate(AuthScreen.SignUp.route) }
+                onNavigateSignup = { navController.navigate(AuthScreen.SignUp.route) },
+                onNavigateLogin = { navController.navigate(AuthScreen.Login.route) },
             )
         }
 
         composable(route = AuthScreen.Login.route) {
+            val loginViewModel = hiltViewModel<LoginViewModel>()
+
             LoginScreen(
+                viewModel = loginViewModel,
                 onNavigateBack = { navController.navigateUp() },
-                loginFormState = LoginFormState(),
-                onLoginFormStateChange = {},
-                onLoginClick = { navController.navigate(HOME_GRAPH) },
-                onSigninWithFacebook = { /*TODO*/ },
-                onSigninWithGoogle = { /*TODO*/ },
-                onSigninWithTwitter = { /*TODO*/ },
-                onNavigateSignup = { navController.navigate(AuthScreen.SignUp.route) }
+                onLoginClick = {
+                    if (loginViewModel.isFormValid()) {
+                        if (loginViewModel.login()) {
+                            navController.navigate(route = HOME_GRAPH)
+                        }
+                    }
+                },
+                onNavigateSignUp = { navController.navigate(route = AuthScreen.SignUp.route) }
             )
         }
 
         composable(route = AuthScreen.SignUp.route) {
             val signUpViewModel = hiltViewModel<SignUpViewModel>()
-            val uiState by signUpViewModel.uiState.collectAsStateWithLifecycle()
 
             SignupScreen(
-                signUpFormState = uiState,
-                onSignUpFormStateChange = signUpViewModel::updateState,
+                signUpViewModel = signUpViewModel,
                 onNavigateUp = { navController.navigateUp() },
+                onNavigateLogin = { navController.navigate(route = AuthScreen.Login.route) },
                 onSignUpClick = {
-                    signUpViewModel.cadastrarUsuario()
-                    navController.navigate(HOME_GRAPH)
-                },
-                onNavigateLogin = { navController.navigate(AuthScreen.Login.route) }
+                    if (signUpViewModel.isFormValid()) {
+                        if (signUpViewModel.signUp()) {
+                            navController.navigate(route = AuthScreen.Setup.route)
+                        }
+                    }
+                }
             )
-
         }
 
         composable(route = AuthScreen.Setup.route) {
-            Screen(
-                route = AuthScreen.Setup.route,
-                onClick = { navController.navigate(route = HOME_GRAPH) })
+            val setupViewModel = hiltViewModel<SetupViewModel>()
+
+            SetupScreen(
+                viewModel = setupViewModel,
+                onConfirmClick = {
+                    setupViewModel.inserirDespesas()
+                    navController.navigate(route = HOME_GRAPH)
+                }
+            )
         }
     }
 }

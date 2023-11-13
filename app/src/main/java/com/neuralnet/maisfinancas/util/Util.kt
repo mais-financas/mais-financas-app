@@ -14,7 +14,11 @@ fun Long.toCalendar(): Calendar = Calendar.getInstance()
 fun Calendar.formattedDate(): String {
     return try {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-        sdf.format(Date(this.timeInMillis))
+        val calendar = this.apply {
+            timeInMillis = timeInMillis
+            add(Calendar.HOUR, 3)
+        }
+        sdf.format(Date(calendar.timeInMillis))
     } catch (e: Exception) {
         e.toString()
     }

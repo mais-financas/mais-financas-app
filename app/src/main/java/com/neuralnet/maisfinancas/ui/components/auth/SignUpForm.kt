@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.ui.screens.auth.SignUpFormState
+import com.neuralnet.maisfinancas.ui.screens.auth.signup.SignUpFormState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import com.neuralnet.maisfinancas.util.FieldValidationError
 
@@ -99,7 +99,8 @@ fun SignUpForm(
                 onCheckedChange = {
                     onSignUpFormStateChange(
                         formState.copy(
-                            agreeWithTermsAndConditions = !formState.agreeWithTermsAndConditions
+                            agreeWithTermsAndConditions = !formState.agreeWithTermsAndConditions,
+                            agreeWithTermsErrorMessage = null
                         )
                     )
                 }
@@ -107,7 +108,18 @@ fun SignUpForm(
             Text(text = stringResource(id = R.string.concordar_termos))
         }
 
-        Button(onClick = onSignUpClick, modifier = Modifier.fillMaxWidth()) {
+        if (formState.agreeWithTermsErrorMessage != null) {
+            Text(
+                text = stringResource(id = R.string.termos_invalidos),
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier
+            )
+        }
+
+        Button(
+            onClick = onSignUpClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(text = stringResource(id = R.string.registrar))
         }
 

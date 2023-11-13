@@ -4,34 +4,38 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
+import com.neuralnet.maisfinancas.data.repository.GestorRepository
+import com.neuralnet.maisfinancas.data.room.model.GestorEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.model.despesa.Despesa
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.Calendar
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class DetalhesDespesaViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val despesaRepository: DespesaRepository,
+    gestorRepository: GestorRepository,
 ) : ViewModel() {
 
     private val despesaId: Long = checkNotNull(savedStateHandle["despesa_id"])
-    private val gestorId: UUID = UUID.fromString("00a7b810-9dad-11d1-80b4-00c04fd430c8")
+    private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
 
     val uiState: StateFlow<DetalhesDespesaUiState> = despesaRepository
-        .getDespesasAndRegistros(gestorId, despesaId)
+        .getDespesasAndRegistros(despesaId)
         .map(Despesa::toDetalhesUiState)
         .stateIn(
             scope = viewModelScope,
@@ -45,6 +49,7 @@ class DetalhesDespesaViewModel @Inject constructor(
     fun setDefinirLembrete(definirLembrete: Boolean) = viewModelScope.launch {
         val despesa: Despesa = uiState.value.copy(definirLembrete = definirLembrete).toModel()
         val categoriaId = despesaRepository.findCategoriaIdByNome(uiState.value.categoria)
+        val gestorId = checkNotNull(gestor.first()?.id)
 
         despesaRepository.updateDespesa(
             despesa = despesa,

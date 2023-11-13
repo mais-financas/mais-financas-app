@@ -27,11 +27,15 @@ class DespesaRepositoryImpl(
     private val categoriaDao: CategoriaDao,
 ) : DespesaRepository {
 
-    override fun getDespesas(gestorId: UUID?): Flow<List<Despesa>> =
-        despesaDao.getDepesasByGestorId(gestorId).map(List<DespesaAndCategoria>::mapToModel)
+    override fun getDespesas(): Flow<List<Despesa>> =
+        despesaDao.getDepesas().map(List<DespesaAndCategoria>::mapToModel)
 
     override suspend fun registrarDespesa(despesaInput: DespesaInput): Long {
         return despesaDao.cadastrarDepesaComRegistro(despesaInput)
+    }
+
+    override suspend fun registrarDespesas(despesas: List<DespesaInput>) {
+        despesaDao.registrarDespesas(despesas)
     }
 
     override fun getCategorias(): Flow<List<Categoria>> = categoriaDao.getCategorias()
@@ -40,8 +44,8 @@ class DespesaRepositoryImpl(
     override suspend fun findCategoriaIdByNome(nome: String): Int =
         categoriaDao.findCategoriaIdByNome(nome)
 
-    override fun getDespesasAndRegistros(gestorId: UUID, despesaId: Long): Flow<Despesa> {
-        val despesaWithRegistro = despesaDao.getDespesaAndRegistro(gestorId, despesaId)
+    override fun getDespesasAndRegistros(despesaId: Long): Flow<Despesa> {
+        val despesaWithRegistro = despesaDao.getDespesaAndRegistro(despesaId)
         return despesaWithRegistro.map(DespesaWithRegistrosAndCategoria::toDespesaModel)
     }
 
