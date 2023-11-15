@@ -16,14 +16,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.ui.screens.auth.signup.SignUpFormState
+import com.neuralnet.maisfinancas.ui.screens.auth.signup.SignupFormState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @Composable
 fun SignUpForm(
-    formState: SignUpFormState,
-    onSignUpFormStateChange: (SignUpFormState) -> Unit,
+    formState: SignupFormState,
+    onSignUpFormStateChange: (SignupFormState) -> Unit,
     onSignUpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -131,7 +131,7 @@ fun SignUpForm(
 private fun SignUpFormPreview() {
     MaisFinancasTheme {
         SignUpForm(
-            formState = SignUpFormState(),
+            formState = SignupFormState(),
             onSignUpFormStateChange = {},
             onSignUpClick = {}
         )
@@ -143,7 +143,7 @@ private fun SignUpFormPreview() {
 private fun SignUpFormWithErrorPreview() {
     MaisFinancasTheme {
         SignUpForm(
-            formState = SignUpFormState(
+            formState = SignupFormState(
                 nomeErrorMessage = FieldValidationError.NOME_INVALIDO,
                 emailErrorMessage = FieldValidationError.EMAIL_INVALIDO,
                 senhaErrorMessage = FieldValidationError.SENHA_INVALIDA,

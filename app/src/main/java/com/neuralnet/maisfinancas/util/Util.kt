@@ -59,3 +59,9 @@ fun Calendar.toMonthQuery(): String {
     val mes = get(Calendar.MONTH) + 1 // Meses começam em 0
     return String.format("%04d-%02d", ano, mes)
 }
+
+fun formatTime(time: Int): String {
+    val minutes = (time / 60).toString().padStart(2, '0')
+    val seconds = (time % 60).toString().padStart(2, '0')
+    return "$minutes:$seconds"
+}

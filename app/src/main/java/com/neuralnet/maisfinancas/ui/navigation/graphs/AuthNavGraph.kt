@@ -8,8 +8,8 @@ import androidx.navigation.navigation
 import com.neuralnet.maisfinancas.ui.screens.WelcomeScreen
 import com.neuralnet.maisfinancas.ui.screens.auth.login.LoginScreen
 import com.neuralnet.maisfinancas.ui.screens.auth.login.LoginViewModel
-import com.neuralnet.maisfinancas.ui.screens.auth.signup.SignUpViewModel
 import com.neuralnet.maisfinancas.ui.screens.auth.signup.SignupScreen
+import com.neuralnet.maisfinancas.ui.screens.auth.signup.SignupViewModel
 import com.neuralnet.maisfinancas.ui.screens.setup.SetupScreen
 import com.neuralnet.maisfinancas.ui.screens.setup.SetupViewModel
 
@@ -31,31 +31,19 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             LoginScreen(
                 viewModel = loginViewModel,
                 onNavigateBack = { navController.navigateUp() },
-                onLoginClick = {
-                    if (loginViewModel.isFormValid()) {
-                        if (loginViewModel.login()) {
-                            navController.navigate(route = HOME_GRAPH)
-                        }
-                    }
-                },
+                navigateToHome = { navController.navigate(route = HOME_GRAPH) },
                 onNavigateSignUp = { navController.navigate(route = AuthScreen.SignUp.route) }
             )
         }
 
         composable(route = AuthScreen.SignUp.route) {
-            val signUpViewModel = hiltViewModel<SignUpViewModel>()
+            val signUpViewModel = hiltViewModel<SignupViewModel>()
 
             SignupScreen(
                 signUpViewModel = signUpViewModel,
                 onNavigateUp = { navController.navigateUp() },
                 onNavigateLogin = { navController.navigate(route = AuthScreen.Login.route) },
-                onSignUpClick = {
-                    if (signUpViewModel.isFormValid()) {
-                        if (signUpViewModel.signUp()) {
-                            navController.navigate(route = AuthScreen.Setup.route)
-                        }
-                    }
-                }
+                navigateToSetup = { navController.navigate(route = AuthScreen.Setup.route) }
             )
         }
 

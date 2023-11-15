@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,27 +22,58 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.auth.LoginForm
 import com.neuralnet.maisfinancas.ui.components.core.MaisFinancasBackground
+import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
+import com.neuralnet.maisfinancas.ui.screens.NoConnectionScreen
+import com.neuralnet.maisfinancas.ui.screens.ServidorIndisponivel
+import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
     onNavigateBack: () -> Unit,
-    onLoginClick: () -> Unit,
+    navigateToHome: () -> Unit,
     onNavigateSignUp: (Int) -> Unit
 ) {
     val loginFormState = viewModel.uiState.collectAsStateWithLifecycle()
+    val authState = viewModel.authState.collectAsStateWithLifecycle()
 
-    LoginScreen(
-        onNavigateBack = onNavigateBack,
-        loginFormState = loginFormState.value,
-        onLoginFormStateChange = viewModel::updateLoginFormState,
-        onLoginClick = onLoginClick,
-        onSigninWithFacebook = { /*TODO*/ },
-        onSigninWithGoogle = { /*TODO*/ },
-        onSigninWithTwitter = { /*TODO*/ },
-        onNavigateSignup = onNavigateSignUp
-    )
+    when (authState.value) {
+        AuthState.Loading -> {
+            LoadingScreen()
+        }
+
+        AuthState.LoggedIn -> {
+            LaunchedEffect(key1 = Unit) {
+                navigateToHome()
+            }
+        }
+
+        AuthState.NotLoggedIn -> {
+            LoginScreen(
+                onNavigateBack = onNavigateBack,
+                loginFormState = loginFormState.value,
+                onLoginFormStateChange = viewModel::updateLoginFormState,
+                onLoginClick = {
+                    if (viewModel.isFormValid()) {
+                        viewModel.login()
+                    }
+                },
+                onSigninWithFacebook = { /*TODO*/ },
+                onSigninWithGoogle = { /*TODO*/ },
+                onSigninWithTwitter = { /*TODO*/ },
+                onNavigateSignup = onNavigateSignUp
+            )
+        }
+
+        AuthState.ConnectionError -> {
+            NoConnectionScreen()
+        }
+
+        AuthState.ServerUnavailableError -> {
+            ServidorIndisponivel(onFinish = viewModel::login)
+        }
+    }
 }
 
 @Composable

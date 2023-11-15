@@ -3,7 +3,7 @@ package com.neuralnet.maisfinancas.ui.screens.auth.signup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
-import com.neuralnet.maisfinancas.data.room.model.GestorEntity
+import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,33 +11,44 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.util.UUID
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(
+class SignupViewModel @Inject constructor(
     private val gestorRepository: GestorRepository
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<SignUpFormState> = MutableStateFlow(SignUpFormState())
-    val uiState: StateFlow<SignUpFormState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<SignupFormState> = MutableStateFlow(SignupFormState())
+    val uiState: StateFlow<SignupFormState> = _uiState.asStateFlow()
 
-    fun updateState(signUpFormState: SignUpFormState) {
+    private val _authState: MutableStateFlow<AuthState> = MutableStateFlow(AuthState.NotLoggedIn)
+    val authState: StateFlow<AuthState> = _authState.asStateFlow()
+
+    fun updateState(signUpFormState: SignupFormState) {
         _uiState.update { signUpFormState }
     }
 
-    fun signUp(): Boolean {
-        viewModelScope.launch {
-            gestorRepository.inserirGestor(
-                GestorEntity(
-                    id = UUID.randomUUID(),
-                    nome = _uiState.value.nome,
-                    orcamento = BigDecimal.TEN
-                )
-            )
+    fun signUp() = viewModelScope.launch {
+        _authState.value = AuthState.Loading
+
+        val gestor = uiState.value.toSignupInput()
+
+        gestorRepository.cadastrar(gestor).onSuccess {
+            _authState.value = AuthState.LoggedIn
+        }.onFailure { throwable ->
+            when (throwable) {
+                is IllegalStateException -> {
+                    _authState.value = AuthState.NotLoggedIn
+                    _uiState.update {
+                        it.copy(emailErrorMessage = FieldValidationError.USUARIO_EXISTE)
+                    }
+                }
+
+                is SocketTimeoutException -> _authState.value = AuthState.ServerUnavailableError
+                else -> _authState.value = AuthState.ConnectionError
+            }
         }
-        return true
     }
 
     fun isFormValid(): Boolean = with(uiState.value) {
@@ -52,7 +63,8 @@ class SignUpViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(senhaErrorMessage = FieldValidationError.VAZIO)
         }
         if (confirmarSenha.isBlank()) {
-            _uiState.value = _uiState.value.copy(confirmarSenhaErrorMessage = FieldValidationError.VAZIO)
+            _uiState.value =
+                _uiState.value.copy(confirmarSenhaErrorMessage = FieldValidationError.VAZIO)
         }
         if (confirmarSenha != senha) {
             _uiState.value = _uiState.value.copy(

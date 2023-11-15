@@ -8,7 +8,6 @@ import com.neuralnet.maisfinancas.model.despesa.RegistroDespesa
 import com.neuralnet.maisfinancas.model.input.DespesaInput
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import com.neuralnet.maisfinancas.util.toCalendar
-import java.math.BigDecimal
 import java.time.Instant
 import java.util.UUID
 

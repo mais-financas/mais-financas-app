@@ -57,6 +57,8 @@ fun HomeScreen(
                 onCardClick = onCardClick,
             )
         }
+
+        else -> {}
     }
 }
 

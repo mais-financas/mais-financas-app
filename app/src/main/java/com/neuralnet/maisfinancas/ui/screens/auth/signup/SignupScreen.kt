@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,30 +22,62 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.auth.SignUpForm
 import com.neuralnet.maisfinancas.ui.components.core.MaisFinancasBackground
+import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
+import com.neuralnet.maisfinancas.ui.screens.NoConnectionScreen
+import com.neuralnet.maisfinancas.ui.screens.ServidorIndisponivel
+import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
 
 @Composable
 fun SignupScreen(
-    signUpViewModel: SignUpViewModel,
+    signUpViewModel: SignupViewModel,
     onNavigateUp: () -> Unit,
     onNavigateLogin: () -> Unit,
-    onSignUpClick: () -> Unit
+    navigateToSetup: () -> Unit
 ) {
     val uiState = signUpViewModel.uiState.collectAsStateWithLifecycle()
 
-    SignupScreen(
-        signUpFormState = uiState.value,
-        onSignUpFormStateChange = signUpViewModel::updateState,
-        onNavigateUp = onNavigateUp,
-        onSignUpClick = onSignUpClick,
-        onNavigateLogin = onNavigateLogin,
-    )
+    val authState = signUpViewModel.authState.collectAsStateWithLifecycle()
+
+    when (authState.value) {
+        AuthState.Loading -> {
+            LoadingScreen()
+        }
+
+        AuthState.LoggedIn -> {
+            LaunchedEffect(key1 = Unit) {
+                navigateToSetup()
+            }
+        }
+
+        AuthState.NotLoggedIn -> {
+            SignupScreen(
+                signUpFormState = uiState.value,
+                onSignUpFormStateChange = signUpViewModel::updateState,
+                onNavigateUp = onNavigateUp,
+                onSignUpClick = {
+                    if (signUpViewModel.isFormValid()) {
+                        signUpViewModel.signUp()
+                    }
+                },
+                onNavigateLogin = onNavigateLogin,
+            )
+        }
+
+        AuthState.ConnectionError -> {
+            NoConnectionScreen()
+        }
+
+        AuthState.ServerUnavailableError -> {
+            ServidorIndisponivel(signUpViewModel::signUp)
+        }
+    }
 }
 
 @Composable
 fun SignupScreen(
-    signUpFormState: SignUpFormState,
-    onSignUpFormStateChange: (SignUpFormState) -> Unit,
+    signUpFormState: SignupFormState,
+    onSignUpFormStateChange: (SignupFormState) -> Unit,
     onNavigateUp: () -> Unit,
     onSignUpClick: () -> Unit,
     onNavigateLogin: () -> Unit,
@@ -89,7 +122,7 @@ fun SignupScreen(
 fun SignupScreenPreview() {
     MaisFinancasTheme {
         SignupScreen(
-            signUpFormState = SignUpFormState(),
+            signUpFormState = SignupFormState(),
             onSignUpFormStateChange = {},
             onNavigateUp = {},
             onSignUpClick = {},

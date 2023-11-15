@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.screens.auth.login
 
+import com.neuralnet.maisfinancas.data.network.model.auth.LoginInput
 import com.neuralnet.maisfinancas.util.FieldValidationError
 
 data class LoginFormState(
@@ -10,3 +11,8 @@ data class LoginFormState(
 ) {
     fun isFormValid(): Boolean = emailErrorMessage == null && senhaErrorMessage == null
 }
+
+fun LoginFormState.toLoginInput() = LoginInput(
+    email = email,
+    senha = senha
+)

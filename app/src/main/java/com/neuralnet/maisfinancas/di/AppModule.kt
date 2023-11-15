@@ -3,6 +3,7 @@ package com.neuralnet.maisfinancas.di
 import android.content.Context
 import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmScheduler
 import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmSchedulerImpl
+import com.neuralnet.maisfinancas.data.network.MaisFinancasApi
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.EstatisticaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
@@ -42,8 +43,14 @@ object AppModule {
         gestorDao: GestorDao,
         despesaRepository: DespesaRepository,
         rendaRepository: RendaRepository,
+        maisFinancasApi: MaisFinancasApi
     ): GestorRepository =
-        GestorRepositoryImpl(gestorDao, despesaRepository, rendaRepository)
+        GestorRepositoryImpl(
+            gestorDao = gestorDao,
+            despesaRepository = despesaRepository,
+            rendaRepository = rendaRepository,
+            maisFinancasApi = maisFinancasApi
+        )
 
     @Singleton
     @Provides

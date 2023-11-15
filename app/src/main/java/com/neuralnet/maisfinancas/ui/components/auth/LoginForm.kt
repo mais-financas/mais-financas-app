@@ -44,7 +44,10 @@ fun LoginForm(
                 onLoginFormStateChange(
                     loginFormState.copy(
                         email = it,
-                        emailErrorMessage = null
+                        emailErrorMessage = null,
+                        senhaErrorMessage = loginFormState.senhaErrorMessage.takeIf { senhaError ->
+                            senhaError != FieldValidationError.FALHA_LOGIN
+                        }
                     )
                 )
             },
@@ -58,7 +61,10 @@ fun LoginForm(
                 onLoginFormStateChange(
                     loginFormState.copy(
                         senha = it,
-                        senhaErrorMessage = null
+                        senhaErrorMessage = null,
+                        emailErrorMessage = loginFormState.emailErrorMessage.takeIf { emailError ->
+                            emailError != FieldValidationError.FALHA_LOGIN
+                        }
                     )
                 )
             },

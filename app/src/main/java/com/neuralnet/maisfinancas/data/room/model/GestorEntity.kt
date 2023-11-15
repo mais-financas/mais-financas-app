@@ -15,6 +15,4 @@ data class GestorEntity(
 
     @ColumnInfo("nome_gestor")
     val nome: String,
-
-    val orcamento: BigDecimal
 )
