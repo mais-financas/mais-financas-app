@@ -60,4 +60,7 @@ class DespesaRepositoryImpl(
 
     override fun getUltimasDespeas(): Flow<List<RegistroAndDespesa>> =
         despesaDao.getUltimasDespesas()
+
+    override fun getGastoTotal(): Flow<BigDecimal> = despesaDao.getGastoTotal()
+
 }

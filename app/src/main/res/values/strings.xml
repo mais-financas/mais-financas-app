@@ -76,7 +76,7 @@
     <string name="income_symbol">+</string>
     <string name="expense_symbol">-</string>
     <string name="adicionar_renda">Adicionar Renda</string>
-    <string name="saldo">Saldo Mensal</string>
+    <string name="saldo_da_conta">Saldo da Conta</string>
     <string name="configure_sua_conta">Configure sua Conta</string>
     <string name="selecione_despesas">Selecione as despesas mais comuns para você</string>
     <string name="confirmar">Confirmar</string>

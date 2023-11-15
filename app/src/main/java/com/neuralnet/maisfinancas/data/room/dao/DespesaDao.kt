@@ -64,8 +64,10 @@ interface DespesaDao {
     @Update
     suspend fun updateDespesa(despesa: DespesaEntity)
 
-    @Query("SELECT SUM(valor) FROM registro_despesa " +
-            "WHERE strftime('%Y-%m', datetime(registro_despesa.data / 1000, 'unixepoch')) = :mes")
+    @Query(
+        "SELECT SUM(valor) FROM registro_despesa " +
+                "WHERE strftime('%Y-%m', datetime(registro_despesa.data / 1000, 'unixepoch')) = :mes"
+    )
     fun getGastosDoMes(mes: String): Flow<BigDecimal>
 
     @Transaction
@@ -79,5 +81,8 @@ interface DespesaDao {
             cadastrarDepesaComRegistro(despesaInput)
         }
     }
+
+    @Query("SELECT SUM(valor) FROM registro_despesa")
+    fun getGastoTotal(): Flow<BigDecimal>
 
 }

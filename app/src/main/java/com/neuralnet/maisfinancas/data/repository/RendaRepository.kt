@@ -9,8 +9,8 @@ interface RendaRepository {
 
     suspend fun insertRenda(renda: Renda)
 
-    fun getRendaPorMes(calendar: Calendar): Flow<BigDecimal>
-
     fun getUltimasRendas(): Flow<List<Renda>>
+
+    fun getRendaTotal(): Flow<BigDecimal>
 
 }

@@ -37,17 +37,20 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
             HomeScreen(
                 viewModel = viewModel,
-                onCardClick = { navController.navigate(route = HomeDestinations.Saldo.route) },
                 onNavigateToLogin = {
                     navController.navigate(route = HomeDestinations.AuthGraph.route)
                 },
+                onCardRendaMensalClick = {
+                    navController.navigate(route = HomeDestinations.Saldo.route)
+                },
+                onAddRendaClick = {
+                    navController.navigate(route = HomeDestinations.AddRenda.route)
+                }
             )
         }
 
         composable(route = HomeDestinations.Saldo.route) {
-            SaldoScreen(
-                onAddClick = { navController.navigate(route = HomeDestinations.AddRenda.route) },
-            )
+            SaldoScreen(onNavigateUp = { navController.navigateUp() })
         }
 
         composable(route = HomeDestinations.AddRenda.route) {
@@ -96,7 +99,7 @@ sealed class HomeDestinations(val route: String, @StringRes val title: Int) {
     data object Home : HomeDestinations("home", R.string.carteira)
     data object DespesasGraph : HomeDestinations("despesas_graph", R.string.despesas)
     data object AddRenda : HomeDestinations("add_renda", R.string.adicionar_renda)
-    data object Saldo : HomeDestinations("saldo", R.string.saldo)
+    data object Saldo : HomeDestinations("saldo", R.string.saldo_da_conta)
     data object Estatisticas : HomeDestinations("estatisticas", R.string.estatisticas)
     data object FinancialGoals : HomeDestinations("objetivos", R.string.objetivos)
     data object Perfil : HomeDestinations("profile", R.string.perfil)

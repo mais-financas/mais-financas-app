@@ -18,26 +18,15 @@ import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 
 @Composable
-fun SaldoScreen(onAddClick: () -> Unit) {
+fun SaldoScreen(onNavigateUp: () -> Unit) {
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
                 title = stringResource(id = HomeDestinations.Saldo.title),
-                canNavigateBack = true
+                canNavigateBack = true,
+                navigateUp = onNavigateUp
             )
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text(text = stringResource(id = R.string.adicionar_renda)) },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.add)
-                    )
-                },
-                onClick = onAddClick
-            )
-        }
     ) { paddingValues ->
         Box(modifier = Modifier
             .fillMaxSize()

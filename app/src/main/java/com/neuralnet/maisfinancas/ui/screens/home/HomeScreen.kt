@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.home.MovimentacaoRecenteItem
 import com.neuralnet.maisfinancas.ui.components.home.SaldoDisponivel
+import com.neuralnet.maisfinancas.ui.components.home.SaldoTotal
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
@@ -34,7 +35,8 @@ import java.util.Calendar
 fun HomeScreen(
     viewModel: HomeViewModel,
     onNavigateToLogin: () -> Unit,
-    onCardClick: () -> Unit,
+    onCardRendaMensalClick: () -> Unit,
+    onAddRendaClick: () -> Unit,
 ) {
     val authState by viewModel.authState.collectAsStateWithLifecycle()
 
@@ -54,7 +56,8 @@ fun HomeScreen(
 
             HomeScreen(
                 uiState = homeUiState.value,
-                onCardClick = onCardClick,
+                onCardClick = onCardRendaMensalClick,
+                onAddRendaClick = onAddRendaClick,
             )
         }
 
@@ -66,6 +69,7 @@ fun HomeScreen(
 fun HomeScreen(
     uiState: HomeUiState,
     onCardClick: () -> Unit,
+    onAddRendaClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -78,8 +82,15 @@ fun HomeScreen(
         LazyColumn(
             modifier = Modifier.padding(paddingValues),
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            item {
+                SaldoTotal(
+                    saldoTotal = uiState.saldoTotal,
+                    onAddClick = onAddRendaClick
+                )
+            }
+
             item {
                 SaldoDisponivel(
                     valor = uiState.saldoMensal,
@@ -93,7 +104,6 @@ fun HomeScreen(
                 Text(
                     text = stringResource(id = R.string.movimentacoes_recentes),
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
 
@@ -142,6 +152,7 @@ private fun HomeScreenPreview() {
                 )
             ),
             onCardClick = {},
+            onAddRendaClick = {},
         )
     }
 }

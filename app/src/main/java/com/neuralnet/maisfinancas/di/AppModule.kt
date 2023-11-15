@@ -8,11 +8,13 @@ import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.EstatisticaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.repository.RendaRepository
+import com.neuralnet.maisfinancas.data.repository.SaldoRepository
 import com.neuralnet.maisfinancas.data.repository.SugestoesRepository
 import com.neuralnet.maisfinancas.data.repository.impl.DespesaRepositoryImpl
 import com.neuralnet.maisfinancas.data.repository.impl.EstatisticaRepositoryImpl
 import com.neuralnet.maisfinancas.data.repository.impl.GestorRepositoryImpl
 import com.neuralnet.maisfinancas.data.repository.impl.RendaRepositoryImpl
+import com.neuralnet.maisfinancas.data.repository.impl.SaldoRepositoryImpl
 import com.neuralnet.maisfinancas.data.repository.impl.SugestoesRepositoryImpl
 import com.neuralnet.maisfinancas.data.room.dao.CategoriaDao
 import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
@@ -66,6 +68,11 @@ object AppModule {
     @Provides
     fun provideSugestoesRepository(despesaRepository: DespesaRepository): SugestoesRepository =
         SugestoesRepositoryImpl(despesaRepository)
+
+    @Singleton
+    @Provides
+    fun provideSaldoRepository(rendaDao: RendaDao, despesaDao: DespesaDao): SaldoRepository =
+        SaldoRepositoryImpl(rendaDao, despesaDao)
 
     @Singleton
     @Provides

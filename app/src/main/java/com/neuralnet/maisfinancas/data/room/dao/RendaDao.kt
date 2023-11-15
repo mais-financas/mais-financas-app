@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.neuralnet.maisfinancas.data.room.model.renda.RendaEntity
-import com.neuralnet.maisfinancas.model.renda.Renda
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 
@@ -20,5 +19,8 @@ interface RendaDao {
 
     @Query("SELECT * FROM renda ORDER BY data DESC LIMIT 5")
     fun getUltimasRendas(): Flow<List<RendaEntity>>
+
+    @Query("SELECT SUM(valor) FROM renda")
+    fun getRendaTotal(): Flow<BigDecimal>
 
 }

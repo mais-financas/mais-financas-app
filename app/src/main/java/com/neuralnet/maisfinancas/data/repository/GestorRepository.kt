@@ -6,6 +6,7 @@ import com.neuralnet.maisfinancas.data.room.model.GestorEntity
 import com.neuralnet.maisfinancas.model.gestor.Gestor
 import com.neuralnet.maisfinancas.ui.screens.home.MovimentacaoItem
 import kotlinx.coroutines.flow.Flow
+import java.math.BigDecimal
 
 interface GestorRepository {
 

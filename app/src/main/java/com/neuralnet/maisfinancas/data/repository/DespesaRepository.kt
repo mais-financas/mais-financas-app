@@ -32,4 +32,6 @@ interface DespesaRepository {
 
     fun getUltimasDespeas(): Flow<List<RegistroAndDespesa>>
 
+    fun getGastoTotal(): Flow<BigDecimal>
+
 }
