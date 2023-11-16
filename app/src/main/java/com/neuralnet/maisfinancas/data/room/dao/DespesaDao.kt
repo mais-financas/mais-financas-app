@@ -2,6 +2,7 @@ package com.neuralnet.maisfinancas.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -11,7 +12,6 @@ import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.RegistroAndDespesa
-import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.model.input.DespesaInput
 import com.neuralnet.maisfinancas.model.input.toDespesaEntity
 import com.neuralnet.maisfinancas.model.input.toRegistroEntity
@@ -21,13 +21,13 @@ import java.math.BigDecimal
 @Dao
 interface DespesaDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDespesa(despesa: DespesaEntity): Long
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRegistro(registroDespesaEntity: RegistroDespesaEntity)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecorrencia(recorrencia: RecorrenciaDespesaEntity)
 
     @Transaction
@@ -36,20 +36,21 @@ interface DespesaDao {
 
     @Transaction
     suspend fun cadastrarDepesaComRegistro(despesaInput: DespesaInput): Long {
-        val despesaId = insertDespesa(despesaInput.toDespesaEntity())
+        val despesaId = despesaInput.despesa.id
+
+        insertDespesa(despesaInput.toDespesaEntity())
         val registroDespesa = despesaInput.toRegistroEntity(despesaId)
 
         insertRegistro(registroDespesa)
 
         despesaInput.despesa.recorrencia.run {
-            if (frequencia != Frequencia.NENHUMA) {
-                val recorrenciaDespesaEntity = RecorrenciaDespesaEntity(
-                    frequencia = frequencia,
-                    quantidade = quantidade,
-                    despesaId = despesaId
-                )
-                insertRecorrencia(recorrenciaDespesaEntity)
-            }
+            val recorrenciaDespesaEntity = RecorrenciaDespesaEntity(
+                id = despesaId,
+                frequencia = frequencia,
+                quantidade = quantidade,
+            )
+            insertRecorrencia(recorrenciaDespesaEntity)
+
         }
 
         return despesaId
@@ -77,12 +78,34 @@ interface DespesaDao {
     @Transaction
     suspend fun registrarDespesas(despesas: List<DespesaInput>) {
         despesas.forEach { despesaInput ->
-            println(despesaInput)
             cadastrarDepesaComRegistro(despesaInput)
         }
     }
 
     @Query("SELECT SUM(valor) FROM registro_despesa")
     fun getGastoTotal(): Flow<BigDecimal>
+
+    @Transaction
+    suspend fun sincronizar(despesas: List<DespesaInput>) {
+        despesas.forEach { despesaInput ->
+            val despesaId = despesaInput.despesa.id
+
+            insertDespesa(despesaInput.toDespesaEntity())
+
+            inserirRegistros(despesaInput.despesa.registros)
+
+            despesaInput.despesa.recorrencia.run {
+                val recorrenciaDespesaEntity = RecorrenciaDespesaEntity(
+                    id = despesaId,
+                    frequencia = frequencia,
+                    quantidade = quantidade,
+                )
+                insertRecorrencia(recorrenciaDespesaEntity)
+            }
+        }
+    }
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun inserirRegistros(registros: List<RegistroDespesaEntity>)
 
 }

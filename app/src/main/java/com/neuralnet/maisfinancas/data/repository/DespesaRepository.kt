@@ -1,9 +1,9 @@
 package com.neuralnet.maisfinancas.data.repository
 
-import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.RegistroAndDespesa
 import com.neuralnet.maisfinancas.model.despesa.Categoria
 import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.RegistroDespesa
 import com.neuralnet.maisfinancas.model.input.DespesaInput
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
@@ -26,12 +26,14 @@ interface DespesaRepository {
 
     suspend fun findCategoriaIdByNome(nome: String): Int
 
-    suspend fun inserirRegistro(registroDespesa: RegistroDespesaEntity)
+    suspend fun inserirRegistro(despesaId: Long, registro: RegistroDespesa)
 
     fun getGastosPorMes(calendar: Calendar): Flow<BigDecimal>
 
     fun getUltimasDespeas(): Flow<List<RegistroAndDespesa>>
 
     fun getGastoTotal(): Flow<BigDecimal>
+
+    suspend fun fetchDespesas(gestorId: UUID)
 
 }

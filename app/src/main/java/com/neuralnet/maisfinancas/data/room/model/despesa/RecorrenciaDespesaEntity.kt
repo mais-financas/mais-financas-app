@@ -12,21 +12,18 @@ import com.neuralnet.maisfinancas.model.despesa.Frequencia
         ForeignKey(
             entity = DespesaEntity::class,
             parentColumns = ["despesa_id"],
-            childColumns = ["despesa_id"],
+            childColumns = ["recorrencia_despesa_id"],
             onDelete = ForeignKey.CASCADE
         ),
     ]
 )
 data class RecorrenciaDespesaEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo("recorrencia_id")
-    val id: Int = 0,
+    @PrimaryKey
+    @ColumnInfo("recorrencia_despesa_id")
+    val id: Long = 0,
 
     val frequencia: Frequencia,
 
     val quantidade: Int,
-
-    @ColumnInfo(name = "despesa_id", index = true)
-    val despesaId: Long,
 )

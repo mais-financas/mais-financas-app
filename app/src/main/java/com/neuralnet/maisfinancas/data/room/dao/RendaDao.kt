@@ -2,6 +2,7 @@ package com.neuralnet.maisfinancas.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.neuralnet.maisfinancas.data.room.model.renda.RendaEntity
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,7 @@ import java.math.BigDecimal
 @Dao
 interface RendaDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(rendaEntity: RendaEntity)
 
     @Query("SELECT SUM(valor) FROM renda " +
@@ -22,5 +23,8 @@ interface RendaDao {
 
     @Query("SELECT SUM(valor) FROM renda")
     fun getRendaTotal(): Flow<BigDecimal>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun sincronizar(rendas: List<RendaEntity>)
 
 }

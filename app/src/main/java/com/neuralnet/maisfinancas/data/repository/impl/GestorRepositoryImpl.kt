@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import java.util.UUID
 
 class GestorRepositoryImpl(
     private val gestorDao: GestorDao,
@@ -49,6 +50,7 @@ class GestorRepositoryImpl(
 
             response.body()?.let { gestorResponse ->
                 gestorDao.insertGestor(gestorResponse.toEntity())
+                sincronizar(UUID.fromString(gestorResponse.id))
                 Result.success(gestorResponse.toModel())
             } ?: Result.failure(IllegalStateException("Login ou senha incorretos"))
         } catch (e: IOException) {
@@ -72,4 +74,8 @@ class GestorRepositoryImpl(
         }
     }
 
+    override suspend fun sincronizar(gestorId: UUID) {
+        despesaRepository.fetchDespesas(gestorId)
+        rendaRepository.fetchRendas(gestorId)
+    }
 }

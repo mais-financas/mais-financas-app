@@ -1,5 +1,10 @@
 package com.neuralnet.maisfinancas.data.repository.impl
 
+import com.neuralnet.maisfinancas.data.network.MaisFinancasApi
+import com.neuralnet.maisfinancas.data.network.model.despesa.DespesaResponse
+import com.neuralnet.maisfinancas.data.network.model.despesa.input.toNetwork
+import com.neuralnet.maisfinancas.data.network.model.despesa.toDespesaInput
+import com.neuralnet.maisfinancas.data.network.model.despesa.toEntity
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.room.dao.CategoriaDao
 import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
@@ -11,6 +16,7 @@ import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.Registro
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.mapToModel
 import com.neuralnet.maisfinancas.model.despesa.Categoria
 import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.RegistroDespesa
 import com.neuralnet.maisfinancas.model.despesa.asModel
 import com.neuralnet.maisfinancas.model.despesa.toDespesaModel
 import com.neuralnet.maisfinancas.model.despesa.toEntity
@@ -25,17 +31,23 @@ import java.util.UUID
 class DespesaRepositoryImpl(
     private val despesaDao: DespesaDao,
     private val categoriaDao: CategoriaDao,
+    private val maisFinancasApi: MaisFinancasApi,
 ) : DespesaRepository {
 
     override fun getDespesas(): Flow<List<Despesa>> =
         despesaDao.getDepesas().map(List<DespesaAndCategoria>::mapToModel)
 
     override suspend fun registrarDespesa(despesaInput: DespesaInput): Long {
-        return despesaDao.cadastrarDepesaComRegistro(despesaInput)
+        val despesaResponse = maisFinancasApi.adicionarDespesa(despesaInput.toNetwork())
+        println(despesaResponse)
+        println(despesaResponse.toDespesaInput())
+        return despesaDao.cadastrarDepesaComRegistro(despesaResponse.toDespesaInput())
     }
 
     override suspend fun registrarDespesas(despesas: List<DespesaInput>) {
-        despesaDao.registrarDespesas(despesas)
+        val response = maisFinancasApi.cadastrarDespesas(despesas.map(DespesaInput::toNetwork))
+
+        despesaDao.registrarDespesas(response.map(DespesaResponse::toDespesaInput))
     }
 
     override fun getCategorias(): Flow<List<Categoria>> = categoriaDao.getCategorias()
@@ -52,8 +64,10 @@ class DespesaRepositoryImpl(
     override suspend fun updateDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int) =
         despesaDao.updateDespesa(despesa.toEntity(gestorId, categoriaId))
 
-    override suspend fun inserirRegistro(registroDespesa: RegistroDespesaEntity) =
-        despesaDao.insertRegistro(registroDespesa)
+    override suspend fun inserirRegistro(despesaId: Long, registro: RegistroDespesa) {
+        val registroResponse = maisFinancasApi.adicionarRegistro(despesaId, registro.toNetwork())
+        despesaDao.insertRegistro(registroResponse.toEntity(despesaId = despesaId))
+    }
 
     override fun getGastosPorMes(calendar: Calendar): Flow<BigDecimal> =
         despesaDao.getGastosDoMes(calendar.toMonthQuery())
@@ -63,4 +77,9 @@ class DespesaRepositoryImpl(
 
     override fun getGastoTotal(): Flow<BigDecimal> = despesaDao.getGastoTotal()
 
+    override suspend fun fetchDespesas(gestorId: UUID) {
+        val despesas = maisFinancasApi.getDespesas(gestorId)
+
+        despesaDao.sincronizar(despesas.map(DespesaResponse::toDespesaInput))
+    }
 }

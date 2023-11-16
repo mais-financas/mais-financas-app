@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -58,5 +60,17 @@ class HomeViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = HomeUiState()
         )
+
+    init {
+        viewModelScope.launch {
+            val gestorId = checkNotNull(gestor.first()?.id)
+
+            try {
+                gestorRepository.sincronizar(gestorId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
 }

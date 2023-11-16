@@ -8,6 +8,8 @@ import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.room.model.GestorEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.model.despesa.Despesa
+import com.neuralnet.maisfinancas.model.despesa.RegistroDespesa
+import com.neuralnet.maisfinancas.ui.screens.ConnectionState
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +22,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
 import java.time.Instant
 import java.util.Calendar
 import javax.inject.Inject
@@ -33,6 +37,10 @@ class DetalhesDespesaViewModel @Inject constructor(
 
     private val despesaId: Long = checkNotNull(savedStateHandle["despesa_id"])
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
+
+    private val _connectionState: MutableStateFlow<ConnectionState> =
+        MutableStateFlow(ConnectionState.Connected)
+    val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
     val uiState: StateFlow<DetalhesDespesaUiState> = despesaRepository
         .getDespesasAndRegistros(despesaId)
@@ -66,14 +74,21 @@ class DetalhesDespesaViewModel @Inject constructor(
         val data: Calendar = Calendar.getInstance()
             .apply { timeInMillis = dataEmEpochMillis ?: Instant.now().toEpochMilli() }
 
-        val registroDespesa = RegistroDespesaEntity(
+        val registroDespesa = RegistroDespesa(
+            id = 0,
             valor = registroUiState.value.valor.toBigDecimal(),
             data = data,
-            despesaId = uiState.value.despesaId
         )
 
-        despesaRepository.inserirRegistro(registroDespesa)
-        clearRegistro()
+        try {
+            despesaRepository.inserirRegistro(despesaId, registroDespesa)
+        } catch (e: SocketTimeoutException) {
+            _connectionState.value = ConnectionState.ServerUnavailable
+        } catch (e: IOException) {
+            _connectionState.value = ConnectionState.NoInternet
+        } catch (e: Exception) {
+            _connectionState.value = ConnectionState.Error
+        }
     }
 
     fun isRegistroValid(): Boolean {
@@ -86,6 +101,6 @@ class DetalhesDespesaViewModel @Inject constructor(
     }
 
     private fun clearRegistro() {
-        _registroUiState.update { it.copy(valor = "") }
+        _registroUiState.update { it.copy(valor = "", valorErrorField = null) }
     }
 }

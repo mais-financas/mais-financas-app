@@ -7,6 +7,7 @@ import com.neuralnet.maisfinancas.model.gestor.Gestor
 import com.neuralnet.maisfinancas.ui.screens.home.MovimentacaoItem
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
+import java.util.UUID
 
 interface GestorRepository {
 
@@ -17,5 +18,7 @@ interface GestorRepository {
     suspend fun login(loginInput: LoginInput): Result<Gestor>
 
     fun getUltimasMovimentacoes(): Flow<List<MovimentacaoItem>>
+
+    suspend fun sincronizar(gestorId: UUID)
 
 }

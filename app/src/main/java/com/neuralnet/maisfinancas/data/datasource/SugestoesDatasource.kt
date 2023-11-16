@@ -18,8 +18,10 @@ import androidx.compose.material.icons.outlined.DirectionsBus
 import androidx.compose.material.icons.outlined.ElectricBolt
 import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material.icons.outlined.Healing
+import androidx.compose.material.icons.outlined.HealthAndSafety
 import androidx.compose.material.icons.outlined.LiveTv
 import androidx.compose.material.icons.outlined.LocalDining
+import androidx.compose.material.icons.outlined.LocalGasStation
 import androidx.compose.material.icons.outlined.LocalHospital
 import androidx.compose.material.icons.outlined.LocalMovies
 import androidx.compose.material.icons.outlined.LocalPharmacy
@@ -33,60 +35,118 @@ import androidx.compose.material.icons.outlined.VideogameAsset
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material.icons.outlined.Wifi
 import com.neuralnet.maisfinancas.model.despesa.Categoria
+import com.neuralnet.maisfinancas.model.despesa.Frequencia
+import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.ui.screens.setup.ItemDespesa
 
 object SugestoesDatasource {
 
     private val despesasAlimentacao = listOf(
-        ItemDespesa(Icons.Outlined.Coffee, "Café"),
-        ItemDespesa(Icons.Outlined.BakeryDining, "Lanches"),
-        ItemDespesa(Icons.Outlined.LocalDining, "Almoço"),
-        ItemDespesa(Icons.Outlined.BrunchDining, "Jantar"),
-        ItemDespesa(Icons.Outlined.Fastfood, "FastFood"),
+        ItemDespesa(icone = Icons.Outlined.Coffee, nome = "Café"),
+        ItemDespesa(icone = Icons.Outlined.BakeryDining, nome = "Lanches"),
+        ItemDespesa(
+            icone = Icons.Outlined.LocalDining, nome = "Almoço",
+            recorrencia = Recorrencia(Frequencia.DIARIA)
+        ),
+        ItemDespesa(icone = Icons.Outlined.BrunchDining, nome = "Jantar"),
+        ItemDespesa(icone = Icons.Outlined.Fastfood, nome = "FastFood"),
     )
 
     private val despesasEssenciais = listOf(
-        ItemDespesa(Icons.Outlined.ShoppingCart, "Compras"),
-        ItemDespesa(Icons.Outlined.WaterDrop, "Água"),
-        ItemDespesa(Icons.Outlined.ElectricBolt, "Energia"),
-        ItemDespesa(Icons.Outlined.Wifi, "Internet"),
-        ItemDespesa(Icons.Outlined.PhoneAndroid, "Celular"),
+        ItemDespesa(
+            icone = Icons.Outlined.ShoppingCart, nome = "Compras",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.WaterDrop, nome = "Água",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.ElectricBolt, nome = "Energia",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.Wifi, nome = "Internet",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.PhoneAndroid, nome = "Celular",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
     )
 
     private val despesasEducacaoo = listOf(
-        ItemDespesa(Icons.Outlined.Abc, "Esocla"),
-        ItemDespesa(Icons.Outlined.Book, "Livros"),
-        ItemDespesa(Icons.Outlined.School, "Graduação"),
-        ItemDespesa(Icons.Outlined.CollectionsBookmark, "Cursos"),
+        ItemDespesa(
+            icone = Icons.Outlined.Abc, nome = "Escola",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(icone = Icons.Outlined.Book, nome = "Livros"),
+        ItemDespesa(icone = Icons.Outlined.School, nome = "Graduação"),
+        ItemDespesa(
+            icone = Icons.Outlined.CollectionsBookmark, nome = "Cursos",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
     )
 
     private val despesasEntretenimento = listOf(
-        ItemDespesa(Icons.Outlined.LocalMovies, "Cinema"),
-        ItemDespesa(Icons.Outlined.LiveTv, "Streaming"),
-        ItemDespesa(Icons.Outlined.Audiotrack, "Música"),
-        ItemDespesa(Icons.Outlined.TheaterComedy, "Teatro"),
-        ItemDespesa(Icons.Outlined.VideogameAsset, "Jogos"),
+        ItemDespesa(icone = Icons.Outlined.LocalMovies, nome = "Cinema"),
+        ItemDespesa(
+            icone = Icons.Outlined.LiveTv, nome = "Streaming",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.Audiotrack, nome = "Música",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(icone = Icons.Outlined.TheaterComedy, nome = "Teatro"),
+        ItemDespesa(icone = Icons.Outlined.VideogameAsset, nome = "Jogos"),
     )
 
     private val despesasTransporte = listOf(
-        ItemDespesa(Icons.Outlined.Cases, "Viagens"),
-        ItemDespesa(Icons.Outlined.DirectionsBus, "Transporte Público"),
-        ItemDespesa(Icons.Outlined.Build, "Manutenção"),
-        ItemDespesa(Icons.Outlined.LocalPolice, "Seguro"),
+        ItemDespesa(icone = Icons.Outlined.Cases, nome = "Viagens"),
+        ItemDespesa(
+            icone = Icons.Outlined.DirectionsBus, nome = "Transporte Público",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.LocalGasStation, nome = "Combustível",
+            recorrencia = Recorrencia(Frequencia.SEMANAL)
+        ),
+        ItemDespesa(icone = Icons.Outlined.Build, nome = "Manutenção"),
+        ItemDespesa(icone = Icons.Outlined.LocalPolice, nome = "Seguro"),
     )
 
     private val despesasDividas = listOf(
-        ItemDespesa(Icons.Outlined.AttachMoney, "Empréstimos"),
-        ItemDespesa(Icons.Outlined.CreditCard, "Cartão de Crédito"),
-        ItemDespesa(Icons.Outlined.Apartment, "Hipoteca"),
-        ItemDespesa(Icons.Outlined.AccountBalance, "Débitos Diversos"),
+        ItemDespesa(
+            icone = Icons.Outlined.AttachMoney, nome = "Empréstimos",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.CreditCard, nome = "Cartão de Crédito",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.Apartment, nome = "Hipoteca",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
+        ItemDespesa(icone = Icons.Outlined.AccountBalance, nome = "Débitos Diversos"),
     )
 
     private val despesasSaude = listOf(
-        ItemDespesa(Icons.Outlined.LocalHospital, "Consultas"),
-        ItemDespesa(Icons.Outlined.LocalPharmacy, "Medicamentos"),
+        ItemDespesa(icone = Icons.Outlined.LocalHospital, nome = "Consultas"),
+        ItemDespesa(
+            icone = Icons.Outlined.LocalPharmacy, nome = "Medicamentos",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
         ItemDespesa(Icons.Outlined.Healing, "Exames"),
-        ItemDespesa(Icons.Outlined.Spa, "Tratamentos"),
+        ItemDespesa(
+            icone = Icons.Outlined.HealthAndSafety, nome = "Checkup",
+            recorrencia = Recorrencia(Frequencia.ANUAL)
+        ),
+        ItemDespesa(
+            icone = Icons.Outlined.Spa, nome = "Tratamentos",
+            recorrencia = Recorrencia(Frequencia.MENSAL)
+        ),
     )
 
 

@@ -13,6 +13,8 @@ import com.neuralnet.maisfinancas.model.despesa.Frequencia.DIARIA
 import com.neuralnet.maisfinancas.model.despesa.Frequencia.MENSAL
 import com.neuralnet.maisfinancas.model.despesa.Frequencia.SEMANAL
 import com.neuralnet.maisfinancas.model.despesa.Recorrencia
+import com.neuralnet.maisfinancas.ui.screens.ConnectionState
+import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +26,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
 import java.time.Instant
 import java.util.Calendar
 import javax.inject.Inject
@@ -35,7 +39,11 @@ class AddDespesaViewModel @Inject constructor(
     gestorRepository: GestorRepository,
 ) : ViewModel() {
 
-    private val gestorId: Flow<GestorEntity?> = gestorRepository.getGestor()
+    private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
+
+    private val _connectionState: MutableStateFlow<ConnectionState> =
+        MutableStateFlow(ConnectionState.Connected)
+    val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
     val categorias: StateFlow<List<Categoria>> = despesaRepository.getCategorias()
         .stateIn(
@@ -56,7 +64,7 @@ class AddDespesaViewModel @Inject constructor(
         val categoria = categorias.value.find { it.nome == uiState.value.categoria }
             ?: categorias.value.first()
 
-        val gestorId = checkNotNull(gestorId.first()?.id)
+        val gestorId = checkNotNull(gestor.first()?.id)
 
         val despesaInput = uiState.value.toDespesaInput(
             gestorId = gestorId,
@@ -64,12 +72,21 @@ class AddDespesaViewModel @Inject constructor(
             dataInMillis = selectedDateInMillis
         )
 
-        val despesaId = despesaRepository.registrarDespesa(despesaInput)
-        val despesa = despesaInput.despesa.copy(id = despesaId)
+        try {
+            _connectionState.value = ConnectionState.Loading
+            val despesaId = despesaRepository.registrarDespesa(despesaInput)
+            val despesa = despesaInput.despesa.copy(id = despesaId)
 
-        if (despesa.definirLembrete) {
-            val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)
-            lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa)
+            if (despesa.definirLembrete) {
+                val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)
+                lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa)
+            }
+        } catch (e: SocketTimeoutException) {
+            _connectionState.value = ConnectionState.ServerUnavailable
+        } catch (e: IOException) {
+            _connectionState.value = ConnectionState.NoInternet
+        } catch (e: Exception) {
+            _connectionState.value = ConnectionState.Error
         }
     }
 

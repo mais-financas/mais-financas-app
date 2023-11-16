@@ -37,7 +37,8 @@ object AppModule {
     fun provideDespesaRepository(
         despesaDao: DespesaDao,
         categoriaDao: CategoriaDao,
-    ): DespesaRepository = DespesaRepositoryImpl(despesaDao, categoriaDao)
+        maisFinancasApi: MaisFinancasApi,
+    ): DespesaRepository = DespesaRepositoryImpl(despesaDao, categoriaDao, maisFinancasApi)
 
     @Singleton
     @Provides
@@ -61,8 +62,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRendaRepository(rendaDao: RendaDao): RendaRepository =
-        RendaRepositoryImpl(rendaDao)
+    fun provideRendaRepository(
+        rendaDao: RendaDao,
+        maisFinancasApi: MaisFinancasApi
+    ): RendaRepository = RendaRepositoryImpl(rendaDao, maisFinancasApi)
 
     @Singleton
     @Provides

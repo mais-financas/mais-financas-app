@@ -26,7 +26,7 @@ import java.util.UUID
 )
 data class DespesaEntity(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo("despesa_id")
     val id: Long = 0L,
 

@@ -3,6 +3,7 @@ package com.neuralnet.maisfinancas.util
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.Calendar
 import java.util.Currency
 import java.util.Date
@@ -64,4 +65,17 @@ fun formatTime(time: Int): String {
     val minutes = (time / 60).toString().padStart(2, '0')
     val seconds = (time % 60).toString().padStart(2, '0')
     return "$minutes:$seconds"
+}
+
+fun String.toCalendar(): Calendar {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val date = dateFormat.parse(this) ?: Date.from(Instant.now())
+    return Calendar.getInstance().apply {
+        time = date
+    }
+}
+
+fun Calendar.toNetworkString(): String {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return dateFormat.format(time)
 }

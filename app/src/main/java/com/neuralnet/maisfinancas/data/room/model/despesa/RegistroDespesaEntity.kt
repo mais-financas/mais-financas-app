@@ -20,9 +20,9 @@ import java.util.Calendar
 )
 data class RegistroDespesaEntity(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo("registro_despesa_id")
-    val id: Int = 0,
+    val id: Long = 0,
 
     @ColumnInfo("valor")
     val valor: BigDecimal,

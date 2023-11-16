@@ -8,7 +8,8 @@ import java.util.Calendar
 
 @Entity("renda")
 data class RendaEntity(
-    @PrimaryKey(autoGenerate = true)
+
+    @PrimaryKey
     @ColumnInfo(name = "renda_id")
     val id: Int = 0,
 

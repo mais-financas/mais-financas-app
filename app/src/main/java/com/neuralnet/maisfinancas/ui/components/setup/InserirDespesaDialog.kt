@@ -27,6 +27,7 @@ import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.core.NumberTextField
 import com.neuralnet.maisfinancas.ui.components.despesa.RecorrenciaDespesa
 import com.neuralnet.maisfinancas.ui.screens.setup.ItemDespesa
+import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,6 +95,9 @@ fun InserirDespesaDialog(
 
                     TextButton(
                         onClick = {
+                            if (valor.isBlank()) {
+                                valorErrorMessage = FieldValidationError.NUMERO_INVALIDO
+                            }
                             onConfirmClick(
                                 item.copy(
                                     valor = valor,

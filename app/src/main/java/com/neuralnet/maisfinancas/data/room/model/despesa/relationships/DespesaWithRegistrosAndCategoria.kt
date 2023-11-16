@@ -22,7 +22,7 @@ data class DespesaWithRegistrosAndCategoria(
 
     @Relation(
         parentColumn = "despesa_id",
-        entityColumn = "despesa_id"
+        entityColumn = "recorrencia_despesa_id"
     )
     val recorrencia: RecorrenciaDespesaEntity? = null,
 )

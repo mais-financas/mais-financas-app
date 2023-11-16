@@ -14,6 +14,7 @@ data class DespesaInput(
 )
 
 fun DespesaInput.toDespesaEntity() = DespesaEntity(
+    id = despesa.id,
     nome = despesa.nome,
     definirLembrete = despesa.definirLembrete,
     gestorId = gestorId,
@@ -21,6 +22,7 @@ fun DespesaInput.toDespesaEntity() = DespesaEntity(
 )
 
 fun DespesaInput.toRegistroEntity(despesaId: Long) = RegistroDespesaEntity(
+    id = registro.id,
     valor = registro.valor,
     data = registro.data,
     despesaId = despesaId

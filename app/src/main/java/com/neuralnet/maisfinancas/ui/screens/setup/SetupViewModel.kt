@@ -9,6 +9,7 @@ import com.neuralnet.maisfinancas.data.room.model.GestorEntity
 import com.neuralnet.maisfinancas.model.despesa.Categoria
 import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.model.despesa.Recorrencia
+import com.neuralnet.maisfinancas.ui.screens.ConnectionState
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
 import java.time.Instant
 import javax.inject.Inject
 
@@ -29,6 +32,10 @@ class SetupViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
+
+    private val _connectionState: MutableStateFlow<ConnectionState> =
+        MutableStateFlow(ConnectionState.Connected)
+    val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
     private val _uiState: MutableStateFlow<SetupUiState> = MutableStateFlow(SetupUiState())
     val uiState: StateFlow<SetupUiState> = _uiState.asStateFlow()
@@ -100,8 +107,16 @@ class SetupViewModel @Inject constructor(
         viewModelScope.launch {
             val gestorId = checkNotNull(gestor.first()?.id)
 
-            val despesas = uiState.value.mapDespesasSelecionadasToList(gestorId).also { println("Lista: $it") }
-            despesaRepository.registrarDespesas(despesas)
+            val despesas = uiState.value.mapDespesasSelecionadasToList(gestorId)
+            try {
+                despesaRepository.registrarDespesas(despesas)
+            } catch (e: SocketTimeoutException) {
+                _connectionState.value = ConnectionState.ServerUnavailable
+            } catch (e: IOException) {
+                _connectionState.value = ConnectionState.NoInternet
+            } catch (e: Exception) {
+                _connectionState.value = ConnectionState.Error
+            }
         }
     }
 
