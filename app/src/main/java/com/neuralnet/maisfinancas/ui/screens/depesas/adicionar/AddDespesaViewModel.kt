@@ -14,7 +14,6 @@ import com.neuralnet.maisfinancas.model.despesa.Frequencia.MENSAL
 import com.neuralnet.maisfinancas.model.despesa.Frequencia.SEMANAL
 import com.neuralnet.maisfinancas.model.despesa.Recorrencia
 import com.neuralnet.maisfinancas.ui.screens.ConnectionState
-import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +41,7 @@ class AddDespesaViewModel @Inject constructor(
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
 
     private val _connectionState: MutableStateFlow<ConnectionState> =
-        MutableStateFlow(ConnectionState.Connected)
+        MutableStateFlow(ConnectionState.Idle)
     val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
     val categorias: StateFlow<List<Categoria>> = despesaRepository.getCategorias()
@@ -81,6 +80,7 @@ class AddDespesaViewModel @Inject constructor(
                 val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)
                 lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa)
             }
+            _connectionState.value = ConnectionState.Success
         } catch (e: SocketTimeoutException) {
             _connectionState.value = ConnectionState.ServerUnavailable
         } catch (e: IOException) {

@@ -15,8 +15,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,7 +33,11 @@ import com.neuralnet.maisfinancas.ui.components.core.NumberTextField
 import com.neuralnet.maisfinancas.ui.components.despesa.ValorDescricaoTextField
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
+import com.neuralnet.maisfinancas.ui.screens.ConnectionState
+import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
+import com.neuralnet.maisfinancas.ui.screens.ServidorIndisponivel
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,17 +45,39 @@ fun AddRendaScreen(
     viewModel: AddRendaViewModel,
     calendarState: DatePickerState,
     onNavigateUp: () -> Unit,
-    onSaveClick: () -> Unit
+    navigateToHome: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val connectionState = viewModel.connectionState.collectAsStateWithLifecycle()
+    val connectionMessage = connectionState.value.message?.let { stringResource(id = it) }
 
-    AddRendaScreen(
-        uiState = uiState.value,
-        onUiStateChange = viewModel::updateUiState,
-        calendarState = calendarState,
-        onNavigateUp = onNavigateUp,
-        onSaveClick = onSaveClick
-    )
+    when (connectionState.value) {
+        is ConnectionState.Loading -> LoadingScreen()
+        is ConnectionState.ServerUnavailable -> {
+            ServidorIndisponivel {
+                viewModel.salvarRenda(calendarState.selectedDateMillis)
+            }
+        }
+        is ConnectionState.Success -> {
+            LaunchedEffect(key1 = Unit) {
+                navigateToHome()
+            }
+        }
+        else -> {
+            AddRendaScreen(
+                uiState = uiState.value,
+                onUiStateChange = viewModel::updateUiState,
+                calendarState = calendarState,
+                onNavigateUp = onNavigateUp,
+                onSaveClick = {
+                    if (viewModel.isFormValid()) {
+                        viewModel.salvarRenda(calendarState.selectedDateMillis)
+                    }
+                },
+                connectionMessage = connectionMessage,
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,13 +89,15 @@ fun AddRendaScreen(
     onNavigateUp: () -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
+    connectionMessage: String? = null,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
                 title = stringResource(id = HomeDestinations.AddRenda.title),
                 canNavigateBack = true,
-                navigateUp = onNavigateUp
+                navigateUp = onNavigateUp,
             )
         },
         floatingActionButton = {
@@ -75,8 +107,18 @@ fun AddRendaScreen(
                     contentDescription = stringResource(R.string.add)
                 )
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
+        LaunchedEffect(key1 = connectionMessage) {
+            launch {
+
+                if (connectionMessage != null) {
+                    snackbarHostState.showSnackbar(message = connectionMessage)
+                }
+            }
+        }
+
         Column(
             modifier = modifier
                 .padding(paddingValues)

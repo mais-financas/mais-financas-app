@@ -20,10 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    gestorRepository: GestorRepository,
+    private val gestorRepository: GestorRepository,
     saldoRepository: SaldoRepository,
 ) : ViewModel() {
-
 
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
 
@@ -48,6 +47,16 @@ class HomeViewModel @Inject constructor(
     private val movimentacoes: Flow<List<MovimentacaoItem>> =
         gestorRepository.getUltimasMovimentacoes()
 
+    init {
+        viewModelScope.launch {
+            try {
+                val gestorId = checkNotNull(gestor.first()?.id)
+                gestorRepository.sincronizar(gestorId)
+            } catch (_: Exception) {
+            }
+        }
+    }
+
     val uiState: StateFlow<HomeUiState> =
         combine(saldoMensal, saldoTotal, movimentacoes) { saldoMensal, saldoTotal, movimentacoes ->
             HomeUiState(
@@ -61,16 +70,9 @@ class HomeViewModel @Inject constructor(
             initialValue = HomeUiState()
         )
 
-    init {
-        viewModelScope.launch {
-            val gestorId = checkNotNull(gestor.first()?.id)
 
-            try {
-                gestorRepository.sincronizar(gestorId)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+    fun sair() {
+        viewModelScope.launch { gestorRepository.sair() }
     }
 
 }

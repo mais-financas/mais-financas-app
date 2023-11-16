@@ -52,10 +52,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
 
             SetupScreen(
                 viewModel = setupViewModel,
-                onConfirmClick = {
-                    setupViewModel.inserirDespesas()
-                    navController.navigate(route = HOME_GRAPH)
-                }
+                navigateToHome = { navController.navigate(route = HOME_GRAPH) }
             )
         }
     }

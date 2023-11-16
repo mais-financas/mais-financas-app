@@ -53,6 +53,11 @@ fun ServidorIndisponivel(onFinish: () -> Unit) {
         )
 
         Text(
+            text = stringResource(R.string.aguarde),
+            style = MaterialTheme.typography.titleMedium,
+        )
+
+        Text(
             text = formatTime(time),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onBackground,

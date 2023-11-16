@@ -78,4 +78,6 @@ class GestorRepositoryImpl(
         despesaRepository.fetchDespesas(gestorId)
         rendaRepository.fetchRendas(gestorId)
     }
+
+    override suspend fun sair() = gestorDao.sair()
 }

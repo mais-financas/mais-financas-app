@@ -8,8 +8,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,11 +25,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.auth.LoginForm
 import com.neuralnet.maisfinancas.ui.components.core.MaisFinancasBackground
+import com.neuralnet.maisfinancas.ui.screens.ConnectionState
 import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
-import com.neuralnet.maisfinancas.ui.screens.NoConnectionScreen
 import com.neuralnet.maisfinancas.ui.screens.ServidorIndisponivel
 import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -38,40 +42,38 @@ fun LoginScreen(
     val loginFormState = viewModel.uiState.collectAsStateWithLifecycle()
     val authState = viewModel.authState.collectAsStateWithLifecycle()
 
-    when (authState.value) {
-        AuthState.Loading -> {
-            LoadingScreen()
-        }
+    val connectionState = viewModel.connectionState.collectAsStateWithLifecycle()
+    val connectionMessage = connectionState.value.message?.let { stringResource(id = it) }
 
-        AuthState.LoggedIn -> {
-            LaunchedEffect(key1 = Unit) {
-                navigateToHome()
-            }
-        }
-
-        AuthState.NotLoggedIn -> {
-            LoginScreen(
-                onNavigateBack = onNavigateBack,
-                loginFormState = loginFormState.value,
-                onLoginFormStateChange = viewModel::updateLoginFormState,
-                onLoginClick = {
-                    if (viewModel.isFormValid()) {
-                        viewModel.login()
-                    }
-                },
-                onSigninWithFacebook = { /*TODO*/ },
-                onSigninWithGoogle = { /*TODO*/ },
-                onSigninWithTwitter = { /*TODO*/ },
-                onNavigateSignup = onNavigateSignUp
-            )
-        }
-
-        AuthState.ConnectionError -> {
-            NoConnectionScreen()
-        }
-
-        AuthState.ServerUnavailableError -> {
+    when (connectionState.value) {
+        is ConnectionState.Loading -> LoadingScreen()
+        is ConnectionState.ServerUnavailable -> {
             ServidorIndisponivel(onFinish = viewModel::login)
+        }
+
+        else -> {
+            if (authState.value == AuthState.LoggedIn) {
+                LaunchedEffect(key1 = Unit) {
+                    navigateToHome()
+                }
+            }
+            if (authState.value == AuthState.NotLoggedIn) {
+                LoginScreen(
+                    onNavigateBack = onNavigateBack,
+                    loginFormState = loginFormState.value,
+                    onLoginFormStateChange = viewModel::updateLoginFormState,
+                    onLoginClick = {
+                        if (viewModel.isFormValid()) {
+                            viewModel.login()
+                        }
+                    },
+                    onSigninWithFacebook = { /*TODO*/ },
+                    onSigninWithGoogle = { /*TODO*/ },
+                    onSigninWithTwitter = { /*TODO*/ },
+                    onNavigateSignup = onNavigateSignUp,
+                    connectionMessage = connectionMessage,
+                )
+            }
         }
     }
 }
@@ -86,12 +88,24 @@ fun LoginScreen(
     onSigninWithGoogle: () -> Unit,
     onSigninWithTwitter: () -> Unit,
     onNavigateSignup: (Int) -> Unit,
+    connectionMessage: String? = null
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     MaisFinancasBackground(
         canNavigateBack = true,
         onNavigateUp = onNavigateBack,
-        modifier = Modifier.verticalScroll(rememberScrollState())
+        modifier = Modifier.verticalScroll(rememberScrollState()),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
+        LaunchedEffect(key1 = connectionMessage) {
+            launch {
+                if (connectionMessage != null) {
+                    snackbarHostState.showSnackbar(message = connectionMessage)
+                }
+            }
+        }
+
         Image(
             painter = painterResource(R.drawable.logo),
             contentDescription = stringResource(R.string.app_name),

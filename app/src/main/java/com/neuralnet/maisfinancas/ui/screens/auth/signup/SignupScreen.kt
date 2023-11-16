@@ -8,8 +8,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,11 +25,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.auth.SignUpForm
 import com.neuralnet.maisfinancas.ui.components.core.MaisFinancasBackground
+import com.neuralnet.maisfinancas.ui.screens.ConnectionState
 import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
-import com.neuralnet.maisfinancas.ui.screens.NoConnectionScreen
 import com.neuralnet.maisfinancas.ui.screens.ServidorIndisponivel
 import com.neuralnet.maisfinancas.ui.screens.auth.AuthState
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignupScreen(
@@ -39,37 +43,36 @@ fun SignupScreen(
 
     val authState = signUpViewModel.authState.collectAsStateWithLifecycle()
 
-    when (authState.value) {
-        AuthState.Loading -> {
-            LoadingScreen()
+
+    val connectionState = signUpViewModel.connectionState.collectAsStateWithLifecycle()
+    val connectionMessage = connectionState.value.message?.let { stringResource(id = it) }
+
+    when (connectionState.value) {
+        is ConnectionState.Loading -> LoadingScreen()
+        is ConnectionState.ServerUnavailable -> {
+            ServidorIndisponivel(onFinish = signUpViewModel::signUp)
         }
 
-        AuthState.LoggedIn -> {
-            LaunchedEffect(key1 = Unit) {
-                navigateToSetup()
+        else -> {
+            if (authState.value == AuthState.LoggedIn) {
+                LaunchedEffect(key1 = Unit) {
+                    navigateToSetup()
+                }
             }
-        }
-
-        AuthState.NotLoggedIn -> {
-            SignupScreen(
-                signUpFormState = uiState.value,
-                onSignUpFormStateChange = signUpViewModel::updateState,
-                onNavigateUp = onNavigateUp,
-                onSignUpClick = {
-                    if (signUpViewModel.isFormValid()) {
-                        signUpViewModel.signUp()
-                    }
-                },
-                onNavigateLogin = onNavigateLogin,
-            )
-        }
-
-        AuthState.ConnectionError -> {
-            NoConnectionScreen()
-        }
-
-        AuthState.ServerUnavailableError -> {
-            ServidorIndisponivel(signUpViewModel::signUp)
+            if (authState.value == AuthState.NotLoggedIn) {
+                SignupScreen(
+                    signUpFormState = uiState.value,
+                    onSignUpFormStateChange = signUpViewModel::updateState,
+                    onNavigateUp = onNavigateUp,
+                    onSignUpClick = {
+                        if (signUpViewModel.isFormValid()) {
+                            signUpViewModel.signUp()
+                        }
+                    },
+                    onNavigateLogin = onNavigateLogin,
+                    connectionMessage = connectionMessage,
+                )
+            }
         }
     }
 }
@@ -81,12 +84,24 @@ fun SignupScreen(
     onNavigateUp: () -> Unit,
     onSignUpClick: () -> Unit,
     onNavigateLogin: () -> Unit,
+    connectionMessage: String? = null,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     MaisFinancasBackground(
         canNavigateBack = true,
         onNavigateUp = onNavigateUp,
-        modifier = Modifier.verticalScroll(rememberScrollState())
+        modifier = Modifier.verticalScroll(rememberScrollState()),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
+        LaunchedEffect(key1 = connectionMessage) {
+            launch {
+                if (connectionMessage != null) {
+                    snackbarHostState.showSnackbar(message = connectionMessage)
+                }
+            }
+        }
+
         Image(
             painter = painterResource(R.drawable.logo),
             contentDescription = stringResource(R.string.app_name),

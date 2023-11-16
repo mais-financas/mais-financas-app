@@ -117,7 +117,9 @@
     <string name="falha_autenticar">Email ou senha inválidos</string>
     <string name="usuario_existe">Usuário já existe com este email</string>
     <string name="sem_conexao">Sem conexão com a Internet</string>
-    <string name="servidor_iniciando">Servidor está iniciando, por favor aguarde...</string>
+    <string name="servidor_iniciando">Servidor está iniciando…</string>
+    <string name="aguarde">Por favor, aguarde</string>
+    <string name="sair">Sair</string>
     <plurals name="recorrencia_despesa">
         <item quantity="one">Ocorre de forma %1$s</item>
         <item quantity="other">Ocorre a cada %d %1$s</item>

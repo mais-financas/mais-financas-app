@@ -77,5 +77,6 @@ fun String.toCalendar(): Calendar {
 
 fun Calendar.toNetworkString(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    add(Calendar.HOUR, 3)
     return dateFormat.format(time)
 }

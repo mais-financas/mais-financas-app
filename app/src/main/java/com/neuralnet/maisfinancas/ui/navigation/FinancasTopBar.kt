@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.navigation
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -20,6 +21,7 @@ fun MaisFinancasTopAppBar(
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
+    actions: @Composable (RowScope.() -> Unit) = {},
 ) {
     if (canNavigateBack) {
         CenterAlignedTopAppBar(
@@ -35,12 +37,16 @@ fun MaisFinancasTopAppBar(
             }
         )
     } else {
-        CenterAlignedTopAppBar(title = {
-            Text(
-                text = title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }, modifier = modifier)
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            },
+            modifier = modifier,
+            actions = actions
+        )
     }
 }

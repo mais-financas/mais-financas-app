@@ -1,7 +1,6 @@
 package com.neuralnet.maisfinancas.data.repository.impl
 
 import com.neuralnet.maisfinancas.data.network.MaisFinancasApi
-import com.neuralnet.maisfinancas.data.network.model.renda.RendaResponse
 import com.neuralnet.maisfinancas.data.network.model.renda.toEntity
 import com.neuralnet.maisfinancas.data.network.model.renda.toNetwork
 import com.neuralnet.maisfinancas.data.repository.RendaRepository
@@ -21,7 +20,7 @@ class RendaRepositoryImpl(
 
     override suspend fun insertRenda(renda: Renda, gestorId: UUID) {
         val rendaResponse = maisFinancasApi.adicionarRenda(renda.toNetwork(gestorId))
-        rendaDao.insert(rendaResponse.toEntity())
+        rendaDao.insert(rendaResponse.toEntity(gestorId))
     }
 
     override fun getUltimasRendas(): Flow<List<Renda>> =
@@ -32,6 +31,6 @@ class RendaRepositoryImpl(
     override suspend fun fetchRendas(gestorId: UUID) {
         val rendaResponses = maisFinancasApi.getRendas(gestorId)
 
-        rendaDao.sincronizar(rendaResponses.map(RendaResponse::toEntity))
+        rendaDao.sincronizar(rendaResponses.map { it.toEntity(gestorId = gestorId) })
     }
 }

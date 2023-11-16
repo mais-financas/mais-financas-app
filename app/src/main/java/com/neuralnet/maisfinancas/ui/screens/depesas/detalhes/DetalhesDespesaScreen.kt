@@ -11,13 +11,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,7 +34,11 @@ import com.neuralnet.maisfinancas.ui.components.despesa.DetalhesDespesaItem
 import com.neuralnet.maisfinancas.ui.components.despesa.InserirRegistroBottomSheet
 import com.neuralnet.maisfinancas.ui.components.despesa.RegistroDespesaItem
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
+import com.neuralnet.maisfinancas.ui.screens.ConnectionState
+import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
+import com.neuralnet.maisfinancas.ui.screens.ServidorIndisponivel
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import kotlinx.coroutines.launch
 import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,24 +57,40 @@ fun DetalhesDespesaScreen(
         mutableStateOf(false)
     }
 
-    DetalhesDespesaScreen(
-        uiState = uiState.value,
-        onNavigateUp = onNavigateUp,
-        onCheckChange = viewModel::setDefinirLembrete,
-        registroState = registroUiState.value,
-        onRegistroChange = viewModel::updateRegistroState,
-        calendarState = calendarState,
-        onSaveClick = {
-            if (viewModel.isRegistroValid()) {
+    val connectionState = viewModel.connectionState.collectAsStateWithLifecycle()
+    val connectionMessage = connectionState.value.message?.let { stringResource(id = it) }
+
+    when (connectionState.value) {
+        is ConnectionState.Loading -> LoadingScreen()
+        is ConnectionState.ServerUnavailable -> {
+            ServidorIndisponivel {
                 viewModel.adicionarRegistro(calendarState.selectedDateMillis)
-                isSheetOpen = false
-                calendarState.setSelection(Instant.now().toEpochMilli())
             }
-        },
-        sheetState = sheetState,
-        isSheetOpen = isSheetOpen,
-        onSheetStateToggle = { isSheetOpen = !isSheetOpen }
-    )
+        }
+
+        else -> {
+            DetalhesDespesaScreen(
+                uiState = uiState.value,
+                onNavigateUp = onNavigateUp,
+                onCheckChange = viewModel::setDefinirLembrete,
+                registroState = registroUiState.value,
+                onRegistroChange = viewModel::updateRegistroState,
+                calendarState = calendarState,
+                onSaveClick = {
+                    if (viewModel.isRegistroValid()) {
+                        viewModel.adicionarRegistro(calendarState.selectedDateMillis)
+                        isSheetOpen = false
+                        calendarState.setSelection(Instant.now().toEpochMilli())
+                    }
+                },
+                sheetState = sheetState,
+                connectionMessage = connectionMessage,
+                isSheetOpen = isSheetOpen,
+                onSheetStateToggle = { isSheetOpen = !isSheetOpen },
+            )
+
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +106,10 @@ fun DetalhesDespesaScreen(
     sheetState: SheetState,
     isSheetOpen: Boolean,
     onSheetStateToggle: () -> Unit,
+    connectionMessage: String? = null,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
@@ -90,13 +117,25 @@ fun DetalhesDespesaScreen(
                 canNavigateBack = true,
                 navigateUp = onNavigateUp,
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .padding(16.dp)
                 .padding(paddingValues)
         ) {
+            item {
+                LaunchedEffect(key1 = connectionMessage) {
+                    launch {
+
+                        if (connectionMessage != null) {
+                            snackbarHostState.showSnackbar(message = connectionMessage)
+                        }
+                    }
+                }
+            }
+
             item {
                 DetalhesDespesaItem(
                     nome = uiState.nome,
@@ -176,7 +215,7 @@ fun DetalhesDespesaScreenPreview() {
             onSaveClick = {},
             sheetState = rememberModalBottomSheetState(),
             isSheetOpen = false,
-            onSheetStateToggle = {}
+            onSheetStateToggle = {},
         )
     }
 }

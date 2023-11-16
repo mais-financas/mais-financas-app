@@ -34,7 +34,7 @@ class SetupViewModel @Inject constructor(
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
 
     private val _connectionState: MutableStateFlow<ConnectionState> =
-        MutableStateFlow(ConnectionState.Connected)
+        MutableStateFlow(ConnectionState.Idle)
     val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
     private val _uiState: MutableStateFlow<SetupUiState> = MutableStateFlow(SetupUiState())
@@ -56,14 +56,19 @@ class SetupViewModel @Inject constructor(
         selectedCategoria.value = categoria
     }
 
+    fun updateItem(itemDespesa: ItemDespesa) {
+        _selectedItem.update { itemDespesa }
+    }
+
     fun adicionarDespesa(itemDespesa: ItemDespesa) {
         updtateDespesas(itemDespesa) { item ->
             item.copy(selecionado = true)
         }
     }
 
-    fun removerItem(itemDespesa: ItemDespesa) {
-        updtateDespesas(itemDespesa) { item ->
+    fun removerItem() {
+        val selectedItem = checkNotNull(_selectedItem.value)
+        updtateDespesas(selectedItem) { item ->
             item.copy(
                 valor = "",
                 dataEmMillis = Instant.now().toEpochMilli(),
@@ -78,7 +83,9 @@ class SetupViewModel @Inject constructor(
         selectedCategoria.value = null
     }
 
-    fun isItemValid(item: ItemDespesa): Boolean {
+    fun isItemValid(): Boolean {
+        val item = checkNotNull(selectedItem.value)
+
         if (item.valor.toBigDecimalOrNull() == null) {
             _selectedItem.update { it?.copy(valorErrorField = FieldValidationError.NUMERO_INVALIDO) }
         }
@@ -109,7 +116,9 @@ class SetupViewModel @Inject constructor(
 
             val despesas = uiState.value.mapDespesasSelecionadasToList(gestorId)
             try {
+                _connectionState.value = ConnectionState.Loading
                 despesaRepository.registrarDespesas(despesas)
+                _connectionState.value = ConnectionState.Success
             } catch (e: SocketTimeoutException) {
                 _connectionState.value = ConnectionState.ServerUnavailable
             } catch (e: IOException) {

@@ -41,7 +41,7 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                     navController.navigate(route = HomeDestinations.AuthGraph.route)
                 },
                 onCardRendaMensalClick = {
-                    navController.navigate(route = HomeDestinations.Saldo.route)
+//                    navController.navigate(route = HomeDestinations.Saldo.route)
                 },
                 onAddRendaClick = {
                     navController.navigate(route = HomeDestinations.AddRenda.route)
@@ -63,12 +63,7 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                 viewModel = viewModel,
                 onNavigateUp = { navController.navigateUp() },
                 calendarState = calendarState,
-                onSaveClick = {
-                    if (viewModel.isFormValid()) {
-                        viewModel.salvarRenda(calendarState.selectedDateMillis)
-                        navController.popBackStack()
-                    }
-                }
+                navigateToHome = { navController.navigate(route = HOME_GRAPH) }
             )
         }
 

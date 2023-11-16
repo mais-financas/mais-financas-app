@@ -52,12 +52,7 @@ fun NavGraphBuilder.despesasNavGraph(navController: NavController) {
                 viewModel = viewModel,
                 calendarState = calendarState,
                 onNavigateUp = { navController.navigateUp() },
-                onSaveClick = {
-                    if (viewModel.isFormValid()) {
-                        viewModel.salvarDespesa(dataEmEpochMillis = calendarState.selectedDateMillis)
-                        navController.popBackStack()
-                    }
-                }
+                navigateBack = { navController.navigateUp() }
             )
         }
 

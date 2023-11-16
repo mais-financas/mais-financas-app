@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.room.model.GestorEntity
-import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.model.despesa.Despesa
 import com.neuralnet.maisfinancas.model.despesa.RegistroDespesa
 import com.neuralnet.maisfinancas.ui.screens.ConnectionState
 import com.neuralnet.maisfinancas.util.FieldValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,7 +39,7 @@ class DetalhesDespesaViewModel @Inject constructor(
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
 
     private val _connectionState: MutableStateFlow<ConnectionState> =
-        MutableStateFlow(ConnectionState.Connected)
+        MutableStateFlow(ConnectionState.Idle)
     val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
     val uiState: StateFlow<DetalhesDespesaUiState> = despesaRepository
@@ -81,7 +81,10 @@ class DetalhesDespesaViewModel @Inject constructor(
         )
 
         try {
+            _connectionState.value = ConnectionState.Loading
             despesaRepository.inserirRegistro(despesaId, registroDespesa)
+            clearRegistro()
+            _connectionState.value = ConnectionState.Idle
         } catch (e: SocketTimeoutException) {
             _connectionState.value = ConnectionState.ServerUnavailable
         } catch (e: IOException) {

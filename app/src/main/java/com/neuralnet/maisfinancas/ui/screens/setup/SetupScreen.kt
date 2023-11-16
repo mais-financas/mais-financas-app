@@ -8,8 +8,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
@@ -22,24 +26,54 @@ import com.neuralnet.maisfinancas.model.despesa.Categoria
 import com.neuralnet.maisfinancas.ui.components.setup.DespesasPorCategoria
 import com.neuralnet.maisfinancas.ui.components.setup.InserirDespesaDialog
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
+import com.neuralnet.maisfinancas.ui.screens.ConnectionState
+import com.neuralnet.maisfinancas.ui.screens.LoadingScreen
+import com.neuralnet.maisfinancas.ui.screens.ServidorIndisponivel
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
-import kotlin.reflect.KFunction0
+import kotlinx.coroutines.launch
 
 @Composable
-fun SetupScreen(viewModel: SetupViewModel, onConfirmClick: () -> Unit) {
+fun SetupScreen(viewModel: SetupViewModel, navigateToHome: () -> Unit) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val selectedItem = viewModel.selectedItem.collectAsStateWithLifecycle()
 
-    SetupScreen(
-        uiState = uiState.value,
-        onSelecionarItem = viewModel::selecionarItem,
-        selectedItem = selectedItem.value,
-        onAddDespesa = viewModel::adicionarDespesa,
-        onConfirmClick = onConfirmClick,
-        onResetSelection = viewModel::resetSelection,
-        onRemoverItem = viewModel::removerItem,
-        isItemValid = viewModel::isItemValid
-    )
+    val connectionState = viewModel.connectionState.collectAsStateWithLifecycle()
+    val connectionMessage = connectionState.value.message?.let { stringResource(id = it) }
+
+    when (connectionState.value) {
+        is ConnectionState.Loading -> LoadingScreen()
+        is ConnectionState.ServerUnavailable -> {
+            ServidorIndisponivel {
+                viewModel.inserirDespesas()
+            }
+        }
+
+        is ConnectionState.Success -> {
+            LaunchedEffect(key1 = Unit) {
+                navigateToHome()
+            }
+        }
+
+        else -> {
+            SetupScreen(
+                uiState = uiState.value,
+                onSelecionarItem = viewModel::selecionarItem,
+                selectedItem = selectedItem.value,
+                onItemChange = viewModel::updateItem,
+                onAdicionarItem = {
+                    if (viewModel.isItemValid()) {
+                        viewModel.adicionarDespesa(it)
+                    }
+                },
+                onRemoverItem = viewModel::removerItem,
+                onConfirmClick = {
+                    viewModel.inserirDespesas()
+                },
+                onResetSelection = viewModel::resetSelection,
+                connectionMessage = connectionMessage,
+            )
+        }
+    }
 }
 
 @Composable
@@ -47,32 +81,40 @@ fun SetupScreen(
     uiState: SetupUiState,
     onSelecionarItem: (Categoria, ItemDespesa) -> Unit,
     selectedItem: ItemDespesa?,
-    isItemValid: (ItemDespesa) -> Boolean,
-    onRemoverItem: (ItemDespesa) -> Unit,
-    onAddDespesa: (ItemDespesa) -> Unit,
+    onItemChange: (ItemDespesa) -> Unit,
+    onAdicionarItem: (ItemDespesa) -> Unit,
+    onRemoverItem: () -> Unit,
     onConfirmClick: () -> Unit,
     onResetSelection: () -> Unit = {},
+    connectionMessage: String? = null,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
                 title = stringResource(id = R.string.configure_sua_conta),
-                canNavigateBack = false
+                canNavigateBack = false,
             )
-        },
+        }, snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
 
         if (selectedItem != null) {
             InserirDespesaDialog(
                 item = selectedItem,
-                onConfirmClick = { itemDespesa ->
-                    if (isItemValid(itemDespesa)) {
-                        onAddDespesa(itemDespesa)
-                    }
-                },
+                onItemChange = onItemChange,
+                onSaveItem = onAdicionarItem,
                 onDismiss = onResetSelection,
                 onRemoverItem = onRemoverItem,
             )
+        }
+
+        LaunchedEffect(key1 = connectionMessage) {
+            launch {
+
+                if (connectionMessage != null) {
+                    snackbarHostState.showSnackbar(message = connectionMessage)
+                }
+            }
         }
 
         LazyColumn(
@@ -122,10 +164,10 @@ fun SetupScreenPreview() {
             uiState = SetupUiState(),
             onSelecionarItem = { _, _ -> },
             selectedItem = null,
-            onRemoverItem = { },
-            onAddDespesa = { },
-            onConfirmClick = { },
-            isItemValid = { true },
+            onRemoverItem = {},
+            onConfirmClick = {},
+            onItemChange = {},
+            onAdicionarItem = {},
         )
     }
 }

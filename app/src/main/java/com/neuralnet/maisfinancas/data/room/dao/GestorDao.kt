@@ -1,8 +1,10 @@
 package com.neuralnet.maisfinancas.data.room.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import com.neuralnet.maisfinancas.data.room.model.GestorEntity
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -18,5 +20,8 @@ interface GestorDao {
 
     @Query("SELECT * from gestor")
     fun getGestor(): Flow<List<GestorEntity>>
+
+    @Query("DELETE FROM gestor")
+    suspend fun sair()
 
 }

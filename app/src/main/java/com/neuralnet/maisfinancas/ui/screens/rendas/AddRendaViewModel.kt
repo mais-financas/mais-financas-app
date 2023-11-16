@@ -30,7 +30,7 @@ class AddRendaViewModel @Inject constructor(
     val uiState: StateFlow<AddRendaUiState> = _uiState.asStateFlow()
 
     private val _connectionState: MutableStateFlow<ConnectionState> =
-        MutableStateFlow(ConnectionState.Connected)
+        MutableStateFlow(ConnectionState.Idle)
     val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
     private val gestor: Flow<GestorEntity?> = gestorRepository.getGestor()
@@ -46,7 +46,9 @@ class AddRendaViewModel @Inject constructor(
         )
 
         try {
+            _connectionState.value = ConnectionState.Loading
             rendaRepository.insertRenda(renda, gestorId)
+            _connectionState.value = ConnectionState.Success
         } catch (e: SocketTimeoutException) {
             _connectionState.value = ConnectionState.ServerUnavailable
         } catch (e: IOException) {
