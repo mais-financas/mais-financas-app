@@ -133,8 +133,12 @@
     <string name="resgatar">Resgatar</string>
     <string name="guardar">Guardar</string>
     <string name="total_guardado">Total guardado: %1$s</string>
+    <string name="chatbot">Chatbot</string>
     <plurals name="recorrencia_despesa">
         <item quantity="one">Ocorre de forma %1$s</item>
         <item quantity="other">Ocorre a cada %d %1$s</item>
     </plurals>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="entenda_seus_objetivos">Entenda seus objetivos</string>
 </resources>

@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.screens.Screen
+import com.neuralnet.maisfinancas.ui.screens.chatbot.ChatBotScreen
 import com.neuralnet.maisfinancas.ui.screens.estatisticas.EstatisticaScreen
 import com.neuralnet.maisfinancas.ui.screens.estatisticas.EstatisticaViewModel
 import com.neuralnet.maisfinancas.ui.screens.home.HomeScreen
@@ -106,7 +107,7 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                         route = HomeDestinations.DetalhesObjetivo.routeWithArgs(objetivoId)
                     )
                 },
-                onInfoClick = { },
+                onInfoClick = { navController.navigate(route = HomeDestinations.Chatbot.route) },
             )
         }
 
@@ -129,6 +130,12 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                 viewModel = viewModel,
                 onNavigateUp = { navController.navigateUp() },
                 navigateBack = { navController.navigateUp() },
+            )
+        }
+
+        composable(route = HomeDestinations.Chatbot.route) {
+            ChatBotScreen(
+                onNavigateUp = { navController.navigateUp() }
             )
         }
 
@@ -155,6 +162,7 @@ sealed class HomeDestinations(val route: String, @StringRes val title: Int) {
     }
 
     data object AddObjetivo : HomeDestinations("add_objetivo", R.string.adicionar_objetivo)
+    data object Chatbot : HomeDestinations("chatbot", R.string.chatbot)
     data object Perfil : HomeDestinations("profile", R.string.perfil)
     data object AuthGraph : HomeDestinations("auth_grpah", R.string.auth)
 }

@@ -42,6 +42,7 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -68,6 +69,9 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    implementation("androidx.compose.ui:ui-viewbinding:1.5.4")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
