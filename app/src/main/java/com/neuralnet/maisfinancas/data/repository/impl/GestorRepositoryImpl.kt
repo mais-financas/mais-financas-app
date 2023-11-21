@@ -7,6 +7,7 @@ import com.neuralnet.maisfinancas.data.network.model.auth.toEntity
 import com.neuralnet.maisfinancas.data.network.model.auth.toModel
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
+import com.neuralnet.maisfinancas.data.repository.ObjetivoRepository
 import com.neuralnet.maisfinancas.data.repository.RendaRepository
 import com.neuralnet.maisfinancas.data.room.dao.GestorDao
 import com.neuralnet.maisfinancas.data.room.model.GestorEntity
@@ -26,6 +27,7 @@ class GestorRepositoryImpl(
     private val gestorDao: GestorDao,
     private val despesaRepository: DespesaRepository,
     private val rendaRepository: RendaRepository,
+    private val objetivoRepository: ObjetivoRepository,
     private val maisFinancasApi: MaisFinancasApi,
 ) : GestorRepository {
 
@@ -77,6 +79,7 @@ class GestorRepositoryImpl(
     override suspend fun sincronizar(gestorId: UUID) {
         despesaRepository.fetchDespesas(gestorId)
         rendaRepository.fetchRendas(gestorId)
+        objetivoRepository.fetchObjetivos(gestorId)
     }
 
     override suspend fun sair() = gestorDao.sair()

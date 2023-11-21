@@ -47,7 +47,7 @@ sealed class BottomNavItem(
     data object Objetivos :
         BottomNavItem(
             title = R.string.objetivos,
-            route = HomeDestinations.FinancialGoals.route,
+            route = HomeDestinations.Objetivos.route,
             selectedIcon = Icons.Filled.Savings,
             unselectedIcon = Icons.Outlined.Savings,
         )

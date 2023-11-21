@@ -7,14 +7,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.screens.Screen
 import com.neuralnet.maisfinancas.ui.screens.estatisticas.EstatisticaScreen
 import com.neuralnet.maisfinancas.ui.screens.estatisticas.EstatisticaViewModel
 import com.neuralnet.maisfinancas.ui.screens.home.HomeScreen
 import com.neuralnet.maisfinancas.ui.screens.home.HomeViewModel
+import com.neuralnet.maisfinancas.ui.screens.objetivos.ObjetivosScreen
+import com.neuralnet.maisfinancas.ui.screens.objetivos.ObjetivosViewModel
+import com.neuralnet.maisfinancas.ui.screens.objetivos.adicionar.AddObjetivoScreen
+import com.neuralnet.maisfinancas.ui.screens.objetivos.adicionar.AddObjetivoViewModel
+import com.neuralnet.maisfinancas.ui.screens.objetivos.detalhes.DetalhesObjetivoScreen
+import com.neuralnet.maisfinancas.ui.screens.objetivos.detalhes.DetalhesObjetivoViewModel
 import com.neuralnet.maisfinancas.ui.screens.rendas.AddRendaScreen
 import com.neuralnet.maisfinancas.ui.screens.rendas.AddRendaViewModel
 import com.neuralnet.maisfinancas.ui.screens.saldo.SaldoScreen
@@ -74,10 +82,54 @@ fun HomeNavGraph(navController: NavHostController, modifier: Modifier = Modifier
             EstatisticaScreen(viewModel = viewModel)
         }
 
-        composable(route = HomeDestinations.FinancialGoals.route) {
-            Screen(
-                route = HomeDestinations.FinancialGoals.route,
-                onClick = { navController.navigate(HomeDestinations.Home.route) })
+        composable(route = HomeDestinations.Objetivos.route) {
+            val viewModel = hiltViewModel<ObjetivosViewModel>()
+            ObjetivosScreen(
+                viewModel = viewModel,
+                onAddClick = { navController.navigate(HomeDestinations.AddObjetivo.route) },
+                onItemClick = { objetivoId ->
+                    navController.navigate(
+                        route = HomeDestinations.DetalhesObjetivo.routeWithArgs(objetivoId)
+                    )
+                },
+                onInfoClick = { },
+            )
+        }
+
+        composable(route = HomeDestinations.Objetivos.route) {
+            val viewModel = hiltViewModel<ObjetivosViewModel>()
+            ObjetivosScreen(
+                viewModel = viewModel,
+                onAddClick = { navController.navigate(HomeDestinations.AddObjetivo.route) },
+                onItemClick = { objetivoId ->
+                    navController.navigate(
+                        route = HomeDestinations.DetalhesObjetivo.routeWithArgs(objetivoId)
+                    )
+                },
+                onInfoClick = { },
+            )
+        }
+
+        composable(
+            route = HomeDestinations.DetalhesObjetivo.route,
+            arguments = listOf(
+                navArgument("objetivo_id") { type = NavType.IntType }
+            )
+        ) {
+            val viewModel = hiltViewModel<DetalhesObjetivoViewModel>()
+            DetalhesObjetivoScreen(
+                viewModel = viewModel,
+                onNavigateUp = { navController.navigateUp() }
+            )
+        }
+
+        composable(route = HomeDestinations.AddObjetivo.route) {
+            val viewModel = hiltViewModel<AddObjetivoViewModel>()
+            AddObjetivoScreen(
+                viewModel = viewModel,
+                onNavigateUp = { navController.navigateUp() },
+                navigateBack = { navController.navigateUp() },
+            )
         }
 
         composable(route = HomeDestinations.Perfil.route) {
@@ -96,7 +148,13 @@ sealed class HomeDestinations(val route: String, @StringRes val title: Int) {
     data object AddRenda : HomeDestinations("add_renda", R.string.adicionar_renda)
     data object Saldo : HomeDestinations("saldo", R.string.saldo_da_conta)
     data object Estatisticas : HomeDestinations("estatisticas", R.string.estatisticas)
-    data object FinancialGoals : HomeDestinations("objetivos", R.string.objetivos)
+    data object Objetivos : HomeDestinations("objetivos", R.string.objetivos)
+    data object DetalhesObjetivo :
+        HomeDestinations("detalhes_objetivo/{objetivo_id}", R.string.detalhes_objetivo) {
+        fun routeWithArgs(objetivoId: Int) = "detalhes_objetivo/$objetivoId"
+    }
+
+    data object AddObjetivo : HomeDestinations("add_objetivo", R.string.adicionar_objetivo)
     data object Perfil : HomeDestinations("profile", R.string.perfil)
     data object AuthGraph : HomeDestinations("auth_grpah", R.string.auth)
 }

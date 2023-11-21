@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
+import com.neuralnet.maisfinancas.data.repository.ObjetivoRepository
 import com.neuralnet.maisfinancas.data.repository.SugestoesRepository
 import com.neuralnet.maisfinancas.data.room.model.GestorEntity
 import com.neuralnet.maisfinancas.model.despesa.Categoria
@@ -27,6 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SetupViewModel @Inject constructor(
     private val despesaRepository: DespesaRepository,
+    private val objetivoRepository: ObjetivoRepository,
     sugestoesRepository: SugestoesRepository,
     gestorRepository: GestorRepository,
 ) : ViewModel() {
@@ -110,23 +112,26 @@ class SetupViewModel @Inject constructor(
         resetSelection()
     }
 
-    fun inserirDespesas() {
-        viewModelScope.launch {
-            val gestorId = checkNotNull(gestor.first()?.id)
+    fun inserirDespesas() = viewModelScope.launch {
+        val gestorId = checkNotNull(gestor.first()?.id)
 
-            val despesas = uiState.value.mapDespesasSelecionadasToList(gestorId)
-            try {
-                _connectionState.value = ConnectionState.Loading
-                despesaRepository.registrarDespesas(despesas)
-                _connectionState.value = ConnectionState.Success
-            } catch (e: SocketTimeoutException) {
-                _connectionState.value = ConnectionState.ServerUnavailable
-            } catch (e: IOException) {
-                _connectionState.value = ConnectionState.NoInternet
-            } catch (e: Exception) {
-                _connectionState.value = ConnectionState.Error
-            }
+        val despesas = uiState.value.mapDespesasSelecionadasToList(gestorId)
+        try {
+            _connectionState.value = ConnectionState.Loading
+            despesaRepository.registrarDespesas(despesas)
+            _connectionState.value = ConnectionState.Success
+        } catch (e: SocketTimeoutException) {
+            _connectionState.value = ConnectionState.ServerUnavailable
+        } catch (e: IOException) {
+            _connectionState.value = ConnectionState.NoInternet
+        } catch (e: Exception) {
+            _connectionState.value = ConnectionState.Error
         }
+    }
+
+    fun inserirObjetivos() = viewModelScope.launch {
+        val gestorId = checkNotNull(gestor.first()?.id)
+        objetivoRepository.inserirObjetivos(gestorId)
     }
 
 }

@@ -7,6 +7,7 @@ import com.neuralnet.maisfinancas.data.room.dao.CategoriaDao
 import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
 import com.neuralnet.maisfinancas.data.room.dao.EstatisticaDao
 import com.neuralnet.maisfinancas.data.room.dao.GestorDao
+import com.neuralnet.maisfinancas.data.room.dao.ObjetivoDao
 import com.neuralnet.maisfinancas.data.room.dao.RendaDao
 import dagger.Module
 import dagger.Provides
@@ -51,5 +52,10 @@ object DatabaseModule {
     @Singleton
     fun provideRendaDao(database: MaisFinancasDatabase): RendaDao =
         database.rendaDao()
+
+    @Provides
+    @Singleton
+    fun provideObjetivoDao(database: MaisFinancasDatabase): ObjetivoDao =
+        database.objetivoDao()
 
 }

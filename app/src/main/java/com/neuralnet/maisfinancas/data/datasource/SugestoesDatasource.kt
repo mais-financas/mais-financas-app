@@ -37,7 +37,9 @@ import androidx.compose.material.icons.outlined.Wifi
 import com.neuralnet.maisfinancas.model.despesa.Categoria
 import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.model.despesa.Recorrencia
+import com.neuralnet.maisfinancas.model.objetivo.Objetivo
 import com.neuralnet.maisfinancas.ui.screens.setup.ItemDespesa
+import java.math.BigDecimal
 
 object SugestoesDatasource {
 
@@ -158,6 +160,14 @@ object SugestoesDatasource {
         despesasSaude,
         despesasEducacaoo,
         despesasDividas,
+    )
+
+    val objetivos: List<Objetivo> = listOf(
+        Objetivo(descricao = "Reserva de Emergência", valor = BigDecimal.ZERO),
+        Objetivo(descricao = "Plano de Aposentadoria", valor = BigDecimal.ZERO),
+        Objetivo(descricao = "Casa Própria", valor = BigDecimal.ZERO),
+        Objetivo(descricao = "Sonho de Consumo", valor = BigDecimal.ZERO),
+        Objetivo(descricao = "Quitar minhas Dívidas", valor = BigDecimal.ZERO),
     )
 
     val defaultDespesas = mapOf(

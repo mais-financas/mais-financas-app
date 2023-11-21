@@ -11,7 +11,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -62,10 +61,10 @@ fun SaldoDisponivel(
                 text = BigDecimal.valueOf(valorAnim.toDouble()).toReal(),
                 style = MaterialTheme.typography.headlineMedium
             )
-
+            /* Funcionalidade prorrogada
             TextButton(onClick = onClick) {
                 Text(text = stringResource(id = R.string.ver_detalhes))
-            }
+            }*/
         }
     }
 }

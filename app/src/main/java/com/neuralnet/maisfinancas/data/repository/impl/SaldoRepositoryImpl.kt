@@ -2,6 +2,7 @@ package com.neuralnet.maisfinancas.data.repository.impl
 
 import com.neuralnet.maisfinancas.data.repository.SaldoRepository
 import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
+import com.neuralnet.maisfinancas.data.room.dao.ObjetivoDao
 import com.neuralnet.maisfinancas.data.room.dao.RendaDao
 import com.neuralnet.maisfinancas.util.toMonthQuery
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +12,8 @@ import java.util.Calendar
 
 class SaldoRepositoryImpl(
     private val rendaDao: RendaDao,
-    private val despesaDao: DespesaDao
+    private val despesaDao: DespesaDao,
+    private val objetivoDao: ObjetivoDao,
 ) : SaldoRepository {
 
     override fun getSaldoMensal(calendar: Calendar): Flow<BigDecimal> {
@@ -25,8 +27,10 @@ class SaldoRepositoryImpl(
     override fun getSaldoTotal(): Flow<BigDecimal> {
         val rendaTotal = rendaDao.getRendaTotal()
         val gastoTotal = despesaDao.getGastoTotal()
-        return rendaTotal.combine(gastoTotal) { renda, gastos ->
-            renda.minus(gastos)
+        val reservaObjetivos = objetivoDao.getReservasTotais()
+
+        return combine(rendaTotal, gastoTotal, reservaObjetivos) { renda, gastos, reserva ->
+            renda - gastos - reserva
         }
     }
 }

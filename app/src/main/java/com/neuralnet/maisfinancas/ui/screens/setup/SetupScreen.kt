@@ -68,6 +68,7 @@ fun SetupScreen(viewModel: SetupViewModel, navigateToHome: () -> Unit) {
                 onRemoverItem = viewModel::removerItem,
                 onConfirmClick = {
                     viewModel.inserirDespesas()
+                    viewModel.inserirObjetivos()
                 },
                 onResetSelection = viewModel::resetSelection,
                 connectionMessage = connectionMessage,

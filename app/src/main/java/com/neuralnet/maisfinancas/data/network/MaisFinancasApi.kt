@@ -7,11 +7,14 @@ import com.neuralnet.maisfinancas.data.network.model.despesa.DespesaResponse
 import com.neuralnet.maisfinancas.data.network.model.despesa.RegistroResponse
 import com.neuralnet.maisfinancas.data.network.model.despesa.input.DespesaInputNetwork
 import com.neuralnet.maisfinancas.data.network.model.despesa.input.RegistroInputNetwork
+import com.neuralnet.maisfinancas.data.network.model.objetivo.ObjetivoInputNetwork
+import com.neuralnet.maisfinancas.data.network.model.objetivo.ObjetivoResponse
 import com.neuralnet.maisfinancas.data.network.model.renda.RendaInputNetwork
 import com.neuralnet.maisfinancas.data.network.model.renda.RendaResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -47,5 +50,20 @@ interface MaisFinancasApi {
         @Path("despesaId") despesaId: Long,
         @Body registroInputNetwork: RegistroInputNetwork
     ): RegistroResponse
+
+    @POST("objetivos/setup")
+    suspend fun cadastrarObjetivos(@Body objetivos: List<ObjetivoInputNetwork>): List<ObjetivoResponse>
+
+    @POST("objetivos")
+    suspend fun adicionarObjetivo(@Body objetivoInputNetwork: ObjetivoInputNetwork): ObjetivoResponse
+
+    @GET("objetivos")
+    suspend fun getObjetivos(@Query("gestorId") gestorId: UUID): List<ObjetivoResponse>
+
+    @PATCH("objetivos/{objetivoid}")
+    suspend fun atualizarObjetivo(
+        @Path("objetivoid") objetivoid: Int,
+        @Body objetivo: ObjetivoInputNetwork
+    ): ObjetivoResponse
 
 }
