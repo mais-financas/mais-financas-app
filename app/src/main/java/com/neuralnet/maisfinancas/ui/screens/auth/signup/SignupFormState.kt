@@ -12,7 +12,7 @@ data class SignupFormState(
     val senhaErrorMessage: FieldValidationError? = null,
     val confirmarSenha: String = "",
     val confirmarSenhaErrorMessage: FieldValidationError? = null,
-    val agreeWithTermsAndConditions: Boolean = false,
+    val agreeWithTermsAndConditions: Boolean = true,
     val agreeWithTermsErrorMessage: FieldValidationError? = null,
 ) {
     fun isFormValid(): Boolean = nomeErrorMessage == null &&

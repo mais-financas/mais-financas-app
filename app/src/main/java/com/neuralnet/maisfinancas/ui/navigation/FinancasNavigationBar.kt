@@ -26,8 +26,6 @@ val allowedRoutes = listOf(
     *screens.map { it.route }.toTypedArray(),
     DespesasDestinations.DetalhesDespesa.route,
     DespesasDestinations.Overview.route,
-    DespesasDestinations.AddDespesa.route,
-    HomeDestinations.AddRenda.route,
     HomeDestinations.Saldo.route,
 )
 

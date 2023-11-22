@@ -57,9 +57,9 @@ fun MovimentacaoRecenteItem(item: MovimentacaoItem, modifier: Modifier = Modifie
 
     Card(modifier = modifier.fillMaxWidth()) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp)
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp)
         ) {
             Box(
                 modifier = Modifier

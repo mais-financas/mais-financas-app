@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -23,14 +24,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.components.core.NumberTextField
-import com.neuralnet.maisfinancas.ui.components.despesa.ValorDescricaoTextField
+import com.neuralnet.maisfinancas.ui.components.despesa.DescricaoTextField
 import com.neuralnet.maisfinancas.ui.navigation.MaisFinancasTopAppBar
 import com.neuralnet.maisfinancas.ui.navigation.graphs.HomeDestinations
 import com.neuralnet.maisfinancas.ui.screens.ConnectionState
@@ -58,11 +62,13 @@ fun AddRendaScreen(
                 viewModel.salvarRenda(calendarState.selectedDateMillis)
             }
         }
+
         is ConnectionState.Success -> {
             LaunchedEffect(key1 = Unit) {
                 navigateToHome()
             }
         }
+
         else -> {
             AddRendaScreen(
                 uiState = uiState.value,
@@ -92,6 +98,8 @@ fun AddRendaScreen(
     connectionMessage: String? = null,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         topBar = {
             MaisFinancasTopAppBar(
@@ -122,15 +130,13 @@ fun AddRendaScreen(
         Column(
             modifier = modifier
                 .padding(paddingValues)
-                .padding(top = 8.dp)
-                .verticalScroll(
-                    state = rememberScrollState()
-                ),
+                .padding(vertical = 8.dp)
+                .verticalScroll(state = rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
 
-            ValorDescricaoTextField(
+            DescricaoTextField(
                 value = uiState.descricao,
                 onValueChange = {
                     onUiStateChange(uiState.copy(descricao = it, descricaoErrorField = null))
@@ -139,7 +145,11 @@ fun AddRendaScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Sentences
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Next) }
                 ),
                 errorMessage = uiState.descricaoErrorField,
             )

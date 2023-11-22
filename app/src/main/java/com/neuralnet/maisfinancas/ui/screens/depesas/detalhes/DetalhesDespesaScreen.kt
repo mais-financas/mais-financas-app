@@ -52,7 +52,7 @@ fun DetalhesDespesaScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val registroUiState = viewModel.registroUiState.collectAsStateWithLifecycle()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isSheetOpen by rememberSaveable {
         mutableStateOf(false)
     }

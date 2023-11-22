@@ -17,15 +17,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.neuralnet.maisfinancas.R
-import com.neuralnet.maisfinancas.model.despesa.Frequencia
 import com.neuralnet.maisfinancas.ui.theme.MaisFinancasTheme
+import com.neuralnet.maisfinancas.util.FieldValidationError
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecorrenciaDespesaDropdown(
-    frequencia: Frequencia,
-    onFrequenciaChanged: (Frequencia) -> Unit,
+fun CategoriaDropdown(
+    options: List<String>,
+    selected: String,
+    onSelectedOptionText: (String) -> Unit,
     modifier: Modifier = Modifier,
+    errorMessage: FieldValidationError? = null,
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
@@ -35,43 +37,48 @@ fun RecorrenciaDespesaDropdown(
         modifier = modifier,
     ) {
         TextField(
-            value = stringResource(id = frequencia.descricao),
+            value = selected,
             onValueChange = { },
             readOnly = true,
-            label = { Text(stringResource(id = R.string.recorrencia)) },
+            label = { Text(stringResource(id = R.string.categoria)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            isError = errorMessage != null,
+            supportingText = errorMessage?.let {
+                { Text(text = stringResource(id = it.message)) }
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor()
+                .menuAnchor(),
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.exposedDropdownSize()
+            modifier = Modifier.exposedDropdownSize(),
         ) {
-            Frequencia.values().forEach {
+            options.forEach { categoria ->
                 DropdownMenuItem(
                     onClick = {
-                        onFrequenciaChanged(Frequencia.from(it.descricao))
+                        onSelectedOptionText(categoria)
                         expanded = false
                     },
-                    text = { Text(text = stringResource(id = it.descricao)) },
+                    text = { Text(text = categoria) },
                 )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 200)
 @Composable
-private fun RecorrenciaDespesaPreview() {
+private fun CategoriaDropdownPreview() {
     MaisFinancasTheme {
-        var frequencia by remember { mutableStateOf(Frequencia.NENHUMA) }
+        var selected by remember { mutableStateOf("") }
 
-        RecorrenciaDespesaDropdown(
-            frequencia = frequencia,
-            onFrequenciaChanged = { frequencia = it }
+        CategoriaDropdown(
+            options = listOf("Essenciais", "Saúde", "Entretenimento"),
+            selected = selected,
+            onSelectedOptionText = { selected = it }
         )
     }
 }

@@ -95,8 +95,8 @@ fun HomeScreen(
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier.padding(paddingValues),
-            contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(all = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             item {
                 SaldoTotal(
@@ -110,7 +110,9 @@ fun HomeScreen(
                     valor = uiState.saldoMensal,
                     calendar = Calendar.getInstance(),
                     onClick = onCardClick,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .fillMaxWidth()
                 )
             }
 
@@ -118,6 +120,7 @@ fun HomeScreen(
                 Text(
                     text = stringResource(id = R.string.movimentacoes_recentes),
                     style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(vertical = 4.dp)
                 )
             }
 

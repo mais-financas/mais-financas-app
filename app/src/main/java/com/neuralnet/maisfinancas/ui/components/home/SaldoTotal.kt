@@ -6,19 +6,14 @@ import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,37 +37,25 @@ fun SaldoTotal(
             label = "Animação do saldo total disponível"
         )
 
-        Row(
-            modifier = Modifier.padding(all = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.saldo_da_conta),
-                    style = MaterialTheme.typography.headlineSmall,
-                )
+            Text(
+                text = stringResource(id = R.string.saldo_da_conta),
+                style = MaterialTheme.typography.titleLarge,
+            )
 
-                Text(
-                    text = BigDecimal.valueOf(valorAnim.toDouble()).toReal(),
-                    style = MaterialTheme.typography.headlineMedium,
-                )
-            }
+            Text(
+                text = BigDecimal.valueOf(valorAnim.toDouble()).toReal(),
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(top = 4.dp)
+            )
 
-            Surface(
-                shape = MaterialTheme.shapes.medium,
-                onClick = onAddClick,
-                modifier = Modifier.size(40.dp),
-                color = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.add),
-                    tint = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier.padding(8.dp)
-                )
+            TextButton(onClick = onAddClick) {
+                Text(text = stringResource(id = R.string.adicionar_renda))
             }
         }
     }

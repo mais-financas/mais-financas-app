@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -24,7 +24,6 @@ import com.neuralnet.maisfinancas.util.toReal
 import java.math.BigDecimal
 import java.util.Calendar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SaldoDisponivel(
     valor: BigDecimal,
@@ -32,15 +31,10 @@ fun SaldoDisponivel(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(modifier = modifier, onClick = onClick) {
+    Card(modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(
-                top = 16.dp,
-                start = 16.dp,
-                end = 16.dp,
-                bottom = 8.dp
-            )
+            modifier = Modifier.padding(all = 16.dp),
         ) {
             val valorAnim by animateValueAsState(
                 targetValue = valor.toFloat(),
@@ -54,17 +48,19 @@ fun SaldoDisponivel(
                     id = R.string.saldo_mensal_disponivel,
                     calendar.displayMonth(),
                 ),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleLarge,
             )
 
             Text(
                 text = BigDecimal.valueOf(valorAnim.toDouble()).toReal(),
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineSmall,
             )
             /* Funcionalidade prorrogada
+
+
             TextButton(onClick = onClick) {
                 Text(text = stringResource(id = R.string.ver_detalhes))
-            }*/
+            } */
         }
     }
 }

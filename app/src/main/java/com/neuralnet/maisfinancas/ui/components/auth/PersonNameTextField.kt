@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.components.auth
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -9,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import com.neuralnet.maisfinancas.R
@@ -22,6 +24,7 @@ fun PersonNameTextField(
     modifier: Modifier = Modifier,
     errorMessage: FieldValidationError? = null,
     required: Boolean = false,
+    keyboardActions: KeyboardActions = KeyboardActions(),
 ) {
     val isError = errorMessage != null
 
@@ -36,9 +39,7 @@ fun PersonNameTextField(
             )
         },
         modifier = modifier,
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Words,
-        ),
+        singleLine = true,
         isError = isError,
         supportingText = if (required) {
             { Text(text = stringResource(id = R.string.required)) }
@@ -47,6 +48,11 @@ fun PersonNameTextField(
                 { Text(text = stringResource(id = error.message)) }
             }
         },
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Words,
+            imeAction = ImeAction.Next,
+        ),
+        keyboardActions = keyboardActions,
     )
 }
 

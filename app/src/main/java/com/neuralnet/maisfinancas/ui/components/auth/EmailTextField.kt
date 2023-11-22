@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.components.auth
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.neuralnet.maisfinancas.R
@@ -22,6 +24,7 @@ fun EmailTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     errorMessage: FieldValidationError? = null,
+    keyboardActions: KeyboardActions = KeyboardActions(),
 ) {
     val isError = errorMessage != null
 
@@ -36,9 +39,6 @@ fun EmailTextField(
             )
         },
         modifier = modifier,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email
-        ),
         isError = isError,
         trailingIcon = {
             if (isError) {
@@ -48,9 +48,15 @@ fun EmailTextField(
                 )
             }
         },
+        singleLine = true,
         supportingText = errorMessage?.let { error ->
             { Text(text = stringResource(id = error.message)) }
-        }
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next,
+        ),
+        keyboardActions = keyboardActions,
     )
 }
 

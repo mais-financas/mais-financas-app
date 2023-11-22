@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.components.auth
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -16,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -31,6 +33,8 @@ fun PasswordTextField(
     modifier: Modifier = Modifier,
     errorMessage: FieldValidationError? = null,
     confirmPassword: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+    keyboardActions: KeyboardActions = KeyboardActions(),
 ) {
     var passwordVisibility by remember { mutableStateOf(false) }
 
@@ -51,9 +55,6 @@ fun PasswordTextField(
         label = { Text(text = label) },
         leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
         modifier = modifier,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password
-        ),
         visualTransformation = if (passwordVisibility) {
             VisualTransformation.None
         } else {
@@ -74,10 +75,15 @@ fun PasswordTextField(
                 }
             }
         },
+        singleLine = true,
         isError = isError,
         supportingText = errorMessage?.let { error ->
             { Text(text = stringResource(id = error.message)) }
-        }
+        },
+        keyboardOptions = keyboardOptions.copy(
+            keyboardType = KeyboardType.Password
+        ),
+        keyboardActions = keyboardActions,
     )
 }
 
