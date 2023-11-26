@@ -32,10 +32,9 @@ fun ObjetivoTextField(
 
     TextField(
         value = valor,
-        onValueChange = {
-            val valorNumber = it.toBigDecimalOrNull() ?: BigDecimal.ZERO
-            isError = valorNumber > saldo || it.toDoubleOrNull() == null
-            onValueChange(it)
+        onValueChange = { value ->
+            value.toBigDecimalOrNull()?.let { isError = it > saldo }
+            onValueChange(value)
         },
         singleLine = true,
         prefix = { Text(stringResource(R.string.moeda)) },
@@ -48,7 +47,7 @@ fun ObjetivoTextField(
             if (errorMessage == FieldValidationError.NUMERO_INVALIDO) {
                 Text(text = stringResource(id = errorMessage.message))
             } else {
-                    Text(text = stringResource(R.string.disponivel, saldo.toReal()))
+                Text(text = stringResource(R.string.disponivel, saldo.toReal()))
             }
         }
     )
@@ -57,13 +56,13 @@ fun ObjetivoTextField(
 @Preview
 @Composable
 private fun ObjetivoTextFieldPreview() {
-    var valor by remember{ mutableStateOf("") }
+    var valor by remember { mutableStateOf("") }
 
     MaisFinancasTheme {
         ObjetivoTextField(
             valor = valor,
             saldo = BigDecimal.TEN,
-            onValueChange = { valor = it}
+            onValueChange = { valor = it }
         )
     }
 }
