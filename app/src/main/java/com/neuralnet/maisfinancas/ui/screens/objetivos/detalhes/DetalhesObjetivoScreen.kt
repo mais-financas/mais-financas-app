@@ -49,6 +49,8 @@ fun DetalhesObjetivoScreen(
     val detalhesObjetivoUiStateState = viewModel.detalhesObjetivoState.collectAsStateWithLifecycle()
     val updateObjetivoUiState = viewModel.updateObjetivoUiState.collectAsStateWithLifecycle()
 
+    val modoAtivo = viewModel.modoAtivo.collectAsStateWithLifecycle()
+
     val connectionState = viewModel.connectionState.collectAsStateWithLifecycle()
     val connectionMessage = connectionState.value.message?.let { stringResource(id = it) }
 
@@ -57,9 +59,9 @@ fun DetalhesObjetivoScreen(
         is ConnectionState.ServerUnavailable -> {
             ServidorIndisponivel(
                 onFinish = {
-                    if (updateObjetivoUiState.value.modoAtivo == ModoAtivo.GUARDAR) {
+                    if (modoAtivo.value == ModoAtivo.GUARDAR) {
                         viewModel.guardar()
-                    } else if (updateObjetivoUiState.value.modoAtivo == ModoAtivo.RESGATAR) {
+                    } else if (modoAtivo.value == ModoAtivo.RESGATAR) {
                         viewModel.resgatar()
                     }
                 }
@@ -70,6 +72,8 @@ fun DetalhesObjetivoScreen(
             DetalhesObjetivoScreen(
                 detalhesObjetivoUiState = detalhesObjetivoUiStateState.value,
                 updateObjetivoUiState = updateObjetivoUiState.value,
+                modoAtivo = modoAtivo.value,
+                onAlternarModoAtivo = viewModel::alternarModoAtivo,
                 onUiStateChange = viewModel::updateObjetivoState,
                 onNavigateUp = onNavigateUp,
                 onResgatarClick = {
@@ -83,6 +87,7 @@ fun DetalhesObjetivoScreen(
                     }
                 },
                 connectionMessage = connectionMessage,
+                onResetState = viewModel::resetObjetivoState,
             )
         }
     }
@@ -92,11 +97,14 @@ fun DetalhesObjetivoScreen(
 fun DetalhesObjetivoScreen(
     detalhesObjetivoUiState: DetalhesObjetivoUiState,
     updateObjetivoUiState: UpdateObjetivoUiState,
+    modoAtivo: ModoAtivo,
+    onAlternarModoAtivo: (ModoAtivo) -> Unit,
     onUiStateChange: (UpdateObjetivoUiState) -> Unit,
     onNavigateUp: () -> Unit,
     onResgatarClick: () -> Unit,
     onGuardarClick: () -> Unit,
     connectionMessage: String? = null,
+    onResetState: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -161,10 +169,10 @@ fun DetalhesObjetivoScreen(
                     .padding(vertical = 24.dp)
             )
 
-            if (updateObjetivoUiState.modoAtivo != ModoAtivo.INVISIBLE) {
+            if (modoAtivo != ModoAtivo.INVISIBLE) {
                 AlertDialog(
                     onDismissRequest = {
-                        onUiStateChange(updateObjetivoUiState.copy(modoAtivo = ModoAtivo.INVISIBLE))
+                        onAlternarModoAtivo(ModoAtivo.INVISIBLE)
                     },
                     title = {
                         Text(
@@ -185,20 +193,14 @@ fun DetalhesObjetivoScreen(
                     },
                     dismissButton = {
                         TextButton(
-                            onClick = {
-                                onUiStateChange(
-                                    updateObjetivoUiState.copy(
-                                        modoAtivo = ModoAtivo.INVISIBLE,
-                                        valor = "",
-                                    )
-                                )
-                            }
+                            onClick = onResetState
+
                         ) {
                             Text(text = stringResource(id = R.string.cancelar))
                         }
                     },
                     confirmButton = {
-                        if (updateObjetivoUiState.modoAtivo == ModoAtivo.GUARDAR) {
+                        if (modoAtivo == ModoAtivo.GUARDAR) {
                             TextButton(
                                 onClick = onGuardarClick,
                                 enabled = updateObjetivoUiState.isFormValid(),
@@ -222,7 +224,7 @@ fun DetalhesObjetivoScreen(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(
                     onClick = {
-                        onUiStateChange(updateObjetivoUiState.copy(modoAtivo = ModoAtivo.RESGATAR))
+                        onAlternarModoAtivo(ModoAtivo.RESGATAR)
                     },
                     modifier = Modifier
                         .weight(1f)
@@ -232,9 +234,7 @@ fun DetalhesObjetivoScreen(
                 }
 
                 Button(
-                    onClick = {
-                        onUiStateChange(updateObjetivoUiState.copy(modoAtivo = ModoAtivo.GUARDAR))
-                    },
+                    onClick = { onAlternarModoAtivo(ModoAtivo.GUARDAR) },
                     modifier = Modifier
                         .weight(1f)
                         .padding(bottom = 16.dp)
@@ -253,10 +253,13 @@ private fun DetalhesObjetivoScreenPreview() {
         DetalhesObjetivoScreen(
             detalhesObjetivoUiState = DetalhesObjetivoUiState(descricao = "Casa própria"),
             updateObjetivoUiState = UpdateObjetivoUiState(),
+            modoAtivo = ModoAtivo.INVISIBLE,
+            onAlternarModoAtivo = {},
             onUiStateChange = {},
             onNavigateUp = {},
             onResgatarClick = {},
             onGuardarClick = {},
+            onResetState = {},
         )
     }
 }

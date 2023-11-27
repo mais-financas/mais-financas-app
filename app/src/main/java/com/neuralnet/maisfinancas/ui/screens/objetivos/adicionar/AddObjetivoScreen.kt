@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material3.Button
@@ -121,9 +124,10 @@ fun AddObjetivoScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(8.dp)
+                .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.weight(.25f))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Surface(
                 shape = CircleShape,
@@ -139,7 +143,7 @@ fun AddObjetivoScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(.2f))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Text(
                 text = stringResource(R.string.nome_objetivo),
@@ -178,7 +182,7 @@ fun AddObjetivoScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.weight(.55f))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Button(
                 onClick = onSaveClick,

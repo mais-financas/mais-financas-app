@@ -44,6 +44,22 @@ class DetalhesObjetivoViewModel @Inject constructor(
     private val saldoTotal = saldoRepository.getSaldoTotal()
     private val detalhesObjetivo = objetivoRepository.findById(objetivoId)
 
+    private val _modoAtivo: MutableStateFlow<ModoAtivo> = MutableStateFlow(ModoAtivo.INVISIBLE)
+    val modoAtivo: StateFlow<ModoAtivo> = _modoAtivo.asStateFlow()
+
+    fun alternarModoAtivo(modoAtivo: ModoAtivo) {
+        _modoAtivo.update { modoAtivo }
+        viewModelScope.launch {
+            val saldo = if (modoAtivo == ModoAtivo.RESGATAR) {
+                detalhesObjetivo.first().valor
+            } else {
+                saldoTotal.first()
+            }
+
+            _updateObjetivoUiState.update { it.copy(saldo = saldo) }
+        }
+    }
+
     val detalhesObjetivoState: StateFlow<DetalhesObjetivoUiState> = detalhesObjetivo
         .combine(saldoTotal) { objetivo, saldo ->
             DetalhesObjetivoUiState(
@@ -58,23 +74,16 @@ class DetalhesObjetivoViewModel @Inject constructor(
             initialValue = DetalhesObjetivoUiState()
         )
 
-    private val _updateObjetivoUiState= MutableStateFlow(UpdateObjetivoUiState())
+    private val _updateObjetivoUiState = MutableStateFlow(UpdateObjetivoUiState())
     val updateObjetivoUiState = _updateObjetivoUiState.asStateFlow()
 
     fun updateObjetivoState(updateObjetivoUiState: UpdateObjetivoUiState) {
-        viewModelScope.launch {
-            val saldo = if (updateObjetivoUiState.modoAtivo == ModoAtivo.RESGATAR) {
-                detalhesObjetivo.first().valor
-            } else {
-                saldoTotal.first()
-            }
-            _updateObjetivoUiState.update { updateObjetivoUiState.copy(saldo = saldo) }
-        }
+        _updateObjetivoUiState.update { updateObjetivoUiState }
     }
 
     fun resgatar() {
         val valorAtual = detalhesObjetivoState.value.valor
-        val valorResgate  = updateObjetivoUiState.value.valor.toBigDecimal()
+        val valorResgate = updateObjetivoUiState.value.valor.toBigDecimal()
 
         val valorFinal = valorAtual - valorResgate
 
@@ -83,7 +92,7 @@ class DetalhesObjetivoViewModel @Inject constructor(
 
     fun guardar() {
         val valorAtual = detalhesObjetivoState.value.valor
-        val valorParaGuardar  = updateObjetivoUiState.value.valor.toBigDecimal()
+        val valorParaGuardar = updateObjetivoUiState.value.valor.toBigDecimal()
 
         val valorFinal = valorAtual + valorParaGuardar
 
@@ -94,7 +103,7 @@ class DetalhesObjetivoViewModel @Inject constructor(
         try {
             _connectionState.value = ConnectionState.Loading
             val gestorId = checkNotNull(gestor.first()?.id)
-            val objetivo = with(detalhesObjetivo.first()){
+            val objetivo = with(detalhesObjetivo.first()) {
                 Objetivo(
                     id = id,
                     descricao = descricao,
@@ -109,10 +118,10 @@ class DetalhesObjetivoViewModel @Inject constructor(
             _connectionState.value = ConnectionState.ServerUnavailable
         } catch (e: IOException) {
             _connectionState.value = ConnectionState.NoInternet
-            _updateObjetivoUiState.update { it.copy(modoAtivo = ModoAtivo.INVISIBLE) }
+            _modoAtivo.value = ModoAtivo.INVISIBLE
         } catch (e: Exception) {
             _connectionState.value = ConnectionState.Error
-            _updateObjetivoUiState.update { it.copy(modoAtivo = ModoAtivo.INVISIBLE) }
+            _modoAtivo.value = ModoAtivo.INVISIBLE
         }
     }
 
@@ -125,14 +134,14 @@ class DetalhesObjetivoViewModel @Inject constructor(
         return updateObjetivoUiState.value.isFormValid()
     }
 
-    private fun resetObjetivoState() {
+    fun resetObjetivoState() {
         _updateObjetivoUiState.update { objetivoUiState ->
             objetivoUiState.copy(
                 valor = "",
                 saldo = BigDecimal.ZERO,
-                modoAtivo = ModoAtivo.INVISIBLE,
             )
         }
+        _modoAtivo.value = ModoAtivo.INVISIBLE
     }
 
 }
