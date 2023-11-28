@@ -1,5 +1,6 @@
 package com.neuralnet.maisfinancas.ui.navigation.graphs
 
+import android.content.Intent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -8,6 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.neuralnet.maisfinancas.R
 import com.neuralnet.maisfinancas.ui.screens.depesas.DespesaViewModel
@@ -58,9 +60,15 @@ fun NavGraphBuilder.despesasNavGraph(navController: NavController) {
 
         composable(
             route = DespesasDestinations.DetalhesDespesa.route,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "myapp://detalhes_despesa/{despesa_id}"
+                    action = Intent.ACTION_VIEW
+                }
+            ),
             arguments = listOf(
                 navArgument("despesa_id") { type = NavType.LongType }
-            )
+            ),
         ) {
             val viewModel = hiltViewModel<DetalhesDespesaViewModel>()
             DetalhesDespesaScreen(
