@@ -5,13 +5,15 @@ O Mais Finanças App é um aplicativo de gerenciamento de despesas e auxílio pa
 ## 📋 Funcionalidades
 
 - [x] Registro de Despesas
-- [ ] Acompanhamento de Gastos
+- [x] Acompanhamento de Gastos
+- [x] Controle Financeiro
 - [x] Lembretes e Notificações
-- [ ] Objetivos Financeiros
+- [x] Objetivos Financeiros
 - [ ] Sugestões para balanceamento de gastos
-- [ ] Autenticação e autorização
-- [ ] Caching dos dados
-- [ ] Criptografia dos dados sensíveis
+- [x] Autenticação
+- [ ] Autorização
+- [x] Caching dos dados
+- [x] Criptografia dos dados sensíveis
 
 ## 📱Screenshots
 
