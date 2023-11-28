@@ -36,6 +36,9 @@ interface MaisFinancasApi {
     @POST("despesas")
     suspend fun adicionarDespesa(@Body despesa: DespesaInputNetwork): DespesaResponse
 
+    @PATCH("despesas/{despesaId}/alternar-lembrete")
+    suspend fun alternarLembrete(@Path("despesaId") despesaId: Long): DespesaResponse
+
     @GET("despesas")
     suspend fun getDespesas(@Query("gestorId") gestorId: UUID): List<DespesaResponse>
 

@@ -65,7 +65,11 @@ fun DetalhesDespesaItem(
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(text = stringResource(id = R.string.definir_lembrete), Modifier.weight(1f))
 
-            Switch(checked = definirLembrete, onCheckedChange = onCheckChange)
+            Switch(
+                checked = definirLembrete,
+                onCheckedChange = onCheckChange,
+                enabled = recorrencia.frequencia != Frequencia.NENHUMA
+            )
         }
     }
 }

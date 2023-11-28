@@ -11,7 +11,6 @@ import com.neuralnet.maisfinancas.data.room.dao.DespesaDao
 import com.neuralnet.maisfinancas.data.room.model.CategoriaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaAndCategoria
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.DespesaWithRegistrosAndCategoria
-import com.neuralnet.maisfinancas.data.room.model.despesa.RegistroDespesaEntity
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.RegistroAndDespesa
 import com.neuralnet.maisfinancas.data.room.model.despesa.relationships.mapToModel
 import com.neuralnet.maisfinancas.model.despesa.Categoria
@@ -39,8 +38,6 @@ class DespesaRepositoryImpl(
 
     override suspend fun registrarDespesa(despesaInput: DespesaInput): Long {
         val despesaResponse = maisFinancasApi.adicionarDespesa(despesaInput.toNetwork())
-        println(despesaResponse)
-        println(despesaResponse.toDespesaInput())
         return despesaDao.cadastrarDepesaComRegistro(despesaResponse.toDespesaInput())
     }
 
@@ -61,8 +58,13 @@ class DespesaRepositoryImpl(
         return despesaWithRegistro.map(DespesaWithRegistrosAndCategoria::toDespesaModel)
     }
 
-    override suspend fun updateDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int) =
-        despesaDao.updateDespesa(despesa.toEntity(gestorId, categoriaId))
+    override suspend fun updateDespesa(despesa: Despesa, gestorId: UUID, categoriaId: Int) {
+        try {
+            despesaDao.updateDespesa(despesa.toEntity(gestorId, categoriaId))
+            maisFinancasApi.alternarLembrete(despesa.id)
+        } catch (_: Exception) {
+        }
+    }
 
     override suspend fun inserirRegistro(despesaId: Long, registro: RegistroDespesa) {
         val registroResponse = maisFinancasApi.adicionarRegistro(despesaId, registro.toNetwork())

@@ -77,7 +77,7 @@ class AddDespesaViewModel @Inject constructor(
             val despesa = despesaInput.despesa.copy(id = despesaId)
 
             if (despesa.definirLembrete) {
-                val dataLembrete = definirProximoLembrete(selectedDateInMillis, despesa.recorrencia)
+                val dataLembrete = dataProximoLembrete(selectedDateInMillis, despesa.recorrencia)
                 lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa)
             }
             _connectionState.value = ConnectionState.Success
@@ -105,7 +105,7 @@ class AddDespesaViewModel @Inject constructor(
     }
 }
 
-fun definirProximoLembrete(selectedDateMillis: Long, recorrencia: Recorrencia): Calendar {
+fun dataProximoLembrete(selectedDateMillis: Long, recorrencia: Recorrencia): Calendar {
     val dataAtual = System.currentTimeMillis()
     val calendarDataLembrete = Calendar.getInstance()
     calendarDataLembrete.timeInMillis = selectedDateMillis

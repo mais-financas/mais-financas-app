@@ -6,12 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.neuralnet.maisfinancas.model.despesa.Despesa
-import com.neuralnet.maisfinancas.model.despesa.Recorrencia
-import com.neuralnet.maisfinancas.model.despesa.Frequencia.ANUAL
-import com.neuralnet.maisfinancas.model.despesa.Frequencia.DIARIA
-import com.neuralnet.maisfinancas.model.despesa.Frequencia.MENSAL
-import com.neuralnet.maisfinancas.model.despesa.Frequencia.NENHUMA
-import com.neuralnet.maisfinancas.model.despesa.Frequencia.SEMANAL
 import java.util.Calendar
 
 class LembreteAlarmSchedulerImpl(
@@ -33,12 +27,16 @@ class LembreteAlarmSchedulerImpl(
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC,
-            calendar.timeInMillis,
-            recorrenciaEmMillis(despesa.recorrencia),
-            pendingIntent
-        )
+        if (despesa.definirLembrete) {
+            alarmManager.set(
+                AlarmManager.RTC,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        } else {
+            alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
+        }
     }
 
     override fun cancelarAlarme(despesa: Despesa) {
@@ -52,17 +50,4 @@ class LembreteAlarmSchedulerImpl(
         }
     }
 
-    private fun recorrenciaEmMillis(recorrencia: Recorrencia): Long {
-        val calendar = Calendar.getInstance().apply {clear() }
-
-        when (recorrencia.frequencia) {
-            DIARIA -> calendar.add(Calendar.DAY_OF_YEAR, recorrencia.quantidade)
-            SEMANAL -> calendar.add(Calendar.WEEK_OF_YEAR, recorrencia.quantidade)
-            MENSAL -> calendar.add(Calendar.MONTH, recorrencia.quantidade)
-            ANUAL -> calendar.add(Calendar.YEAR, recorrencia.quantidade)
-            else -> throw Exception("Impossível definir lembrete para $NENHUMA")
-        }
-
-        return calendar.timeInMillis.also { println(it) }
-    }
 }
