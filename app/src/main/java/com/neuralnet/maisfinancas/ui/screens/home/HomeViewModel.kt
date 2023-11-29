@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val gestorId = checkNotNull(gestor.first()?.id)
-//                gestorRepository.sincronizar(gestorId)
+                gestorRepository.sincronizar(gestorId)
             } catch (_: Exception) {
             }
         }

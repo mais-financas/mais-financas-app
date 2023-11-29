@@ -24,7 +24,7 @@ const val BASE_URL = "https://mais-financas-api.onrender.com/api/"
 
 interface MaisFinancasApi {
 
-    @POST("gestores")
+    @POST("auth/registrar")
     suspend fun signup(@Body signupInput: SignupInput): Response<GestorResponse>
 
     @POST("auth/login")
