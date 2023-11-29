@@ -3,14 +3,18 @@ package com.neuralnet.maisfinancas.ui.screens.depesas.detalhes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.neuralnet.maisfinancas.data.alarm.LembreteAlarmScheduler
 import com.neuralnet.maisfinancas.data.repository.DespesaRepository
 import com.neuralnet.maisfinancas.data.repository.GestorRepository
 import com.neuralnet.maisfinancas.data.room.model.GestorEntity
 import com.neuralnet.maisfinancas.model.despesa.Despesa
 import com.neuralnet.maisfinancas.model.despesa.RegistroDespesa
 import com.neuralnet.maisfinancas.ui.screens.ConnectionState
+import com.neuralnet.maisfinancas.ui.screens.depesas.adicionar.dataProximoLembrete
 import com.neuralnet.maisfinancas.util.FieldValidationError
+import com.neuralnet.maisfinancas.util.formattedDate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +36,7 @@ import javax.inject.Inject
 class DetalhesDespesaViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val despesaRepository: DespesaRepository,
+    private val lembreteAlarmScheduler: LembreteAlarmScheduler,
     gestorRepository: GestorRepository,
 ) : ViewModel() {
 
@@ -54,16 +59,25 @@ class DetalhesDespesaViewModel @Inject constructor(
     private val _registroUiState = MutableStateFlow(RegistroUiState())
     val registroUiState: StateFlow<RegistroUiState> = _registroUiState.asStateFlow()
 
-    fun setDefinirLembrete(definirLembrete: Boolean) = viewModelScope.launch {
-        val despesa: Despesa = uiState.value.copy(definirLembrete = definirLembrete).toModel()
-        val categoriaId = despesaRepository.findCategoriaIdByNome(uiState.value.categoria)
-        val gestorId = checkNotNull(gestor.first()?.id)
+    private var job: Job? = null
 
-        despesaRepository.updateDespesa(
-            despesa = despesa,
-            gestorId = gestorId,
-            categoriaId = categoriaId
-        )
+    fun setDefinirLembrete(definirLembrete: Boolean) {
+        job?.cancel()
+
+        job = viewModelScope.launch {
+            delay(500)
+            val despesa: Despesa = uiState.value.copy(definirLembrete = definirLembrete).toModel()
+            val categoriaId = despesaRepository.findCategoriaIdByNome(uiState.value.categoria)
+            val gestorId = checkNotNull(gestor.first()?.id)
+
+            despesaRepository.updateDespesa(
+                despesa = despesa,
+                gestorId = gestorId,
+                categoriaId = categoriaId
+            )
+
+            definirProximoLembrete(despesa)
+        }
     }
 
     fun updateRegistroState(registroUiState: RegistroUiState) {
@@ -80,10 +94,14 @@ class DetalhesDespesaViewModel @Inject constructor(
             data = data,
         )
 
+        val despesa = uiState.value.toModel()
+
         try {
             _connectionState.value = ConnectionState.Loading
             despesaRepository.inserirRegistro(despesaId, registroDespesa)
             clearRegistro()
+            definirProximoLembrete(despesa)
+
             _connectionState.value = ConnectionState.Idle
         } catch (e: SocketTimeoutException) {
             _connectionState.value = ConnectionState.ServerUnavailable
@@ -106,4 +124,14 @@ class DetalhesDespesaViewModel @Inject constructor(
     private fun clearRegistro() {
         _registroUiState.update { it.copy(valor = "", valorErrorField = null) }
     }
+
+    private fun definirProximoLembrete(despesa: Despesa) {
+        val dataUltimoLembrete = despesa.registros.maxBy { it.data.timeInMillis }.data
+        val dataLembrete = dataProximoLembrete(
+            selectedDateMillis = dataUltimoLembrete.timeInMillis,
+            recorrencia = despesa.recorrencia
+        )
+        lembreteAlarmScheduler.definirAlarme(dataLembrete, despesa)
+    }
+
 }

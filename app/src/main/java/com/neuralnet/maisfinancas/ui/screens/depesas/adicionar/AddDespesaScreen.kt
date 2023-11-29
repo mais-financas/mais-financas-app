@@ -215,7 +215,7 @@ fun AddDespesaScreen(
                     val dataProximoLembrete =
                         remember(calendarState.selectedDateMillis, uiState.frequencia) {
                             derivedStateOf {
-                                definirProximoLembrete(
+                                dataProximoLembrete(
                                     selectedDateMillis = calendarState.selectedDateMillis
                                         ?: Instant.now().toEpochMilli(),
                                     recorrencia = Recorrencia(
